@@ -11,5 +11,9 @@ class Movie(models.Model):
     vote_average = models.FloatField()
     overview = models.TextField()
     poster_path = models.URLField()
+<<<<<<< HEAD
     genres = models.ManyToManyField(Genre)
     
+=======
+    genres = models.ManyToManyField(Genre)
+>>>>>>> d0d09f5 (feat:movie CRUD)
