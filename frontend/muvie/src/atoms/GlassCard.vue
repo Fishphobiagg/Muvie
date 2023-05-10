@@ -2,14 +2,18 @@
   <div>
     <div class="container">
       <div class="card">
-        <div class="content"></div>
+        <div class="content">
+          <slot></slot>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  name: "GlassCard",
+};
 </script>
 
 <style>
