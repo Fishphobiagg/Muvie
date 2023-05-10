@@ -3,10 +3,6 @@ from . models import Movie
 from . serializers import MovieListSerializer, MovieSerializer
 from django.db.models import Q
 
-def all_movies(request):
-    movies = Movie.objects.all()
-    serializers = 0
-
 def movie(request, movie_pk):
     movie = Movie.objects.get(pk=movie_pk)
     serializers = 0

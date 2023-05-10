@@ -12,3 +12,4 @@ class Movie(models.Model):
     overview = models.TextField()
     poster_path = models.URLField()
     genres = models.ManyToManyField(Genre)
+    
