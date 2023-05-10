@@ -13,14 +13,14 @@ export default {};
 </script>
 
 <style>
-body {
+/* body {
   display: flex;
   justify-content: center;
   align-items: center;
   position: fixed;
   bottom: 0;
   min-height: 100vh;
-}
+} */
 .container {
   /* 임시 위치 */
   position: fixed;
