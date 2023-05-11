@@ -1,5 +1,5 @@
 from django.db import models
-
+from . . accounts .models import User
 class Genre(models.Model):
     name = models.CharField(max_length=20)
 
@@ -12,9 +12,5 @@ class Movie(models.Model):
     vote_average = models.FloatField()
     overview = models.TextField()
     poster_path = models.URLField()
-<<<<<<< HEAD
     genres = models.ManyToManyField(Genre)
-    
-=======
-    genres = models.ManyToManyField(Genre)
->>>>>>> d0d09f5 (feat:movie CRUD)
+    like_movie = models.ManyToManyField(User, related_name='users_like_movies')

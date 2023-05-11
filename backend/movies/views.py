@@ -4,6 +4,11 @@ from . serializers import MovieListSerializer, MovieSerializer
 from rest_framework.decorators import api_view, permission_classes, authentication_classe
 from django.db.models import Q
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+
+
+
 # from . . musics import Music
 
 class MoviePagination(PageNumberPagination):
@@ -13,18 +18,31 @@ class MoviePagination(PageNumberPagination):
     max_page_size = 100
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def movie(request, movie_pk):
     movie = Movie.objects.get(pk=movie_pk)
     serializers = MovieSerializer()
     serializers.data()
-    
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def user_movie_like(request, movie_pk):
-    pass
+    movie = Movie.objects.get(pk=movie_pk)
+    user = request.user
+    if movie not in user.users_movie_like.all():
+        user.users_movie_like.add(movie)
+        response_data = {"status": "success", "message": "Movie liked successfully."}
+    else:
+        user.users_movie_like.remove(movie)
+        response_data = {"status": "success", "message": "Movie unliked successfully."}
+
+    return Response(response_data)
 
 def search_movie_ost(request, movie_pk):
     pass
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def search_movie(request, keyword):
     movie_search_result = Movie.objects.filter(Q(content__icontains=keyword)|Q(title__icontains=keyword))
     paginator = MoviePagination()
