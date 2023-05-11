@@ -8,15 +8,8 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
-
-
 # from . . musics import Music
 
-class MoviePagination(PageNumberPagination):
-    page_size = 10
-    page_query_param = 'page'
-    page_size_query_param = 'per_page'
-    max_page_size = 100
 class MoviePagination(PageNumberPagination):
     page_size = 10
     page_query_param = 'page'
@@ -50,11 +43,6 @@ def search_movie_ost(request, movie_pk):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def search_movie(request, keyword):
-    movie_search_result = Movie.objects.filter(Q(content__icontains=keyword)|Q(title__icontains=keyword))
-    paginator = MoviePagination()
-    result_page = paginator.paginate_queryset(movie_search_result, request)
-    serializer = MovieListSerializer(result_page, many=True)
-    return paginator.get_paginated_response(serializer.data)
     movie_search_result = Movie.objects.filter(Q(content__icontains=keyword)|Q(title__icontains=keyword))
     paginator = MoviePagination()
     result_page = paginator.paginate_queryset(movie_search_result, request)
