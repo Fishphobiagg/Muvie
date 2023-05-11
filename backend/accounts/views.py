@@ -111,3 +111,38 @@ class AuthAPIView(APIView):
         response.delete_cookie("access")
         response.delete_cookie("refresh")
         return response
+
+class FollowAPIView(APIView):
+    def get(self, request, user_pk):
+        user = User.objects.get(pk=user_pk)
+        serializer = FollowSerializer(user)
+        return Response(serializer.data)
+
+    def post(self, request, user_pk):
+        user = User.objects.get(pk=user_pk)
+        opponent = get_object_or_404(User, pk=request.data['opponent_id'])
+        if opponent in user.following.all():
+            return Response({
+                "message" : "already followed"
+            }, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            user.following.add(opponent)
+            return Response({
+                "message": "follow success",
+            })
+    def delete(self, request, user_pk):
+        user = User.objects.get(pk=user_pk)
+        opponent = get_object_or_404(User, pk=request.data['opponent_id'])
+        if opponent not in user.following.all():
+            return Response({
+                "message" : "Not followed"
+            }, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            user.following.remove(opponent)
+            return Response({
+                "message": 'Unfollow success'
+            })
+
+class ProfileView(APIView):
+    def get(self, request, user_pk):
+        pass
