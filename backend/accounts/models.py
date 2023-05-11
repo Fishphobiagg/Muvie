@@ -21,7 +21,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=30, unique=True, null=False, blank=False)
     profile_picture = models.ImageField(upload_to='profile_pictures', blank=True, null=True)
     nickname = models.CharField(max_length=20, unique=True, null=True, blank=True)
-
+    following = models.ManyToManyField('self', symmetrical=False, blank=True, related_name='followers')
 	# 헬퍼 클래스 사용
     objects = UserManager()
 	# 사용자의 username field는 email으로 설정 (이메일로 로그인)
