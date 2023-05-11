@@ -7,8 +7,6 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
-
-
 # from . . musics import Music
 
 class MoviePagination(PageNumberPagination):
