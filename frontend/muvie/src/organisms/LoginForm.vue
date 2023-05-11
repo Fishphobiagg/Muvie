@@ -1,16 +1,38 @@
 <template>
   <div>
     <h2>Login</h2>
-    <label for=""><input type="email" placeholder="Email" /></label>
-    <label for=""><input type="password" placeholder="Password" /></label>
-    <p>Forget Password?</p>
-    <button>Login</button>
+    <form @submit.prevent="onSubmit">
+      <label for=""
+        ><input type="email" v-model="email" placeholder="Email"
+      /></label>
+      <label for=""
+        ><input
+          type="password"
+          v-model="password"
+          placeholder="Password"
+          autocomplete="off"
+      /></label>
+      <p>Forgot Password?</p>
+      <button type="submit">Login</button>
+    </form>
   </div>
 </template>
 
 <script>
 export default {
   name: "LoginForm",
+  data() {
+    return {
+      email: "",
+      password: "",
+    };
+  },
+  methods: {
+    onSubmit() {
+      console.log(this.email);
+      console.log(this.password);
+    },
+  },
 };
 </script>
 
