@@ -10,4 +10,6 @@ class MovieListSerializer(serializers.ModelSerializer):
 # music model 구현 이후 구현
 class MovieSerializer(serializers.ModelSerializer):
 #     ost = serializers.StringRelatedField(many=True)
+    class Meta:
+        model = Movie
     pass
