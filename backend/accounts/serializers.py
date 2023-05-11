@@ -21,3 +21,67 @@ class FollowSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'email', 'nickname', 'followers', 'following')
+
+class SimpleUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id','nickname', 'email']
+
+class MyProfileSerializer(serializers.ModelSerializer):
+    user = SimpleUserSerializer()
+    followers = serializers.SerializerMethodField()
+    following = serializers.SerializerMethodField()
+    like_movie_list = serializers.SerializerMethodField()
+    # like_music_list = serializers.SerializerMethodField()
+    followers_count = serializers.SerializerMethodField()
+    following_count = serializers.SerializerMethodField()
+    # playlist = serializers.SerializerMethodField()
+    class Meta:
+        fields = ('user', 'followers', 'following', 'like_movie_list', 'followers_count', 'following_count')
+    
+    def get_followers(self, instance):
+        followers = instance.followers.all()
+        return [{'id':follower.id, 'email':follower.email, 'nickname':follower.nickname} for follower in followers]
+    
+    def get_followers(self, instance):
+        followers = instance.followers.all()
+        return [{'id':follower.id, 'email':follower.email, 'nickname':follower.nickname} for follower in followers]
+    
+    def get_like_movie_list(self, instance):
+        like_movie_list = instance.users_like_movies.all()
+        return[{'title':movie.title, 'poster_path':movie.poster_path} for movie in like_movie_list]
+    
+    def get_followers_count(self, instance):
+        return instance.followers.count()
+    
+    def get_following_count(self, instance):
+        return instance.following.count()
+
+class ProfileSerializer(serializers.ModelSerializer):
+    user = SimpleUserSerializer()
+    followers = serializers.SerializerMethodField()
+    following = serializers.SerializerMethodField()
+    like_movie_list = serializers.SerializerMethodField()
+    # like_music_list = serializers.SerializerMethodField()
+    followers_count = serializers.SerializerMethodField()
+    following_count = serializers.SerializerMethodField()
+    class Meta:
+        fields = ('user', 'followers', 'following', 'like_movie_list', 'followers_count', 'following_count')
+    
+    def get_followers(self, instance):
+        followers = instance.followers.all()
+        return [{'id':follower.id, 'email':follower.email, 'nickname':follower.nickname} for follower in followers]
+    
+    def get_followers(self, instance):
+        followers = instance.followers.all()
+        return [{'id':follower.id, 'email':follower.email, 'nickname':follower.nickname} for follower in followers]
+    
+    def get_like_movie_list(self, instance):
+        like_movie_list = instance.users_like_movies.all()
+        return[{'title':movie.title, 'poster_path':movie.poster_path} for movie in like_movie_list]
+    
+    def get_followers_count(self, instance):
+        return instance.followers.count()
+    
+    def get_following_count(self, instance):
+        return instance.following.count()
