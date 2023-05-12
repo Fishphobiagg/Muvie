@@ -145,10 +145,22 @@ class FollowAPIView(APIView):
 
 class ProfileView(APIView):
     def get(self, request, user_pk):
+        print(3423434)
         me = request.user
         if user_pk == me.pk:
             serializer = MyProfileSerializer(instance=me)
-            return Response(serializer.data)
+            user_serializer = SimpleUserSerializer(me)
+            response = {
+                "user_profile" : user_serializer.data,
+                "detail" : serializer.data
+            }
+            return Response(response)
         else:
-            serializer = ProfileSerializer(instance=User.objects.get(pk=user_pk))
-            return Response(serializer.data)
+            user = User.objects.get(pk=user_pk)
+            serializer = ProfileSerializer(instance=user)
+            user_serializer = SimpleUserSerializer(user)
+            response = {
+                "user_profile" : user_serializer.data,
+                "detail" : serializer.data
+            }
+            return Response(response)
