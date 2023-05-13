@@ -4,6 +4,7 @@ from rest_framework import serializers
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
+
         fields = ['id', 'password', 'nickname', 'email', 'profile_picture']
     def create(self, validated_data):
         user = User.objects.create_user(

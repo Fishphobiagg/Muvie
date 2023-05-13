@@ -53,6 +53,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+CORS_ALLOWED_ORIGINS = [
+  'http://localhost:8080',
+]
+
+CORS_ALLOWED_ALL_ORIGINS = True
+
 ROOT_URLCONF = 'muvie.urls'
 
 CORS_ALLOWED_ORIGINS = [
@@ -138,8 +144,8 @@ AUTH_USER_MODEL = 'accounts.user'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.permissions.AllowAny',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # 'rest_framework.permissions.AllowAny',
     ),
      'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -180,3 +186,4 @@ SIMPLE_JWT = {
 
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
+
