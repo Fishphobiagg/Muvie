@@ -4,15 +4,23 @@ from rest_framework import serializers
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'nickname', 'email',]
-
+        fields = ['id', 'password', 'nickname', 'email', 'profile_picture']
     def create(self, validated_data):
         user = User.objects.create_user(
             email = validated_data['email'],
             password = validated_data['password'],
             nickname = validated_data['nickname'],
+            profile_picture = '/users/민지.JPEG'if len(validated_data) == 3 else validated_data['profile_picture']
         )
         return user
+    
+    def change(self, instance, validated_data):
+        instance.email = validated_data.get("email", instance.email)
+        instance.nickname = validated_data.get("nickname", instance.email)
+        instance.profile_picture = validated_data.get("profile_picture", instance.profile_picture)
+        instance.save()
+        return instance
+    
 
 class FollowSerializer(serializers.ModelSerializer):
     followers = serializers.PrimaryKeyRelatedField(many=True, read_only=True)

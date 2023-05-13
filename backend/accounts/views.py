@@ -77,6 +77,7 @@ class AuthAPIView(APIView):
         user = authenticate(
             email=request.data.get("email"), password=request.data.get("password")
         )
+        print(request.data)
         # 이미 회원가입 된 유저일 때
         if user is not None:
             serializer = UserSerializer(user)
@@ -145,7 +146,6 @@ class FollowAPIView(APIView):
 
 class ProfileView(APIView):
     def get(self, request, user_pk):
-        print(3423434)
         me = request.user
         if user_pk == me.pk:
             serializer = MyProfileSerializer(instance=me)
@@ -164,3 +164,20 @@ class ProfileView(APIView):
                 "detail" : serializer.data
             }
             return Response(response)
+        
+class PasswordChangeView(APIView):
+    pass
+class AccountsChangeView(APIView):
+    def patch(self, request, user_pk):
+        user = User.objects.get(pk=request.user)
+        user.email = request.email
+        user.nickname = request.nickname
+        user.profile_picture = request.profile_picture
+
+        user.save()
+        return Response({
+            "message": "change Success"
+        })
+        
+        
+        

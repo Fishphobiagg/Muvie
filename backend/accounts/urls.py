@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import SignupAPIView, AuthAPIView, FollowAPIView, ProfileView
+from .views import SignupAPIView, AuthAPIView, FollowAPIView, ProfileView, AccountsChangeView, PasswordChangeView
 from rest_framework_simplejwt.views import TokenRefreshView
 from .serializers import * 
 from rest_framework import viewsets
@@ -10,4 +10,7 @@ urlpatterns = [
     path('auth/refresh', TokenRefreshView.as_view()),
     path('<int:user_pk>/follow', FollowAPIView.as_view()),
     path('<int:user_pk>/profile', ProfileView.as_view()),
+    path('<int:user_pk/username', AccountsChangeView.as_view()),
+    path('<int:user_pk/password', PasswordChangeView.as_view()),
+    
 ]
