@@ -1,11 +1,12 @@
 from django.db import models
-from . . accounts .models import User
+from musics .models import Music
+
 class Genre(models.Model):
     name = models.CharField(max_length=20)
 
 class Movie(models.Model):
     title = models.CharField(max_length=50)
-    original_title = models.CharField(max_length=30)
+    original_title = models.CharField(max_length=30, default='')
     release_date = models.DateField()
     popularity = models.FloatField()
     vote_count = models.IntegerField()
@@ -13,9 +14,6 @@ class Movie(models.Model):
     overview = models.TextField()
     poster_path = models.URLField()
     genres = models.ManyToManyField(Genre)
-    like_movie = models.ManyToManyField(User, related_name='users_like_movies', through='MusicUserLike')
+    ost = models.ManyToManyField(Music, related_name='movie_ost')
 
-class MusicUserLike(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
+
