@@ -6,7 +6,6 @@ from django.db.models import Q
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-
 # from . . musics import Music
 
 class MoviePagination(PageNumberPagination):
@@ -14,13 +13,14 @@ class MoviePagination(PageNumberPagination):
     page_query_param = 'page'
     page_size_query_param = 'per_page'
     max_page_size = 100
-
+    
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def movie(request, movie_pk):
     movie = Movie.objects.get(pk=movie_pk)
     serializers = MovieSerializer()
     serializers.data()
+
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
