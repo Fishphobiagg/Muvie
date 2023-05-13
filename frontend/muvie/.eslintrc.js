@@ -24,5 +24,6 @@ module.exports = {
         ignores: [],
       },
     ],
+    "prefer-destructuring": ["error", { object: true, array: false }],
   },
 };
