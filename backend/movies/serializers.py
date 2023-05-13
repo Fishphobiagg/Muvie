@@ -7,7 +7,7 @@ class MovieListSerializer(serializers.ModelSerializer):
         fields = '__all__'  
 
 class MovieSerializer(serializers.ModelSerializer):
+#     ost = serializers.StringRelatedField(many=True)
     class Meta:
         model = Movie
-        fields = '__all__'
-
+    pass
