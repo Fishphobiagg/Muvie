@@ -10,7 +10,7 @@ urlpatterns = [
     path('auth/refresh', TokenRefreshView.as_view()),
     path('<int:user_pk>/follow', FollowAPIView.as_view()),
     path('<int:user_pk>/profile', ProfileView.as_view()),
-    path('<int:user_pk/username', AccountsChangeView.as_view()),
-    path('<int:user_pk/password', PasswordChangeView.as_view()),
+    path('edit/<int:user_pk>/', AccountsChangeView.as_view()),
+    path('edit/<int:user_pk>/password', PasswordChangeView.as_view()),
     
 ]

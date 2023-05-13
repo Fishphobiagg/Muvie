@@ -166,18 +166,26 @@ class ProfileView(APIView):
             return Response(response)
         
 class PasswordChangeView(APIView):
-    pass
+    def patch(self, request, user_pk):
+        user = User.objects.get(pk=user_pk)
+        new_password = request.data.get('new_password')
+        new_password_confirm = request.data.get('new_password_confirm')
+        if new_password == new_password_confirm:
+            user.password = new_password
+            return Response(SimpleUserSerializer(user).data, status=status.HTTP_200_OK)
+
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
 class AccountsChangeView(APIView):
     def patch(self, request, user_pk):
-        user = User.objects.get(pk=request.user)
-        user.email = request.email
-        user.nickname = request.nickname
-        user.profile_picture = request.profile_picture
-
-        user.save()
-        return Response({
-            "message": "change Success"
-        })
+        user = User.objects.get(pk=user_pk)
+        serializer = UserChangeSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message":"Change Success",
+                             "changed_data" : UserChangeSerializer(User.objects.get(pk=user_pk)).data
+                             })
+        return Response(serializers.error, status=status.HTTP_400_BAD_REQUEST)
         
         
         
