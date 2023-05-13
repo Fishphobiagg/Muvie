@@ -146,7 +146,6 @@ class FollowAPIView(APIView):
 
 class ProfileView(APIView):
     def get(self, request, user_pk):
-        print(3423434)
         me = request.user
         if user_pk == me.pk:
             serializer = MyProfileSerializer(instance=me)

@@ -13,6 +13,14 @@ class UserSerializer(serializers.ModelSerializer):
             profile_picture = '/users/민지.JPEG'if len(validated_data) == 3 else validated_data['profile_picture']
         )
         return user
+    
+    def change(self, instance, validated_data):
+        instance.email = validated_data.get("email", instance.email)
+        instance.nickname = validated_data.get("nickname", instance.email)
+        instance.profile_picture = validated_data.get("profile_picture", instance.profile_picture)
+        instance.save()
+        return instance
+    
 
 class UserChangeSerializer(serializers.ModelSerializer):
     class Meta:
