@@ -2,16 +2,13 @@
   <div>
     <h2>Login</h2>
     <form @submit.prevent="onSubmit">
-      <label for=""
-        ><input type="email" v-model="email" placeholder="Email"
-      /></label>
-      <label for=""
-        ><input
-          type="password"
-          v-model="password"
-          placeholder="Password"
-          autocomplete="off"
-      /></label>
+      <input type="email" v-model="email" placeholder="Email" />
+      <input
+        type="password"
+        v-model="password"
+        placeholder="Password"
+        autocomplete="off"
+      />
       <p>Forgot Password?</p>
       <button type="submit">Login</button>
     </form>
@@ -19,18 +16,34 @@
 </template>
 
 <script>
+// import axios from "axios";
+
+// const LOGIN_URL = "http://127.0.0.1:8000/accounts/auth";
+
 export default {
   name: "LoginForm",
   data() {
     return {
-      email: "",
-      password: "",
+      email: null,
+      password: null,
     };
   },
   methods: {
     onSubmit() {
       console.log(this.email);
       console.log(this.password);
+
+      const userInfo = {};
+      userInfo.email = this.email;
+      userInfo.password = this.password;
+      console.log(userInfo);
+      this.$store.dispatch("login", userInfo);
+
+      // axios.post(LOGIN_URL, userInfo).then((res) => {
+      //   if (res.status == 200) {
+      //     this.$store.commit('loginSuccess')
+      //   }
+      // });
     },
   },
 };

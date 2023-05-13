@@ -1,12 +1,34 @@
-// import createPersistedState from "vuex-persistedstate";
 import Vue from "vue";
 import Vuex from "vuex";
 import createPersistedState from "vuex-persistedstate";
-import modules from "./modules";
+import loginStore from "./modules/loginStore";
 
 Vue.use(Vuex);
 
-const store = new Vuex.Store({
-  modules,
-  plugins: [createPersistedState()],
+export default new Vuex.Store({
+  state: {},
+  getters: {},
+  mutations: {},
+  actions: {},
+  modules: {
+    loginstore: loginStore,
+  },
+  plugins: [
+    createPersistedState({
+      paths: ["loginstore"],
+    }),
+  ],
 });
+
+// export default createStore({
+//   state: {},
+//   getters: {},
+//   mutations: {},
+//   actions: {},
+//   modules: {},
+//   plugins: [
+//     createPersistedState({
+//       paths: ["loginStore"],
+//     }),
+//   ],
+// });
