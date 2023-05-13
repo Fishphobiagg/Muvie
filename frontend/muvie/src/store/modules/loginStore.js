@@ -13,8 +13,10 @@ const loginStore = {
     loginSuccess(state, payload) {
       this.state.userInfo = payload;
       this.state.isLogin = true;
+      console.log(this.userInfo);
+      console.log("로그인 성공~");
     },
-    logoutTest() {
+    logoutSuccess() {
       this.state.userInfo = null;
       this.state.isLogin = false;
       localStorage.removeItem("access_token");
@@ -25,19 +27,19 @@ const loginStore = {
     login(dispatch, loginObj) {
       axios.post(BASE_URL, loginObj).then((res) => {
         console.log(res.data);
-        // if ((res.status = 200)) {
-        //   console.log(res.data);
-        //   const accessToken = res.data;
-        //   localStorage.setItem("access_token", accessToken);
-        //   const refreshToken = res.data;
-        //   localStorage.setItem("refresh_token", refreshToken);
-        //   axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
-        // }
+        console.log(res.data);
+        const accessToken = res.data.token.access;
+        localStorage.setItem("access_token", accessToken);
+        const refreshToken = res.data.token.refresh;
+        localStorage.setItem("refresh_token", refreshToken);
+        axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+        this.$store.commit("loginSuccess", res.data.user);
       });
     },
-    // logout(dispatch) {
-    //   axios.delete(BASE_URL);
-    // },
+  },
+  logout() {
+    this.$store.commit("logoutSuccess");
+    axios.delete(BASE_URL);
   },
 };
 
