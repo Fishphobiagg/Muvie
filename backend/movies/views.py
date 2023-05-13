@@ -13,13 +13,7 @@ class MoviePagination(PageNumberPagination):
     page_query_param = 'page'
     page_size_query_param = 'per_page'
     max_page_size = 100
-
-class MoviePagination(PageNumberPagination):
-    page_size = 10
-    page_query_param = 'page'
-    page_size_query_param = 'per_page'
-    max_page_size = 100
-
+    
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def movie(request, movie_pk):
