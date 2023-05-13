@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from . models import Movie
 from . serializers import MovieListSerializer, MovieSerializer
-from rest_framework.decorators import api_view, permission_classes, authentication_classe
+from rest_framework.decorators import api_view, permission_classes
 from django.db.models import Q
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
