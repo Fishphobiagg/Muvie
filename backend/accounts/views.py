@@ -77,6 +77,7 @@ class AuthAPIView(APIView):
         user = authenticate(
             email=request.data.get("email"), password=request.data.get("password")
         )
+        print(request.data)
         # 이미 회원가입 된 유저일 때
         if user is not None:
             serializer = UserSerializer(user)
@@ -145,4 +146,46 @@ class FollowAPIView(APIView):
 
 class ProfileView(APIView):
     def get(self, request, user_pk):
-        pass
+        me = request.user
+        if user_pk == me.pk:
+            serializer = MyProfileSerializer(instance=me)
+            user_serializer = SimpleUserSerializer(me)
+            response = {
+                "user_profile" : user_serializer.data,
+                "detail" : serializer.data
+            }
+            return Response(response)
+        else:
+            user = User.objects.get(pk=user_pk)
+            serializer = ProfileSerializer(instance=user)
+            user_serializer = SimpleUserSerializer(user)
+            response = {
+                "user_profile" : user_serializer.data,
+                "detail" : serializer.data
+            }
+            return Response(response)
+        
+class PasswordChangeView(APIView):
+    def patch(self, request, user_pk):
+        user = User.objects.get(pk=user_pk)
+        new_password = request.data.get('new_password')
+        new_password_confirm = request.data.get('new_password_confirm')
+        if new_password == new_password_confirm:
+            user.password = new_password
+            return Response(SimpleUserSerializer(user).data, status=status.HTTP_200_OK)
+
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+class AccountsChangeView(APIView):
+    def patch(self, request, user_pk):
+        user = User.objects.get(pk=user_pk)
+        serializer = UserChangeSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message":"Change Success",
+                             "changed_data" : UserChangeSerializer(User.objects.get(pk=user_pk)).data
+                             })
+        return Response(serializers.error, status=status.HTTP_400_BAD_REQUEST)
+        
+        
+        

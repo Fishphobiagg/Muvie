@@ -9,6 +9,7 @@ class UserManager(BaseUserManager):
         user = self.model(
             email=email,
             nickname=nickname,
+            profile_picture = kwargs.get('profile_picture', '')
         )
         user.set_password(password)
         user.save(using=self._db)
@@ -19,7 +20,7 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     
     email = models.EmailField(max_length=30, unique=True, null=False, blank=False)
-    profile_picture = models.ImageField(upload_to='profile_pictures', blank=True, null=True)
+    profile_picture = models.ImageField(blank=True, null=True, upload_to='users')
     nickname = models.CharField(max_length=20, unique=True, null=True, blank=True)
     following = models.ManyToManyField('self', symmetrical=False, blank=True, related_name='followers')
 	# 헬퍼 클래스 사용
