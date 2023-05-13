@@ -20,21 +20,6 @@ class UserChangeSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'nickname', 'email', 'profile_picture']
 
-class UserChangeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['id', 'nickname', 'email', 'profile_picture']
-
-class UserChangeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['id', 'nickname', 'email', 'profile_picture']
-
-class UserChangeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['id', 'nickname', 'email', 'profile_picture']
-
 class FollowSerializer(serializers.ModelSerializer):
     followers = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     following = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all())
