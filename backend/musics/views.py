@@ -5,6 +5,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from . models import Music
 from serializers import *
+from rest_framework.views import APIView
+from rest_framework import status
 
 class MusicPagenatior(PageNumberPagination):
     page_size = 10
@@ -14,9 +16,32 @@ class MusicPagenatior(PageNumberPagination):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def search_movie(request, keyword):
+def search_music(request, keyword):
     movie_search_result = Music.objects.filter(Q(content__icontains=keyword)|Q(title__icontains=keyword))
     paginator = MusicPagenatior()
     result_page = paginator.paginate_queryset(movie_search_result, request)
     serializer = MusicListSerializers(result_page, many=True)
     return paginator.get_paginated_response(serializer.data)
+
+class MusicLikeView(APIView):
+    def post(request, music_pk):
+        user = request.user
+        music = Music.objects.get(pk=music_pk)
+        user.like_music.add(music)
+        return Response({'message':'like successfully'}, status=status.HTTP_202_ACCEPTED)
+    
+    def delete(reqeust, music_pk):
+        user = reqeust.user
+        music = Music.objects.get(pk=music_pk)
+        user.like_music.remove(music)
+        return Response({'message':'unlike successfully'}, status=status.HTTP_202_ACCEPTED)
+
+class MusicPlaylistView(APIView):
+    def get(request, user_pk):
+        user = request.user
+        playlist = user.playlist.all()
+
+    def post(request, user_pk):
+        user = request.user
+
+        music = Music.objects.get()

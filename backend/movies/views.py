@@ -24,14 +24,14 @@ def movie(request, movie_pk):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def user_movie_like(request, movie_pk):
+def like_movie(request, movie_pk):
     movie = Movie.objects.get(pk=movie_pk)
     user = request.user
     if movie not in user.users_movie_like.all():
-        user.users_movie_like.add(movie)
+        user.like_movie.add(movie)
         response_data = {"status": "success", "message": "Movie liked successfully."}
     else:
-        user.users_movie_like.remove(movie)
+        user.like_movie.remove(movie)
         response_data = {"status": "success", "message": "Movie unliked successfully."}
 
     return Response(response_data)
