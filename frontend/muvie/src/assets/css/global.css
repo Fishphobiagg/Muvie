@@ -1,0 +1,18 @@
+/* Global */
+:root {
+  /* Color (CSS Variables)*/
+  --color-main-purple: #dad4ec;
+  --color-main-light-purple: #f3e7e9;
+
+  /* Font size */
+  --font-large: 48px;
+  --font-medium: 24px;
+  --font-regular: 18px;
+  --font-small: 16px;
+  --font-micro: 14px;
+
+  /* Font weight */
+  --weight-bold: 700;
+  --weight-semi-bold: 600;
+  --weight-regular: 400;
+}

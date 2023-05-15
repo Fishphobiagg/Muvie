@@ -53,7 +53,19 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+CORS_ALLOWED_ORIGINS = [
+  'http://localhost:8080',
+]
+
+CORS_ALLOWED_ALL_ORIGINS = True
+
 ROOT_URLCONF = 'muvie.urls'
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:8080'
+]
+
+CORS_ALLOWED_ALL_ORIGINS = True
 
 TEMPLATES = [
     {
@@ -137,6 +149,7 @@ REST_FRAMEWORK = {
     ),
      'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        
     )
 }
 
@@ -172,6 +185,6 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
+MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
+
