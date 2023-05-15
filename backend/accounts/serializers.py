@@ -33,14 +33,10 @@ class SimpleUserSerializer(serializers.ModelSerializer):
         fields = ['id','email', 'nickname', 'profile_picture']
 
 class UserTestSerializer(serializers.ModelSerializer):
-
     followers = SimpleUserSerializer(many=True)
-
-
     class Meta:
             model = User
             fields = ('pk', 'followers')
-
 
 class MyProfileSerializer(serializers.ModelSerializer):
     followers = serializers.SerializerMethodField()
@@ -88,8 +84,6 @@ class ProfileSerializer(serializers.ModelSerializer):
     # like_music_list = serializers.SerializerMethodField()
     followers_count = serializers.SerializerMethodField()
     following_count = serializers.SerializerMethodField()
-    # unfollowed_user = serializers.SerializerMethodField()
-    # followed_user = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -103,7 +97,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     def get_followers(self, instance):
         user = User.objects.get(pk=self.user_pk)
         followers = instance.followers.all()
-        return [{'id':follower.id, 'email':follower.email, 'nickname':follower.nickname, 'profile_picture':follower.profile_picture.url, 
+        return [{'id':follower.id, 'email':follower.email, 'nickname':follower.nickname, 'f':follower.profile_picture.url, 
                  'is_followed':True if follower in user.following.all() else "me" if follower == user else False} for follower in followers]
     
     def get_following(self, instance):
@@ -121,7 +115,3 @@ class ProfileSerializer(serializers.ModelSerializer):
     
     def get_following_count(self, instance):
         return instance.following.count()
-
-    # def get_unfollowed_user(self, instance):
-
-    # def get_followed_user(self, instance):
