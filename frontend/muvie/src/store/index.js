@@ -12,25 +12,8 @@ export default new Vuex.Store({
   mutations: {},
   actions: {},
   modules: {
-    loginstore: loginStore,
-    signupstore: signupStore,
+    loginStore,
+    signupStore,
   },
-  plugins: [
-    createPersistedState({
-      paths: ["loginstore", "signupstore"],
-    }),
-  ],
+  plugins: [createPersistedState({ paths: ["loginStore"] })],
 });
-
-// export default createStore({
-//   state: {},
-//   getters: {},
-//   mutations: {},
-//   actions: {},
-//   modules: {},
-//   plugins: [
-//     createPersistedState({
-//       paths: ["loginStore"],
-//     }),
-//   ],
-// });

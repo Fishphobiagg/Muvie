@@ -16,10 +16,6 @@
 </template>
 
 <script>
-// import axios from "axios";
-
-// const LOGIN_URL = "http://127.0.0.1:8000/accounts/auth";
-
 export default {
   name: "LoginForm",
   data() {
@@ -38,12 +34,6 @@ export default {
       userInfo.password = this.password;
       console.log(userInfo);
       this.$store.dispatch("login", userInfo);
-
-      // axios.post(LOGIN_URL, userInfo).then((res) => {
-      //   if (res.status == 200) {
-      //     this.$store.commit('loginSuccess')
-      //   }
-      // });
     },
   },
 };
