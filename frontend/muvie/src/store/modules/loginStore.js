@@ -35,6 +35,8 @@ const loginStore = {
           localStorage.setItem("access_token", accessToken);
           const refreshToken = res.data.token.refresh;
           localStorage.setItem("refresh_token", refreshToken);
+          const userId = res.data.user.id;
+          localStorage.setItem("user_id", userId);
           axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
           commit("loginSuccess", res.data.user);
         })

@@ -22,7 +22,7 @@
         placeholder="Password"
         autocomplete="off"
       />
-      <button type="submit">Sign up</button>
+      <button class="submit-button" type="submit">Sign up</button>
     </form>
   </div>
 </template>
@@ -72,7 +72,7 @@ input::placeholder {
   margin-left: 5px;
 }
 
-button {
+.submit-button {
   margin: 20px;
   padding: 13px 30px;
   background: white;
@@ -82,14 +82,14 @@ button {
   border: none;
 }
 
-button:hover {
+.submit-button:hover {
   color: white;
   background: rgba(218, 138, 114, 0.8);
   letter-spacing: 2px;
   cursor: pointer;
 }
 
-button:active {
+.submit-button:active {
   transform: scale(1.1);
 }
 
