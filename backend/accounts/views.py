@@ -121,6 +121,8 @@ class FollowAPIView(APIView):
 
     def post(self, request, user_pk):
         user = User.objects.get(pk=user_pk)
+        if user != request.user:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
         opponent = get_object_or_404(User, pk=request.data['opponent_id'])
         if opponent in user.following.all():
             return Response({
@@ -186,6 +188,4 @@ class AccountsChangeView(APIView):
                              "changed_data" : UserChangeSerializer(User.objects.get(pk=user_pk)).data
                              })
         return Response(serializers.error, status=status.HTTP_400_BAD_REQUEST)
-        
-        
         
