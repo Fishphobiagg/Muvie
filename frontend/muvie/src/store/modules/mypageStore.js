@@ -1,33 +1,32 @@
-// import router from "@/router";
-import axios from "axios";
+// import axios from "axios";
+// import Vue from "vue";
+// import Vuex from "vuex";
+// import { useStore } from "vuex";
+// import { computed } from "vue";
 
-const userId = localStorage.getItem("user_id");
-const BASE_URL = `http://127.0.0.1:8000/accounts/${userId}/profile`;
+// const { userId } = localStorage.getItem("vuex");
 
-const loginStore = {
-  state: {},
+// Vue.use(Vuex);
+
+const mypageStore = {
+  state: {
+    followers: null,
+    following: null,
+  },
   mutations: {},
   actions: {
-    // login({ commit }, loginObj) {
-    //   axios
-    //     .post(BASE_URL, loginObj)
-    //     .then((res) => {
-    //       console.log(res.data);
-    //       const accessToken = res.data.token.access;
-    //       localStorage.setItem("access_token", accessToken);
-    //       const refreshToken = res.data.token.refresh;
-    //       localStorage.setItem("refresh_token", refreshToken);
-    //       axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
-    //       commit("loginSuccess", res.data.user);
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //     });
-    // },
     getProfile() {
-      axios.get(BASE_URL);
+      const Id = this.$store.state.loginStore.userId;
+      console.log(Id);
+      const BASE_URL = `http://127.0.0.1:8000/accounts/${Id}/profile`;
+
+      // axios.get(BASE_URL).then((res) => {
+      //   console.log(res.data);
+      // });
+      console.log(BASE_URL);
+      console.log("에러");
     },
   },
 };
 
-export default loginStore;
+export default mypageStore;

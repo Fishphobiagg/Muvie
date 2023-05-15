@@ -16,9 +16,27 @@ export default {
       tab: 0,
     };
   },
+  // computed: {
+  //   getId() {
+  //     // eslint-disable-next-line no-undef
+  //     console.log(this.$store.state.userId);
+  //     // eslint-disable-next-line no-undef
+  //     return this.$store.state.mypageStore.userId;
+  //   },
+  // },
   components: {
     FollowList,
   },
+  created() {
+    const Id = this.$store.state.loginStore.userId;
+    console.log(typeof Id);
+    this.$store.dispatch("getProfile");
+  },
+  // created() {
+  //   const save = localStorage.getItem("vuex");
+  //   console.log(save);
+  //   // this.$store.dispatch("getProfile");
+  // },
 };
 </script>
 

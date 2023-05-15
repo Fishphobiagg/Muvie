@@ -11,7 +11,11 @@
 <script>
 export default {
   name: "FollowList",
-  buttonMsg: "팔로잉",
+  data() {
+    return {
+      buttonMsg: "팔로잉",
+    };
+  },
 };
 </script>
 
