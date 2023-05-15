@@ -32,6 +32,14 @@ class SimpleUserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id','email', 'nickname', 'profile_picture']
 
+class UserTestSerializer(serializers.ModelSerializer):
+
+    followers = SimpleUserSerializer(many=True)
+
+
+    class Meta:
+            model = User
+            fields = ('pk', 'followers')
 
 
 class MyProfileSerializer(serializers.ModelSerializer):
@@ -45,14 +53,23 @@ class MyProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('followers', 'following','followers_count', 'following_count')
-    
+
+    def __init__(self, *args, **kwargs):
+        user_pk = kwargs.pop('user_pk', None)
+        super().__init__(*args, **kwargs)
+        self.user_pk = user_pk
+
     def get_followers(self, instance):
+        user = User.objects.get(pk=self.user_pk)
         followers = instance.followers.all()
-        return [{'id':follower.id, 'email':follower.email, 'nickname':follower.nickname, 'profile_picture':follower.profile_picture} for follower in followers]
+        return [{'id':follower.id, 'email':follower.email, 'nickname':follower.nickname, 'profile_picture':follower.profile_picture.url, 
+                 'is_followed':True if follower in user.following.all() else "me" if follower == user else False} for follower in followers]
     
     def get_following(self, instance):
+        user = User.objects.get(pk=self.user_pk)
         following = instance.following.all()
-        return [{'id':follower.id, 'email':follower.email, 'nickname':follower.nickname, 'profile_picture':follower.profile_picture} for follower in following]
+        return [{'id':follower.id, 'email':follower.email, 'nickname':follower.nickname, 'profile_picture':follower.profile_picture.url, 
+                 'is_followed':True if follower in user.following.all() else "me" if follower == user else False} for follower in following]    
     
     # def get_like_movie_list(self, instance):
     #     like_movie_list = instance.users_like_movies.all()
@@ -63,7 +80,7 @@ class MyProfileSerializer(serializers.ModelSerializer):
     
     def get_following_count(self, instance):
         return instance.following.count()
-
+    
 class ProfileSerializer(serializers.ModelSerializer):
     followers = serializers.SerializerMethodField()
     following = serializers.SerializerMethodField()
@@ -78,13 +95,22 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = User
         fields = ('followers', 'following', 'followers_count', 'following_count')
 
+    def __init__(self, *args, **kwargs):
+        user_pk = kwargs.pop('user_pk', None)
+        super().__init__(*args, **kwargs)
+        self.user_pk = user_pk
+
     def get_followers(self, instance):
+        user = User.objects.get(pk=self.user_pk)
         followers = instance.followers.all()
-        return [{'id':follower.id, 'email':follower.email, 'nickname':follower.nickname, 'profile_picture':follower.profile_picture} for follower in followers]
+        return [{'id':follower.id, 'email':follower.email, 'nickname':follower.nickname, 'profile_picture':follower.profile_picture.url, 
+                 'is_followed':True if follower in user.following.all() else "me" if follower == user else False} for follower in followers]
     
     def get_following(self, instance):
+        user = User.objects.get(pk=self.user_pk)
         following = instance.following.all()
-        return [{'id':follower.id, 'email':follower.email, 'nickname':follower.nickname, 'profile_picture':follower.profile_picture} for follower in following]
+        return [{'id':follower.id, 'email':follower.email, 'nickname':follower.nickname, 'profile_picture':follower.profile_picture.url, 
+                 'is_followed':True if follower in user.following.all() else "me" if follower == user else False} for follower in following]    
 
     # def get_like_movie_list(self, instance):
     #     like_movie_list = instance.users_like_movies.all()

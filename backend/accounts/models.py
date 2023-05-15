@@ -5,14 +5,14 @@ from movies .models import Movie
 from django.utils.text import get_valid_filename
 import os
 
-def user_directory_path(instance, filename):
-    # 파일 이름을 "user{user_id}.{확장자}" 형식으로 지정
-    ext = os.path.splitext(filename)[1]  # 파일 확장자 추출
-    filename = f'user{instance.id}{ext}'
-    # 파일 이름을 안전하게 인코딩
-    safe_filename = get_valid_filename(filename)
-    # 파일이 저장될 경로 반환
-    return f'users/{safe_filename}'
+# def user_directory_path(instance, filename):
+#     # 파일 이름을 "user{user_id}.{확장자}" 형식으로 지정
+#     ext = os.path.splitext(filename)[1]  # 파일 확장자 추출
+#     filename = f'user{instance.id}{ext}'
+#     # 파일 이름을 안전하게 인코딩
+#     safe_filename = get_valid_filename(filename)
+#     # 파일이 저장될 경로 반환
+#     return f'users/{safe_filename}'
 
 # 헬퍼 클래스
 class UserManager(BaseUserManager):
@@ -34,7 +34,7 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     
     email = models.EmailField(max_length=30, unique=True, null=False, blank=False)
-    profile_picture = models.ImageField(blank=True, null=True, upload_to=user_directory_path)
+    profile_picture = models.ImageField(blank=True, null=True, upload_to='users')
     nickname = models.CharField(max_length=20, unique=True, null=True, blank=True)
     following = models.ManyToManyField('self', symmetrical=False, blank=True, related_name='followers')
     music_components = models.OneToOneField(MusicComponent, on_delete=models.CASCADE, blank=True, null=True)

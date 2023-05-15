@@ -149,8 +149,10 @@ class FollowAPIView(APIView):
 class ProfileView(APIView):
     def get(self, request, user_pk):
         me = request.user
+        # serializer = UserTestSerializer(User.objects.get(pk=user_pk))
         if user_pk == me.pk:
-            serializer = MyProfileSerializer(instance=me)
+            print(me)
+            serializer = MyProfileSerializer(instance=me, user_pk=me.pk)
             user_serializer = SimpleUserSerializer(me)
             response = {
                 "user_profile" : user_serializer.data,
@@ -159,13 +161,14 @@ class ProfileView(APIView):
             return Response(response)
         else:
             user = User.objects.get(pk=user_pk)
-            serializer = ProfileSerializer(instance=user)
+            serializer = ProfileSerializer(instance=user, user_pk=me.pk)
             user_serializer = SimpleUserSerializer(user)
+            print(123412412412342, user_serializer.data)
             response = {
                 "user_profile" : user_serializer.data,
                 "detail" : serializer.data
             }
-            return Response(response)
+        return Response(response)
         
 class PasswordChangeView(APIView):
     def patch(self, request, user_pk):
