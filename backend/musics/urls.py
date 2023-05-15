@@ -1,8 +1,8 @@
 from django.urls import path
-from . import views
 
+from . views import MusicLikeView, MusicPlaylistView
 
 urlpatterns = [
-      path('', views.music),
-    #   path('playlist/<int:music_pk>', views.) 
+      path('playlist/<int:music_pk>', MusicPlaylistView.as_view()),
+      path('like/<int:music_pk>', MusicLikeView.as_view()),
 ]

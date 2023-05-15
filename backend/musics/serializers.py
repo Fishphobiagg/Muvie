@@ -25,3 +25,4 @@ class PlaylistSerializers(serializers.ModelSerializer):
     def get_album_cover(self, instance):
         album_cover = instance.movie_ost.all()[0]
         return {"poster_path":album_cover.poster_path}
+
