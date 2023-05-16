@@ -30,6 +30,8 @@ export default {
 
     if (this.userId) {
       this.$store.dispatch("getProfile", this.userId);
+      console.log("컴포넌트로 불러와져");
+      console.log(this.$store.state.followers);
     }
   },
 };
