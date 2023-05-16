@@ -1,31 +1,42 @@
+/* eslint-disable no-param-reassign */
 import axios from "axios";
 
 const mypageStore = {
   state: {
-    followers: null,
-    following: null,
+    followers: [],
+    following: [],
+    followers_count: null,
+    following_coun: null,
   },
-  mutations: {},
   // computed: mapState({
   //   userId: (state) => state.loginStore.userId,
   // }),
   actions: {
-    getProfile(_, id) {
+    getProfile({ commit }, id) {
       const BASE_URL = `http://127.0.0.1:8000/accounts/${id}/profile`;
-      console.log(axios.defaults);
 
       axios
         .get(BASE_URL)
         .then((res) => {
-          console.log(res.data);
+          console.log(res.data.user_profile);
+          console.log(res.data.detail);
+          commit("getUserDetail", res.data);
         })
         .catch((err) => console.log(err));
-      console.log(BASE_URL);
     },
   },
-  mounted() {
-    console.log(this.userId);
-    this.getProfile();
+  mutations: {
+    // 마이페이지 데이터 저장
+    getUserDetail(state, payload) {
+      state.followers = payload.detail.followers;
+      state.following = payload.detail.following;
+      state.followers_count = payload.detail.followers_count;
+      state.followers_count = payload.detail.followers_count;
+
+      console.log(state);
+
+      console.log("마이페이지 성공");
+    },
   },
 };
 
