@@ -15,7 +15,7 @@ def get_popular_movies():
     data = response.json()
     
     movies = []
-    for page in range(1, 500):
+    for page in range(1, 50):
         params["page"] = page
         response = requests.get(url, params=params)
         data = response.json()
@@ -41,7 +41,6 @@ def transform_movie_data(movie):
             "vote_average": movie["vote_average"],
             "overview": movie["overview"],
             "poster_path": movie["poster_path"],
-            "genres": movie["genre_ids"]
         }
     }
     return transformed_movie

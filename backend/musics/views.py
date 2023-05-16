@@ -8,7 +8,6 @@ from . serializers import *
 from rest_framework.views import APIView
 from rest_framework import status
 
-
 class MusicPagenatior(PageNumberPagination):
     page_size = 10
     page_query_param = 'page'
@@ -18,14 +17,13 @@ class MusicPagenatior(PageNumberPagination):
 def music(request):
     pass
 
-
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def search_music(request, keyword):
     movie_search_result = Music.objects.filter(Q(content__icontains=keyword)|Q(title__icontains=keyword))
     paginator = MusicPagenatior()
     result_page = paginator.paginate_queryset(movie_search_result, request)
-    serializer = MusicListSerializers(result_page, many=True)
+    serializer = MusicListSerializer(result_page, many=True)
     return paginator.get_paginated_response(serializer.data)
 
 class MusicLikeView(APIView):
@@ -47,7 +45,7 @@ class MusicPlaylistView(APIView):
         playlist = user.playlist.all()
         paginator = MusicPagenatior()
         result_page = paginator.paginate_queryset(playlist)
-        serializers = PlaylistSerializers(result_page, many=True)
+        serializers = PlaylistSerializer(result_page, many=True)
         return paginator.get_paginated_response(serializers.data)
 
     def post(request, music_pk):
@@ -62,3 +60,17 @@ class MusicPlaylistView(APIView):
         user.playlist.remove(music)
         return Response({"message":"Deleted to playlist successfully"})
 
+class MusicComponentView(APIView):
+    def get(self, request):
+        user = request.user
+        component = user.music_components
+        serializer = ComponentSerializer(component)
+        return Response(serializer.data)
+    
+    def post(self, request):
+        serializer = ComponentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=201)
+        else:
+            return Response(serializer.errors, status=400)
