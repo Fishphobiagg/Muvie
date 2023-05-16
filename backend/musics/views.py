@@ -71,13 +71,11 @@ class MusicComponentView(APIView):
         return Response(serializer.data)
     
     def post(self, request):
-        serializer = ComponentSerializer(data=request.data)
-        user = request.user
-        if user:
-            print(1)
+            serializer = ComponentSerializer(data=request.data)
             if serializer.is_valid():
-                component = serializer.save()
-                user.music_components.add(component.pk)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_406_NOT_ACCEPTABLE)
+                component = serializer.save(user=request.user)  # 1대1 관계 설정
+                print(request.user.music_components)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                return Response(serializer.errors, status=status.HTTP_406_NOT_ACCEPTABLE)
+

@@ -1,5 +1,16 @@
 from .models import Music, MusicComponent
 from rest_framework import serializers
+from accounts.models import User
+
+class ComponentSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(),
+        default=serializers.CurrentUserDefault()
+    )
+
+    class Meta:
+        model = MusicComponent
+        fields = '__all__'
 
 class MusicListSerializer(serializers.ModelSerializer):
     album_cover = serializers.SerializerMethodField()

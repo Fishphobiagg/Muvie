@@ -5,16 +5,6 @@ from movies .models import Movie
 from django.utils.text import get_valid_filename
 import os
 
-# def user_directory_path(instance, filename):
-#     # 파일 이름을 "user{user_id}.{확장자}" 형식으로 지정
-#     ext = os.path.splitext(filename)[1]  # 파일 확장자 추출
-#     filename = f'user{instance.id}{ext}'
-#     # 파일 이름을 안전하게 인코딩
-#     safe_filename = get_valid_filename(filename)
-#     # 파일이 저장될 경로 반환
-#     return f'users/{safe_filename}'
-
-# 헬퍼 클래스
 class UserManager(BaseUserManager):
     def create_user(self, email, password, **kwargs):
         if not email:
