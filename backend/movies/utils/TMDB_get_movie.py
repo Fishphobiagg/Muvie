@@ -30,8 +30,7 @@ def get_popular_movies():
     return movies[:10000]
  
 def transform_movie_data(movie):
-    if movie.original_language == 'kr':
-        transformed_movie = {
+    transformed_movie = {
         "model": "movies.movie",
         "fields": {
             "title": movie["title"],
@@ -45,23 +44,6 @@ def transform_movie_data(movie):
             "genres": movie["genre_ids"]
         }
     }
-    else:
-        transformed_movie = {
-        "model": "movies.movie",
-        "fields": {
-            "title": movie["original_title"],
-            "original_title": movie["original_title"],
-            "release_date": movie["release_date"],
-            "popularity": movie["popularity"],
-            "vote_count": movie["vote_count"],
-            "vote_average": movie["vote_average"],
-            "overview": movie["overview"],
-            "poster_path": movie["poster_path"],
-            "genres": movie["genre_ids"]
-        }
-    }    
-    
-    
     return transformed_movie
 
 def save_movies_to_fixture(movies):
