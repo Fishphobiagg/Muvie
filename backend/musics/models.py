@@ -5,7 +5,6 @@ class Music(models.Model):
     title = models.CharField(max_length=50)
     artist = models.CharField(max_length=30)
     uri = models.URLField(blank=False)
-    youtube_uri = models.URLField(blank=False, null=True)
 
 class MusicComponent(models.Model):
     energy = models.DecimalField(max_digits=3, decimal_places=2, validators=[MinValueValidator(0.0), MaxValueValidator(1.0)])
