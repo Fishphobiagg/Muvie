@@ -1,12 +1,4 @@
-// import axios from "axios";
-// import Vue from "vue";
-// import Vuex from "vuex";
-// import { useStore } from "vuex";
-// import { computed } from "vue";
-
-// const { userId } = localStorage.getItem("vuex");
-
-// Vue.use(Vuex);
+import axios from "axios";
 
 const mypageStore = {
   state: {
@@ -14,18 +6,26 @@ const mypageStore = {
     following: null,
   },
   mutations: {},
+  // computed: mapState({
+  //   userId: (state) => state.loginStore.userId,
+  // }),
   actions: {
-    getProfile() {
-      const Id = this.$store.state.loginStore.userId;
-      console.log(Id);
-      const BASE_URL = `http://127.0.0.1:8000/accounts/${Id}/profile`;
+    getProfile(_, id) {
+      const BASE_URL = `http://127.0.0.1:8000/accounts/${id}/profile`;
+      console.log(axios.defaults);
 
-      // axios.get(BASE_URL).then((res) => {
-      //   console.log(res.data);
-      // });
+      axios
+        .get(BASE_URL)
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((err) => console.log(err));
       console.log(BASE_URL);
-      console.log("에러");
     },
+  },
+  mounted() {
+    console.log(this.userId);
+    this.getProfile();
   },
 };
 

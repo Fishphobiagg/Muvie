@@ -8,6 +8,8 @@ const loginStore = {
     userInfo: null,
     isLogin: false,
     userId: null,
+    accessToken: null,
+    refreshToken: null,
   },
   actions: {
     // 로그인
@@ -15,7 +17,8 @@ const loginStore = {
       axios
         .post(BASE_URL, loginObj)
         .then((res) => {
-          commit("loginSuccess", res.data.user);
+          console.log(axios.defaults);
+          commit("loginSuccess", res.data);
         })
         .catch((err) => {
           console.log(err);
@@ -25,9 +28,14 @@ const loginStore = {
   mutations: {
     // 로그인 성공 후 상태 변경
     loginSuccess(state, payload) {
-      state.userInfo = payload;
+      state.userInfo = payload.user;
+
       state.isLogin = true;
-      state.userId = payload.id;
+
+      state.userId = payload.user.id;
+
+      state.accessToken = payload.token.access;
+      state.refreshToken = payload.token.refresh;
       console.log("로그인 성공~");
     },
   },
