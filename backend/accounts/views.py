@@ -1,5 +1,6 @@
 # views.py
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 from .serializers import *
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
 from rest_framework import status
@@ -114,6 +115,7 @@ class AuthAPIView(APIView):
         return response
 
 class FollowAPIView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request, user_pk):
         user = User.objects.get(pk=user_pk)
         serializer = FollowSerializer(user)
@@ -147,6 +149,7 @@ class FollowAPIView(APIView):
             })
 
 class ProfileView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request, user_pk):
         me = request.user
         if user_pk == me.pk:
@@ -170,6 +173,7 @@ class ProfileView(APIView):
         return Response(response)
         
 class PasswordChangeView(APIView):
+    permission_classes = [IsAuthenticated]
     def patch(self, request, user_pk):
         user = User.objects.get(pk=user_pk)
         new_password = request.data.get('new_password')
@@ -181,6 +185,7 @@ class PasswordChangeView(APIView):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 class AccountsChangeView(APIView):
+    permission_classes = [IsAuthenticated]
     def patch(self, request, user_pk):
         user = User.objects.get(pk=user_pk)
         serializer = UserChangeSerializer(user, data=request.data, partial=True)
