@@ -1,5 +1,6 @@
 <template>
   <div>
+    <MyProfile />
     <div class="tab">
       <ul class="tab-bar">
         <li @click="tab = 0">팔로잉</li>
@@ -16,6 +17,7 @@
 
 <script>
 import { mapState } from "vuex";
+import MyProfile from "../organisms/MyProfile";
 import TabContainer from "../organisms/TabContainer";
 
 export default {
@@ -28,6 +30,7 @@ export default {
   },
   components: {
     TabContainer,
+    MyProfile,
   },
   computed: mapState({
     userId: (state) => state.loginStore.userId,
@@ -80,7 +83,7 @@ export default {
 }
 
 .tab-container {
-  width: 100%;
+  width: 100vh;
   height: 700px;
 }
 </style>
