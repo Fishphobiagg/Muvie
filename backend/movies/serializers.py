@@ -7,7 +7,12 @@ class MovieListSerializer(serializers.ModelSerializer):
         fields = '__all__'  
 
 class MovieSerializer(serializers.ModelSerializer):
-#     ost = serializers.StringRelatedField(many=True)
+    ost = serializers.SerializerMethodField()
     class Meta:
         model = Movie
-    pass
+        fields = ['title', 'poster_path','ost']
+    
+    def get_ost(self, instance):
+        all_ost = instance.ost.all()
+        return [{"title": ost.title, "artist":ost.artist, 'uri':ost.uri, 'like':ost.users_like_musics.count()} for ost in all_ost]
+    

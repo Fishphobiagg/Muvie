@@ -2,19 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from musics .models import MusicComponent, Music
 from movies .models import Movie
-from django.utils.text import get_valid_filename
-import os
+from sklearn.preprocessing import StandardScaler
 
-# def user_directory_path(instance, filename):
-#     # 파일 이름을 "user{user_id}.{확장자}" 형식으로 지정
-#     ext = os.path.splitext(filename)[1]  # 파일 확장자 추출
-#     filename = f'user{instance.id}{ext}'
-#     # 파일 이름을 안전하게 인코딩
-#     safe_filename = get_valid_filename(filename)
-#     # 파일이 저장될 경로 반환
-#     return f'users/{safe_filename}'
-
-# 헬퍼 클래스
 class UserManager(BaseUserManager):
     def create_user(self, email, password, **kwargs):
         if not email:
@@ -27,7 +16,27 @@ class UserManager(BaseUserManager):
         )
         user.set_password(password)
         user.save(using=self._db)
+
+        music_component = MusicComponent.objects.create(
+            energy=0.5,
+            instrumentalness=0.5,
+            liveness=0.5,
+            acousticness=0.5,
+            speechiness=0.5,
+            valence=0.5,
+            tempo=80,
+            mode=0.5,
+            loudness=50,
+            danceability=0.5,
+        )
+        
+        # MusicComponent와 User의 관계 설정
+        user.music_components = music_component
+        user.save()
+        # vector 값 계산
+        user.calculate_vector()
         return user
+    
 
 
 # AbstractBaseUser를 상속해서 유저 커스텀
@@ -46,6 +55,27 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 	# 사용자의 username field는 email으로 설정 (이메일로 로그인)
     USERNAME_FIELD = 'email'
+
+    def calculate_vector(self):
+        scaler = StandardScaler()
+        # MusicComponent의 필드 값을 가져옴
+        normalized_vector = scaler.fit_transform([
+    [self.music_components.energy],
+    [self.music_components.instrumentalness],
+    [self.music_components.liveness],
+    [self.music_components.speechiness],
+    [self.music_components.acousticness],
+    [self.music_components.valence],
+    [self.music_components.tempo*0.1],
+    [self.music_components.mode],
+    [self.music_components.loudness*0.1],
+    [self.music_components.danceability],
+])
+
+        vector = normalized_vector
+        # 계산된 값을 vector 필드에 저장
+        self.music_components.vector = vector
+        self.music_components.save()
 
 class MovieUserLike(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
