@@ -1,5 +1,6 @@
 # views.py
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 from .serializers import *
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
 from rest_framework import status
@@ -8,6 +9,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth import authenticate
 from muvie.settings import SECRET_KEY
 import jwt
+from musics.serializers import PlaylistSerializer
 
 class SignupAPIView(APIView):
     def post(self, request):
@@ -114,14 +116,15 @@ class AuthAPIView(APIView):
         return response
 
 class FollowAPIView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request, user_pk):
         user = User.objects.get(pk=user_pk)
         serializer = FollowSerializer(user)
         return Response(serializer.data)
 
     def post(self, request, user_pk):
-        user = User.objects.get(pk=user_pk)
-        opponent = get_object_or_404(User, pk=request.data['opponent_id'])
+        user = request.user
+        opponent = User.objects.get(pk=user_pk)
         if opponent in user.following.all():
             return Response({
                 "message" : "already followed"
@@ -132,8 +135,8 @@ class FollowAPIView(APIView):
                 "message": "follow success",
             })
     def delete(self, request, user_pk):
-        user = User.objects.get(pk=user_pk)
-        opponent = get_object_or_404(User, pk=request.data['opponent_id'])
+        user = request.user
+        opponent = User.objects.get(pk=user_pk)
         if opponent not in user.following.all():
             return Response({
                 "message" : "Not followed"
@@ -145,10 +148,12 @@ class FollowAPIView(APIView):
             })
 
 class ProfileView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request, user_pk):
         me = request.user
         if user_pk == me.pk:
-            serializer = MyProfileSerializer(instance=me)
+            print(me)
+            serializer = MyProfileSerializer(instance=me, user_pk=me.pk)
             user_serializer = SimpleUserSerializer(me)
             response = {
                 "user_profile" : user_serializer.data,
@@ -157,15 +162,17 @@ class ProfileView(APIView):
             return Response(response)
         else:
             user = User.objects.get(pk=user_pk)
-            serializer = ProfileSerializer(instance=user)
+            serializer = ProfileSerializer(instance=user, user_pk=me.pk)
             user_serializer = SimpleUserSerializer(user)
+            print(123412412412342, user_serializer.data)
             response = {
                 "user_profile" : user_serializer.data,
                 "detail" : serializer.data
             }
-            return Response(response)
+        return Response(response)
         
 class PasswordChangeView(APIView):
+    permission_classes = [IsAuthenticated]
     def patch(self, request, user_pk):
         user = User.objects.get(pk=user_pk)
         new_password = request.data.get('new_password')
@@ -177,6 +184,7 @@ class PasswordChangeView(APIView):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 class AccountsChangeView(APIView):
+    permission_classes = [IsAuthenticated]
     def patch(self, request, user_pk):
         user = User.objects.get(pk=user_pk)
         serializer = UserChangeSerializer(user, data=request.data, partial=True)
@@ -186,6 +194,19 @@ class AccountsChangeView(APIView):
                              "changed_data" : UserChangeSerializer(User.objects.get(pk=user_pk)).data
                              })
         return Response(serializers.error, status=status.HTTP_400_BAD_REQUEST)
-        
-        
-        
+
+class LikeListView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        user = request.user
+        like_list = user.like_music.all()
+        serializer = PlaylistSerializer(like_list, many=True)
+        return Response(serializer.data)
+
+class PlaylistView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        user = request.user
+        playlist = user.playlist.all()
+        serializer = PlaylistSerializer(playlist, many=True)
+        return Response(serializer.data)
