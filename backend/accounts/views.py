@@ -135,6 +135,7 @@ class FollowAPIView(APIView):
             user.following.add(opponent)
             return Response({
                 "message": "follow success",
+                "opponent_id" : user_pk
             })
     def delete(self, request, user_pk):
         user = request.user
@@ -146,7 +147,8 @@ class FollowAPIView(APIView):
         else:
             user.following.remove(opponent)
             return Response({
-                "message": 'Unfollow success'
+                "message": 'Unfollow success',
+                "opponent_id" : user_pk
             })
 
 class ProfileView(APIView):
@@ -189,6 +191,8 @@ class AccountsChangeView(APIView):
     permission_classes = [IsAuthenticated]
     def patch(self, request, user_pk):
         user = User.objects.get(pk=user_pk)
+        if request.user != user:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
         serializer = UserChangeSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
