@@ -7,6 +7,8 @@ from . models import Music
 from . serializers import *
 from rest_framework.views import APIView
 from rest_framework import status
+from sklearn.preprocessing import StandardScaler
+
 
 class MusicPagenatior(PageNumberPagination):
     page_size = 10
@@ -78,10 +80,27 @@ class MusicComponentView(APIView):
     
     def post(self, request):
             serializer = ComponentSerializer(data=request.data)
+            scaler = StandardScaler()
+            user = request.user
             if serializer.is_valid():
-                component = serializer.save(user=request.user)  # 1대1 관계 설정
-                print(request.user.music_components)
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
+                component = user.music_components
+                for field, value in serializer.validated_data.items():
+                    setattr(component, field, value)
+                component.vector = scaler.fit_transform([
+                    [user.music_components.energy],
+                    [user.music_components.instrumentalness],
+                    [user.music_components.liveness],
+                    [user.music_components.speechiness],
+                    [user.music_components.acousticness],
+                    [user.music_components.valence],
+                    [user.music_components.tempo*0.1],
+                    [user.music_components.mode],
+                    [user.music_components.loudness*0.1],
+                    [user.music_components.danceability],
+                ])
+                component.save()
+                
+                return Response({"vector":user.music_components.vector}, status=status.HTTP_201_CREATED)
             else:
                 return Response(serializer.errors, status=status.HTTP_406_NOT_ACCEPTABLE)
 

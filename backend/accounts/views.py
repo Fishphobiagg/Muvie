@@ -123,10 +123,8 @@ class FollowAPIView(APIView):
         return Response(serializer.data)
 
     def post(self, request, user_pk):
-        user = User.objects.get(pk=user_pk)
-        if user != request.user:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
-        opponent = get_object_or_404(User, pk=request.data['opponent_id'])
+        user = request.user
+        opponent = User.objects.get(pk=user_pk)
         if opponent in user.following.all():
             return Response({
                 "message" : "already followed"
@@ -137,8 +135,8 @@ class FollowAPIView(APIView):
                 "message": "follow success",
             })
     def delete(self, request, user_pk):
-        user = User.objects.get(pk=user_pk)
-        opponent = get_object_or_404(User, pk=request.data['opponent_id'])
+        user = request.user
+        opponent = User.objects.get(pk=user_pk)
         if opponent not in user.following.all():
             return Response({
                 "message" : "Not followed"
