@@ -1,5 +1,6 @@
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
+from ..models import User
 
 def recommend_ost(components):
     sp_client_id = '150e34294220415f8bc1337af12adb58'
@@ -24,4 +25,7 @@ def recommend_ost(components):
     return recommendations
 
 def recommend_simillar_user(components):
+    pass
+
+def recommend_by_like(like_list):
     pass

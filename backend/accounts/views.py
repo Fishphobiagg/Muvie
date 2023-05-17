@@ -12,6 +12,7 @@ import jwt
 from musics.serializers import PlaylistSerializer, ComponentSerializer
 from rest_framework.decorators import api_view, permission_classes
 from .algorithms.algorithm import recommend_ost
+from musics.models import Music
 
 class SignupAPIView(APIView):
     def post(self, request):
@@ -235,13 +236,29 @@ def recommend_components(request):
         'danceability': component.danceability,
     }
     recommend_list = recommend_ost(data)
-    print(recommend_list)
+    response = {"data":[]}
+    for recommend in recommend_list['tracks']:
+        title = recommend['name']
+        artist = recommend['artists'][0]['name']
+        album = recommend['album']['name']
+        uri = recommend['uri']
+        poster = recommend['album']['images'][0]['url']
+        if Music.objects.filter(title=title, artist=artist):
+           response['data'].append({"title":title, "artist":artist, 'album':album, "uri":uri, 'poster':poster})
+        else:
+            new = Music.objects.create(
+                title=title, artist=artist, uri=uri
+            )
+            new.save()
+            response['data'].append({"title":title, "artist":artist, 'album':album, "uri":uri, 'poster':poster})
+    return Response(response)
 
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def recommend_user(request):
     user = request.user
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
