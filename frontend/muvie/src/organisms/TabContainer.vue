@@ -29,15 +29,23 @@ export default {
   props: {
     tab: Number,
   },
-  computed: mapState({
-    userId: (state) => state.loginStore.userId,
-    followers: (state) => state.mypageStore.followers,
-    following: (state) => state.mypageStore.following,
-  }),
-  created() {
+  computed: {
+    ...mapState({
+      userId: (state) => state.loginStore.userId,
+      followers: (state) => state.mypageStore.followers,
+      following: (state) => state.mypageStore.following,
+    }),
+    paramId() {
+      return this.$route.params.userId;
+    },
+  },
+  mounted() {
     console.log("마이페이지뷰");
-    if (this.userId) {
-      this.$store.dispatch("getProfile", this.userId);
+    // if (this.userId) {
+    //   this.$store.dispatch("getProfile", this.userId);
+    // }
+    if (this.paramId) {
+      this.$store.dispatch("getProfile", this.paramId);
     }
   },
 };

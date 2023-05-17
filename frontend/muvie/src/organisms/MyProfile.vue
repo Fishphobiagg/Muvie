@@ -22,8 +22,8 @@ export default {
   name: "MyProfile",
   computed: mapState({
     userId: (state) => state.mypageStore.userId,
-    nickname: (state) => state.loginStore.userInfo.nickname,
-    profile_picture: (state) => state.loginStore.userInfo.profile_picture,
+    nickname: (state) => state.mypageStore.nickname,
+    profile_picture: (state) => state.mypageStore.profile_picture,
   }),
 };
 </script>

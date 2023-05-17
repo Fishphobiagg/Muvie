@@ -23,8 +23,13 @@ const routes = [
     name: "signup",
     component: SignupView,
   },
+  // {
+  //   path: "/mypage",
+  //   name: "mypage",
+  //   component: MypageView,
+  // },
   {
-    path: "/mypage",
+    path: "/:userId/profile",
     name: "mypage",
     component: MypageView,
   },

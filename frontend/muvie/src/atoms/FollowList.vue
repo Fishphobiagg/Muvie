@@ -6,7 +6,9 @@
         :src="`http://127.0.0.1:8000${fwg.profile_picture}`"
         alt="프로필 사진"
       />
-      <span class="user-name">{{ fwg.nickname }}</span>
+      <span class="user-name" @click="navigateToProfile(fwg.id)">{{
+        fwg.nickname
+      }}</span>
     </div>
     <button class="follow-button">
       {{ fwg.is_followed ? "팔로잉" : "팔로우" }}
@@ -21,6 +23,14 @@ export default {
     return {
       buttonMsg: "팔로잉",
     };
+  },
+  methods: {
+    navigateToProfile(id) {
+      // this.$store.dispatch("getProfile", id);
+      const BASE_URL = "http://127.0.0.1:8000";
+      const url = `${BASE_URL}/${id}/profile`;
+      window.location.href = url;
+    },
   },
   props: {
     fwg: Object,

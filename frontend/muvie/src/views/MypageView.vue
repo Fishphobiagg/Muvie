@@ -17,15 +17,14 @@
 
 <script>
 import { mapState } from "vuex";
-import MyProfile from "../organisms/MyProfile";
-import TabContainer from "../organisms/TabContainer";
+import MyProfile from "../organisms/MyProfile.vue";
+import TabContainer from "../organisms/TabContainer.vue";
 
 export default {
   name: "MypageView",
   data() {
     return {
       tab: 1,
-      profilePhoto: null,
     };
   },
   components: {
@@ -37,12 +36,6 @@ export default {
     followers: (state) => state.mypageStore.followers,
     following: (state) => state.mypageStore.following,
   }),
-  // created() {
-  //   console.log("마이페이지뷰");
-  //   if (this.userId) {
-  //     this.$store.dispatch("getProfile", this.userId);
-  //   }
-  // },
 };
 </script>
 

@@ -7,8 +7,8 @@ const mypageStore = {
     following: [],
     followers_count: null,
     following_count: null,
+    nickname: null,
     profile_picture: null,
-    profile_picture_usage: null,
   },
   actions: {
     getProfile({ commit }, id) {
@@ -46,11 +46,15 @@ const mypageStore = {
   },
   mutations: {
     getUserDetail(state, payload) {
+      // console.log(payload);
       state.followers = payload.detail.followers;
       state.following = payload.detail.following;
       state.followers_count = payload.detail.followers_count;
       state.following_count = payload.detail.following_count;
+      state.nickname = payload.user_profile.nickname;
       state.profile_picture = payload.user_profile.profile_picture;
+      console.log(state);
+      console.log(state.profile_picture);
 
       console.log("마이페이지 성공");
     },
