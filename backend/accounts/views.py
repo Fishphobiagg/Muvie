@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth import authenticate
 from muvie.settings import SECRET_KEY
 import jwt
+from musics.serializers import PlaylistSerializer
 
 class SignupAPIView(APIView):
     def post(self, request):
@@ -195,4 +196,19 @@ class AccountsChangeView(APIView):
                              "changed_data" : UserChangeSerializer(User.objects.get(pk=user_pk)).data
                              })
         return Response(serializers.error, status=status.HTTP_400_BAD_REQUEST)
-        
+
+class LikeListView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        user = request.user
+        like_list = user.like_music.all()
+        serializer = PlaylistSerializer(like_list, many=True)
+        return Response(serializer.data)
+
+class PlaylistView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        user = request.user
+        playlist = user.playlist.all()
+        serializer = PlaylistSerializer(playlist, many=True)
+        return Response(serializer.data)
