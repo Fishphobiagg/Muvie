@@ -9,9 +9,9 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth import authenticate
 from muvie.settings import SECRET_KEY
 import jwt
-from musics.serializers import PlaylistSerializer
+from musics.serializers import PlaylistSerializer, ComponentSerializer
 from rest_framework.decorators import api_view, permission_classes
-
+from .algorithms.algorithm import recommend_ost
 
 class SignupAPIView(APIView):
     def post(self, request):
@@ -217,6 +217,22 @@ class PlaylistView(APIView):
 @permission_classes([IsAuthenticated])
 def recommend_components(request):
     user = request.user
+    component = user.music_components
+    data = {
+        'energy': component.energy,
+        'instrumentalness': component.instrumentalness,
+        'liveness': component.liveness,
+        'acousticness': component.acousticness,
+        'speechiness': component.speechiness,
+        'valence': component.valence,
+        'tempo': component.tempo,
+        'mode': component.mode,
+        'loudness': component.loudness,
+        'danceability': component.danceability,
+    }
+    recommend_list = recommend_ost(data)
+    print(recommend_list)
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
