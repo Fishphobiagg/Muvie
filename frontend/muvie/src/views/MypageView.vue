@@ -1,13 +1,16 @@
 <template>
   <div>
     <div v-if="tab == 0">
-      <FollowList></FollowList>
+      <FollowList
+        :fwg="fwg"
+        v-for="(fwg, idx) in following"
+        :key="idx"
+      ></FollowList>
     </div>
   </div>
 </template>
 
 <script>
-import axios from "axios";
 import { mapState } from "vuex";
 import FollowList from "../atoms/FollowList.vue";
 
@@ -16,6 +19,7 @@ export default {
   data() {
     return {
       tab: 0,
+      profilePhoto: null,
     };
   },
   components: {
@@ -23,15 +27,13 @@ export default {
   },
   computed: mapState({
     userId: (state) => state.loginStore.userId,
+    followers: (state) => state.mypageStore.followers,
+    following: (state) => state.mypageStore.following,
   }),
-  mounted() {
-    console.log(this.userId);
-    console.log(axios.defaults);
-
+  created() {
+    console.log("마이페이지뷰");
     if (this.userId) {
       this.$store.dispatch("getProfile", this.userId);
-      console.log("컴포넌트로 불러와져");
-      console.log(this.$store.state.followers);
     }
   },
 };

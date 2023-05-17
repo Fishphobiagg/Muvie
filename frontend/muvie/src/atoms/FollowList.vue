@@ -1,10 +1,16 @@
 <template>
   <div class="profile-item">
     <div class="user-detail">
-      <div class="profile-photo"></div>
-      <span class="user-name">하니</span>
+      <img
+        class="profile-photo"
+        :src="`http://127.0.0.1:8000${fwg.profile_picture}`"
+        alt="프로필 사진"
+      />
+      <span class="user-name">{{ fwg.nickname }}</span>
     </div>
-    <button class="follow-button">{{ buttonMsg }}</button>
+    <button class="follow-button">
+      {{ fwg.is_followed ? "팔로잉" : "팔로우" }}
+    </button>
   </div>
 </template>
 
@@ -15,6 +21,9 @@ export default {
     return {
       buttonMsg: "팔로잉",
     };
+  },
+  props: {
+    fwg: Object,
   },
 };
 </script>
@@ -54,8 +63,8 @@ export default {
   font-size: 25px;
   line-height: 80px;
   cursor: pointer;
-  display: inline-block; /* 추가 */
-  vertical-align: middle; /* 추가 */
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .follow-button {
