@@ -1,8 +1,6 @@
 from django.urls import path
-from .views import PlaylistView, LikeListView, SignupAPIView, AuthAPIView, FollowAPIView, ProfileView, AccountsChangeView, PasswordChangeView
+from .views import PlaylistView, LikeListView, SignupAPIView, AuthAPIView, FollowAPIView, ProfileView, AccountsChangeView, PasswordChangeView, recommend_components, recommend_like, recommend_user
 from rest_framework_simplejwt.views import TokenRefreshView
-from .serializers import * 
-from rest_framework import viewsets
 
 urlpatterns = [
     path('playlist', PlaylistView.as_view()),
@@ -14,5 +12,7 @@ urlpatterns = [
     path('<int:user_pk>/profile', ProfileView.as_view()),
     path('edit/<int:user_pk>/', AccountsChangeView.as_view()),
     path('edit/<int:user_pk>/password', PasswordChangeView.as_view()),
-    
+    path('recommend/components', recommend_components),
+    path('recommend/user', recommend_user),
+    path('recommend/like', recommend_like),
 ]

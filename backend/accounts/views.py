@@ -10,6 +10,8 @@ from django.contrib.auth import authenticate
 from muvie.settings import SECRET_KEY
 import jwt
 from musics.serializers import PlaylistSerializer
+from rest_framework.decorators import api_view, permission_classes
+
 
 class SignupAPIView(APIView):
     def post(self, request):
@@ -106,7 +108,7 @@ class AuthAPIView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
     # 로그아웃
-    def delete(self, request):
+    def delete(self, request):  
         # 쿠키에 저장된 토큰 삭제 => 로그아웃 처리
         response = Response({
             "message": "Logout success"
@@ -210,3 +212,18 @@ class PlaylistView(APIView):
         playlist = user.playlist.all()
         serializer = PlaylistSerializer(playlist, many=True)
         return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def recommend_components(request):
+    user = request.user
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def recommend_user(request):
+    user = request.user
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def recommend_like(request):
+    user = request.user
