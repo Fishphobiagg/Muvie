@@ -19,7 +19,7 @@ class MusicPagenatior(PageNumberPagination):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def search_music(request, keyword):
-    music_search_result = Music.objects.filter(Q(content__icontains=keyword)|Q(title__icontains=keyword))
+    music_search_result = Music.objects.filter(Q(artist__icontains=keyword)|Q(title__icontains=keyword))
     paginator = MusicPagenatior()
     result_page = paginator.paginate_queryset(music_search_result, request)
     serializer = MusicListSerializer(result_page, many=True)
@@ -50,14 +50,6 @@ class MusicLikeView(APIView):
 
 class MusicPlaylistView(APIView):
     permission_classes = [IsAuthenticated]
-    def get(self, request, **kwargs):
-        user = request.user
-        playlist = user.playlist.all()
-        paginator = MusicPagenatior()
-        result_page = paginator.paginate_queryset(playlist, request)
-        serializer = PlaylistSerializer(result_page, many=True)
-        return paginator.get_paginated_response(serializer.data)
-
     def post(self, request, music_pk):
         user = request.user
         music = Music.objects.get(pk=music_pk)
