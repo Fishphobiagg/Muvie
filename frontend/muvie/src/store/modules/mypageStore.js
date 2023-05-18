@@ -23,32 +23,43 @@ const mypageStore = {
         .get(MYPAGE_API)
         .then((res) => {
           console.log("프로필 요청");
+          console.log(res);
           commit("getUserDetail", res.data);
 
           // 유저(본인) 프로필사진 가져오기
-          if (res.data.user_profile.profile_picture) {
-            const PHOTO_API = `${BASE_URL}/${res.data.user_profile.profile_picture}`;
-            console.log(PHOTO_API);
-            axios
-              .get(PHOTO_API, {
-                responseType: "arraybuffer",
-              })
-              .then((response) => {
-                const image = new Blob([response.data], { type: "image/jpeg" });
-                const imageUrl = URL.createObjectURL(image);
-                commit("getPhoto", imageUrl);
-              })
-              .catch((error) => {
-                console.log(error);
-              });
-          }
+          // if (res.data.user_profile.profile_picture) {
+          //   const PHOTO_API = `${BASE_URL}/${res.data.user_profile.profile_picture}`;
+          //   console.log(PHOTO_API);
+          //   axios
+          //     .get(PHOTO_API, {
+          //       responseType: "arraybuffer",
+          //     })
+          //     .then((response) => {
+          //       const image = new Blob([response.data], { type: "image/jpeg" });
+          //       const imageUrl = URL.createObjectURL(image);
+          //       commit("getPhoto", imageUrl);
+          //     })
+          //     .catch((error) => {
+          //       console.log(error);
+          //     });
+          // }
         })
         .catch((err) => console.log(err));
     },
     follow({ commit }, id) {
       axios.post(`${BASE_URL}/accounts/${id}/follow`).then((res) => {
         console.log(res);
-        commit("updateFollowState", id);
+        commit("updateFollowState", res.following);
+        // eslint-disable-next-line no-restricted-globals
+        location.reload();
+      });
+    },
+    unfollow({ commit }, id) {
+      axios.delete(`${BASE_URL}/accounts/${id}/follow`).then((res) => {
+        console.log(res);
+        commit("updateUnfollowState", res.following);
+        // eslint-disable-next-line no-restricted-globals
+        location.reload();
       });
     },
     editNickname({ commit }, payload) {
@@ -101,6 +112,14 @@ const mypageStore = {
 
       console.log(state.profile_picture_usage);
       console.log("이미지 요청 성공");
+    },
+    updateFollowState(state, payload) {
+      state.following = payload;
+      console.log("팔로잉 목록 업데이트 성공");
+    },
+    updateUnfollowState(state, payload) {
+      state.following = payload;
+      console.log("언팔로잉 목록 업데이트 성공");
     },
   },
 };

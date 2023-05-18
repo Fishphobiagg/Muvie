@@ -56,7 +56,7 @@ export default {
   computed: {
     ...mapState({
       userId: (state) => state.loginStore.userId,
-      nickname: (state) => state.loginStore.userInfo.nickname,
+      nickname: (state) => state.mypageStore.nickname,
       profile_picture: (state) => state.mypageStore.profile_picture,
     }),
   },

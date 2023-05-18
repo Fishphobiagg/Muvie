@@ -10,7 +10,11 @@
         fwg.nickname
       }}</span>
     </div>
-    <button class="follow-button" @click="followAction(fwg)">
+    <button
+      class="follow-button"
+      @click="followAction(fwg)"
+      :class="{ following: fwg.is_followed }"
+    >
       {{ fwg.is_followed ? "팔로잉" : "팔로우" }}
     </button>
   </div>
@@ -34,6 +38,7 @@ export default {
     followAction(fwg) {
       if (fwg.is_followed) {
         // 이미 팔로잉 중인 경우의 동작
+        this.$store.dispatch("unfollow", fwg.id);
       } else {
         // 팔로우할 경우의 동작
         this.$store.dispatch("follow", fwg.id);
@@ -92,5 +97,12 @@ export default {
   border: none;
   border-radius: 9px;
   cursor: pointer;
+  background-color: blue;
+  color: white;
+}
+
+.following {
+  background-color: lightgray !important;
+  color: black !important;
 }
 </style>
