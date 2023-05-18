@@ -10,6 +10,12 @@ export default {};
 
 <style>
 body {
+  background: #eed0b2;
+  height: 100vh;
+  width: 100vw;
+}
+
+.circle-out {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -17,8 +23,6 @@ body {
   width: 100vw;
   /* background: #349fb3; */
   background: #eed0b2;
-}
-.circle-out {
   width: 300px;
   height: 300px;
 }

@@ -32,11 +32,12 @@ export default {
 .my-profile {
   display: flex;
   align-items: center;
+  padding-left: 80px;
 }
 
 .my-profile-photo {
-  width: 140px;
-  height: 140px;
+  width: 100px;
+  height: 100px;
   margin-right: 40px;
   background-color: transparent;
   border-radius: 75px;

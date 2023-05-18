@@ -10,7 +10,7 @@
         fwg.nickname
       }}</span>
     </div>
-    <button class="follow-button">
+    <button class="follow-button" @click="followAction(fwg)">
       {{ fwg.is_followed ? "팔로잉" : "팔로우" }}
     </button>
   </div>
@@ -31,6 +31,14 @@ export default {
       const url = `${BASE_URL}/${id}/profile`;
       window.location.href = url;
     },
+    followAction(fwg) {
+      if (fwg.is_followed) {
+        // 이미 팔로잉 중인 경우의 동작
+      } else {
+        // 팔로우할 경우의 동작
+        this.$store.dispatch("follow", fwg.id);
+      }
+    },
   },
   props: {
     fwg: Object,
@@ -42,7 +50,7 @@ export default {
 .profile-item {
   width: 1000px;
   height: 80px;
-  margin: 0 auto;
+  margin: 5px auto;
   padding: 10px 60px;
   display: flex;
   flex-direction: row;
@@ -57,8 +65,8 @@ export default {
 }
 
 .profile-photo {
-  width: 77px;
-  height: 77px;
+  width: 66px;
+  height: 66px;
   background-color: white;
   border-radius: 75px;
   overflow: hidden;

@@ -1,6 +1,8 @@
 /* eslint-disable no-param-reassign */
 import axios from "axios";
 
+const BASE_URL = `http://127.0.0.1:8000`;
+
 const mypageStore = {
   state: {
     followers: [],
@@ -12,7 +14,7 @@ const mypageStore = {
   },
   actions: {
     getProfile({ commit }, id) {
-      const BASE_URL = `http://127.0.0.1:8000`;
+      // const BASE_URL = `http://127.0.0.1:8000`;
 
       // 유저 데이터 가져오기
       const MYPAGE_API = `${BASE_URL}/accounts/${id}/profile`;
@@ -43,10 +45,15 @@ const mypageStore = {
         })
         .catch((err) => console.log(err));
     },
+    follow({ commit }, id) {
+      axios.post(`${BASE_URL}/accounts/${id}/follow`).then((res) => {
+        console.log(res);
+        commit("updateFollowState", id);
+      });
+    },
   },
   mutations: {
     getUserDetail(state, payload) {
-      // console.log(payload);
       state.followers = payload.detail.followers;
       state.following = payload.detail.following;
       state.followers_count = payload.detail.followers_count;
@@ -64,6 +71,9 @@ const mypageStore = {
       console.log(state.profile_picture_usage);
       console.log("이미지 요청 성공");
     },
+    // updateFollowState(state, payload) {
+    //   state.foll
+    // }
   },
 };
 
