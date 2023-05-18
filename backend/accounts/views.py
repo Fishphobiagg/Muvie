@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 
 from musics.serializers import PlaylistSerializer, ComponentSerializer
-from .algorithms.algorithm import recommend_ost
+from .algorithms.algorithm import recommend_ost, calculate_vector
 from .serializers import *
 from musics.models import Music
 
@@ -19,7 +19,7 @@ import numpy as np
 
 from muvie.settings import SECRET_KEY
 import jwt
-
+import ast
 
 class SignupAPIView(APIView):
     def post(self, request):
@@ -261,20 +261,23 @@ def recommend_components(request):
 @permission_classes([IsAuthenticated])
 def recommend_user(request):
     user = request.user
-    user_vector = np.array(user.music_components.vector)
     random_users = User.objects.order_by('?')[:10] # 대규모로 갈 경우 속도가 느려지기 때문에 후에 수정
+    user_vector = calculate_vector(user)
     most_similar_user = None
     highest_similarity = -1
-
+    
     for random_user in random_users:
-        random_user_vector = np.array(random_user.music_components.vector)
-        similarity = cosine_similarity([user_vector], [random_user_vector])[0][0]
+        random_user_vector = calculate_vector(random_user)
+        similarity = cosine_similarity(user_vector, random_user_vector)[0][0]
         if similarity > highest_similarity:
             highest_similarity = similarity
             most_similar_user = random_user
-
+    user_serializer = SimpleUserSerializer(user)
+    serializer = ProfileSerializer(instance=most_similar_user, user_pk=user.pk)
+    return Response({"user_profile" : user_serializer.data,
+                    "detail" : serializer.data})
+    
     # 가장 유사도가 높은 사용자 정보 반환
-    return Response({'most_similar_user': most_similar_user.nickname, 'similarity': highest_similarity})
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])

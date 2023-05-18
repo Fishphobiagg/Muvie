@@ -1,6 +1,8 @@
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 from ..models import User
+from sklearn.preprocessing import StandardScaler
+
 
 def recommend_ost(components):
     sp_client_id = '150e34294220415f8bc1337af12adb58'
@@ -28,3 +30,21 @@ def recommend_simillar_user(components):
 
 def recommend_by_like(like_list):
     pass
+
+def calculate_vector(self):
+    scaler = StandardScaler()
+        # MusicComponent의 필드 값을 가져옴
+    normalized_vector = scaler.fit_transform([
+    [self.music_components.energy],
+    [self.music_components.instrumentalness],
+    [self.music_components.liveness],
+    [self.music_components.speechiness],
+    [self.music_components.acousticness],
+    [self.music_components.valence],
+    [self.music_components.tempo*0.1],
+    [self.music_components.mode],
+    [self.music_components.loudness*0.1],
+    [self.music_components.danceability],
+])
+
+    return normalized_vector

@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from musics .models import MusicComponent, Music
 from movies .models import Movie
-from sklearn.preprocessing import StandardScaler
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password, **kwargs):
@@ -34,7 +33,6 @@ class UserManager(BaseUserManager):
         user.music_components = music_component
         user.save()
         # vector 값 계산
-        user.calculate_vector()
         return user
     
 
@@ -55,27 +53,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 	# 사용자의 username field는 email으로 설정 (이메일로 로그인)
     USERNAME_FIELD = 'email'
-
-    def calculate_vector(self):
-        scaler = StandardScaler()
-        # MusicComponent의 필드 값을 가져옴
-        normalized_vector = scaler.fit_transform([
-    [self.music_components.energy],
-    [self.music_components.instrumentalness],
-    [self.music_components.liveness],
-    [self.music_components.speechiness],
-    [self.music_components.acousticness],
-    [self.music_components.valence],
-    [self.music_components.tempo*0.1],
-    [self.music_components.mode],
-    [self.music_components.loudness*0.1],
-    [self.music_components.danceability],
-])
-
-        vector = normalized_vector
-        # 계산된 값을 vector 필드에 저장
-        self.music_components.vector = vector
-        self.music_components.save()
 
 class MovieUserLike(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
