@@ -15,11 +15,9 @@ from .serializers import *
 from musics.models import Music
 
 from sklearn.metrics.pairwise import cosine_similarity
-import numpy as np
 
 from muvie.settings import SECRET_KEY
 import jwt
-import ast
 
 class SignupAPIView(APIView):
     def post(self, request):
@@ -263,19 +261,18 @@ def recommend_user(request):
     user = request.user
     random_users = User.objects.order_by('?')[:10] # 대규모로 갈 경우 속도가 느려지기 때문에 후에 수정
     user_vector = calculate_vector(user)
-    most_similar_user = None
-    highest_similarity = -1
-    
+    random_user_list = []
+
     for random_user in random_users:
         random_user_vector = calculate_vector(random_user)
         similarity = cosine_similarity(user_vector, random_user_vector)[0][0]
-        if similarity > highest_similarity:
-            highest_similarity = similarity
-            most_similar_user = random_user
-    user_serializer = SimpleUserSerializer(user)
-    serializer = ProfileSerializer(instance=most_similar_user, user_pk=user.pk)
-    return Response({"user_profile" : user_serializer.data,
-                    "detail" : serializer.data})
+        random_user_list.append((similarity, random_user))
+        
+
+    random_user_list.sort(key=lambda x: x[0], reverse=True)
+    topusers = [user[1] for user in random_user_list[:3]]
+    user_serializer = SimpleUserSerializer(topusers, many=True)
+    return Response({"recommend":user_serializer.data})
     
     # 가장 유사도가 높은 사용자 정보 반환
 
@@ -283,3 +280,4 @@ def recommend_user(request):
 @permission_classes([IsAuthenticated])
 def recommend_like(request):
     user = request.user
+    print(user.like_music)
