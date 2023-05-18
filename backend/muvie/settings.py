@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'accounts',
     'movies',
     'musics',
+    
     # 3rd party
    	'rest_framework_simplejwt',
 	'rest_framework_simplejwt.token_blacklist',

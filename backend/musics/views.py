@@ -25,6 +25,7 @@ def search_music(request, keyword):
     serializer = MusicListSerializer(result_page, many=True)
     return paginator.get_paginated_response(serializer.data)
 
+
 class MusicLikeView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request, **kwargs):
@@ -34,7 +35,6 @@ class MusicLikeView(APIView):
         result_page = paginator.paginate_queryset(like_list, request)
         serializer = PlaylistSerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
-
 
     def post(self, request, music_pk):
         user = request.user

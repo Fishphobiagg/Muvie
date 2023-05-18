@@ -9,7 +9,10 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth import authenticate
 from muvie.settings import SECRET_KEY
 import jwt
-from musics.serializers import PlaylistSerializer
+from musics.serializers import PlaylistSerializer, ComponentSerializer
+from rest_framework.decorators import api_view, permission_classes
+from .algorithms.algorithm import recommend_ost
+from musics.models import Music
 
 class SignupAPIView(APIView):
     def post(self, request):
@@ -106,7 +109,7 @@ class AuthAPIView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
     # 로그아웃
-    def delete(self, request):
+    def delete(self, request):  
         # 쿠키에 저장된 토큰 삭제 => 로그아웃 처리
         response = Response({
             "message": "Logout success"
@@ -133,6 +136,7 @@ class FollowAPIView(APIView):
             user.following.add(opponent)
             return Response({
                 "message": "follow success",
+                "opponent_id" : user_pk
             })
     def delete(self, request, user_pk):
         user = request.user
@@ -144,7 +148,8 @@ class FollowAPIView(APIView):
         else:
             user.following.remove(opponent)
             return Response({
-                "message": 'Unfollow success'
+                "message": 'Unfollow success',
+                "opponent_id" : user_pk
             })
 
 class ProfileView(APIView):
@@ -187,6 +192,8 @@ class AccountsChangeView(APIView):
     permission_classes = [IsAuthenticated]
     def patch(self, request, user_pk):
         user = User.objects.get(pk=user_pk)
+        if request.user != user:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
         serializer = UserChangeSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
@@ -210,3 +217,50 @@ class PlaylistView(APIView):
         playlist = user.playlist.all()
         serializer = PlaylistSerializer(playlist, many=True)
         return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def recommend_components(request):
+    user = request.user
+    component = user.music_components
+    data = {
+        'energy': component.energy,
+        'instrumentalness': component.instrumentalness,
+        'liveness': component.liveness,
+        'acousticness': component.acousticness,
+        'speechiness': component.speechiness,
+        'valence': component.valence,
+        'tempo': component.tempo,
+        'mode': component.mode,
+        'loudness': component.loudness,
+        'danceability': component.danceability,
+    }
+    recommend_list = recommend_ost(data)
+    response = {"data":[]}
+    for recommend in recommend_list['tracks']:
+        title = recommend['name']
+        artist = recommend['artists'][0]['name']
+        album = recommend['album']['name']
+        uri = recommend['uri']
+        poster = recommend['album']['images'][0]['url']
+        if Music.objects.filter(title=title, artist=artist):
+           response['data'].append({"title":title, "artist":artist, 'album':album, "uri":uri, 'poster':poster})
+        else:
+            new = Music.objects.create(
+                title=title, artist=artist, uri=uri
+            )
+            new.save()
+            response['data'].append({"title":title, "artist":artist, 'album':album, "uri":uri, 'poster':poster})
+    return Response(response)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def recommend_user(request):
+    user = request.user
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def recommend_like(request):
+    user = request.user
