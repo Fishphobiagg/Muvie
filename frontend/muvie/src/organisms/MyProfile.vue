@@ -7,7 +7,7 @@
           :src="`http://127.0.0.1:8000${profile_picture}`"
           alt=""
         />
-        <i class="fas fa-camera fa-4x" v-show="editing"></i>
+        <i class="fas fa-camera fa-4x" v-show="editing" @click="editPhoto"></i>
       </div>
       <div class="my-profile-detail">
         <div class="nick-name-detail">
@@ -54,9 +54,19 @@ export default {
       const payload = {
         id: this.userId,
         name: this.newNickname,
+        // profile_picture: this.profile_picture,
+      };
+      this.$store.dispatch("editNickname", payload);
+      this.editing = !this.editing;
+    },
+    editPhoto() {
+      const payload = {
+        id: this.userId,
+        name: this.newNickname,
         profile_picture: this.profile_picture,
       };
       this.$store.dispatch("editNickname", payload);
+      this.editing = !this.editing;
     },
   },
   // actions: {
@@ -81,6 +91,10 @@ export default {
   display: flex;
   align-items: center;
   padding-left: 80px;
+}
+
+.my-profile i {
+  cursor: pointer;
 }
 
 .my-photo-detail {

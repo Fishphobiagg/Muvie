@@ -38,6 +38,10 @@ const loginStore = {
       state.refreshToken = payload.token.refresh;
       console.log("로그인 성공~");
     },
+    updateNickname(state, payload) {
+      state.userInfo.nickname = payload;
+      console.log("로컬스토리지 닉네임 변경");
+    },
   },
 };
 

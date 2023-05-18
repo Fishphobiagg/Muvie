@@ -51,20 +51,27 @@ const mypageStore = {
         commit("updateFollowState", id);
       });
     },
-    editNickname(_, payload) {
+    editNickname({ commit }, payload) {
       console.log(payload);
       const data = {
         nickname: payload.name,
-        // profile_picture: payload.profile_picture,
       };
       axios
         .patch(`${BASE_URL}/accounts/edit/${payload.id}/`, data)
         .then((res) => {
           console.log(res);
-          // commit("updateNickname", name);
+          console.log("닉네임 변경 성공");
+          commit("updateNickname", data.nickname);
         });
     },
   },
+  // getters: {
+  //   nickname: (state) => state.loginStore.userInfo.nickname,
+  // },
+  // getters: {
+  //   // nickname 상태를 가져오는 getter
+  //   nickname: (state) => state.loginStore.userInfo.nickname,
+  // },
   mutations: {
     getUserDetail(state, payload) {
       state.followers = payload.detail.followers;
@@ -84,9 +91,6 @@ const mypageStore = {
       console.log(state.profile_picture_usage);
       console.log("이미지 요청 성공");
     },
-    // updateFollowState(state, payload) {
-    //   state.foll
-    // }
   },
 };
 
