@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'accounts',
     'movies',
     'musics',
+    
     # 3rd party
    	'rest_framework_simplejwt',
 	'rest_framework_simplejwt.token_blacklist',
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
@@ -51,10 +53,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-]
-
-CORS_ALLOWED_ORIGINS = [
-  'http://localhost:8080',
 ]
 
 CORS_ALLOWED_ALL_ORIGINS = True
@@ -152,6 +150,7 @@ REST_FRAMEWORK = {
         
     )
 }
+
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=2),
