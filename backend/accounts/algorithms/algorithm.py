@@ -21,7 +21,6 @@ def recommend_ost(components):
     ]
     seed_features = [round(num, 3) for num in user_features]
     recommendations = sp.recommendations(seed_genres=['movies'],market='KR',seed_features=seed_features, limit=10)
-    # recommendations = sp.recommendations(seed_genres=['ost'])    
     return recommendations
 
 def recommend_simillar_user(components):
