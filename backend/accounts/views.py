@@ -1,18 +1,25 @@
-# views.py
+from django.shortcuts import get_object_or_404
+from django.contrib.auth import authenticate
+from django.db.models.functions.math import Random
+
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-from .serializers import *
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
 from rest_framework import status
 from rest_framework.response import Response
-from django.shortcuts import get_object_or_404
-from django.contrib.auth import authenticate
+from rest_framework.decorators import api_view, permission_classes
+
+from musics.serializers import PlaylistSerializer, ComponentSerializer
+from .algorithms.algorithm import recommend_ost
+from .serializers import *
+from musics.models import Music
+
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
+
 from muvie.settings import SECRET_KEY
 import jwt
-from musics.serializers import PlaylistSerializer, ComponentSerializer
-from rest_framework.decorators import api_view, permission_classes
-from .algorithms.algorithm import recommend_ost
-from musics.models import Music
+
 
 class SignupAPIView(APIView):
     def post(self, request):
@@ -134,10 +141,8 @@ class FollowAPIView(APIView):
             }, status=status.HTTP_400_BAD_REQUEST)
         else:
             user.following.add(opponent)
-            return Response({
-                "message": "follow success",
-                "opponent_id" : user_pk
-            })
+            serializer = FollowSerializer(user)
+            return Response(serializer.data)
     def delete(self, request, user_pk):
         user = request.user
         opponent = User.objects.get(pk=user_pk)
@@ -146,11 +151,9 @@ class FollowAPIView(APIView):
                 "message" : "Not followed"
             }, status=status.HTTP_400_BAD_REQUEST)
         else:
+            serializer = FollowSerializer(user)
             user.following.remove(opponent)
-            return Response({
-                "message": 'Unfollow success',
-                "opponent_id" : user_pk
-            })
+            return Response(serializer.data)
 
 class ProfileView(APIView):
     permission_classes = [IsAuthenticated]
@@ -247,7 +250,7 @@ def recommend_components(request):
            response['data'].append({"title":title, "artist":artist, 'album':album, "uri":uri, 'poster':poster})
         else:
             new = Music.objects.create(
-                title=title, artist=artist, uri=uri
+                title=title, artist=artist, uri=uri, album_cover = poster
             )
             new.save()
             response['data'].append({"title":title, "artist":artist, 'album':album, "uri":uri, 'poster':poster})
@@ -258,7 +261,20 @@ def recommend_components(request):
 @permission_classes([IsAuthenticated])
 def recommend_user(request):
     user = request.user
+    user_vector = np.array(user.music_components.vector)
+    random_users = User.objects.order_by('?')[:10] # 대규모로 갈 경우 속도가 느려지기 때문에 후에 수정
+    most_similar_user = None
+    highest_similarity = -1
 
+    for random_user in random_users:
+        random_user_vector = np.array(random_user.music_components.vector)
+        similarity = cosine_similarity([user_vector], [random_user_vector])[0][0]
+        if similarity > highest_similarity:
+            highest_similarity = similarity
+            most_similar_user = random_user
+
+    # 가장 유사도가 높은 사용자 정보 반환
+    return Response({'most_similar_user': most_similar_user.nickname, 'similarity': highest_similarity})
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
