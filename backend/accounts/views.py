@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import authenticate
-from django.db.models.functions.math import Random
+from django.contrib.auth.hashers import check_password
 
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
@@ -9,13 +9,17 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 
-from musics.serializers import PlaylistSerializer, ComponentSerializer
+from musics.serializers import PlaylistSerializer
 from .algorithms.algorithm import recommend_ost, calculate_vector
 from .serializers import *
 from musics.models import Music
+from accounts.models import MusicUserLike, User
+
 
 from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.neighbors import NearestNeighbors
 
+import numpy as np
 from muvie.settings import SECRET_KEY
 import jwt
 
@@ -81,13 +85,13 @@ class AuthAPIView(APIView):
             # 사용 불가능한 토큰일 때
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-    # 로그인
     def post(self, request):
     	# 유저 인증
-        user = authenticate(
-            email=request.data.get("email"), password=request.data.get("password")
-        )
-        print(request.data)
+        email = request.data.get('email')
+        password = request.data.get('password')
+        print(check_password(password, encoded=User.objects.get(email=email).password))
+        user = authenticate(email=email, password=password)
+        print(user)
         # 이미 회원가입 된 유저일 때
         if user is not None:
             serializer = UserSerializer(user)
@@ -112,6 +116,7 @@ class AuthAPIView(APIView):
             return res
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
 
     # 로그아웃
     def delete(self, request):  
@@ -268,7 +273,6 @@ def recommend_user(request):
         similarity = cosine_similarity(user_vector, random_user_vector)[0][0]
         random_user_list.append((similarity, random_user))
         
-
     random_user_list.sort(key=lambda x: x[0], reverse=True)
     topusers = [user[1] for user in random_user_list[:3]]
     user_serializer = SimpleUserSerializer(topusers, many=True)
@@ -280,4 +284,37 @@ def recommend_user(request):
 @permission_classes([IsAuthenticated])
 def recommend_like(request):
     user = request.user
-    print(user.like_music)
+    recent_likes = MusicUserLike.objects.filter(user=user).order_by('-created_at')[:10]
+    liked_songs = [like.music for like in recent_likes]
+
+    all_users = User.objects.exclude(id=user.id)
+    number_users = len(all_users)
+    user_item_matrix = np.zeros((number_users, 10))
+
+    for i, other_user in enumerate(all_users):
+        other_likes = MusicUserLike.objects.filter(user=other_user).order_by('-created_at')[:10]
+        for j, like in enumerate(other_likes):
+            if like.music in liked_songs:
+                user_item_matrix[i, j] = 1
+
+    number_neighbor = 3
+    if number_users >= number_neighbor:
+        model = NearestNeighbors(n_neighbors=number_neighbor, metric='cosine')
+        model.fit(user_item_matrix)
+        print(all_users)
+        user_index = list(all_users).index(user)
+        user_vector = user_item_matrix[user_index].reshape(1, -1)
+        distances, indices = model.kneighbors(user_vector)
+
+        recommendations = []
+        for i in range(number_neighbor):
+            neighbor_index = indices[0][i]
+            neighbor_user = all_users[neighbor_index]
+            neighbor_likes = MusicUserLike.objects.filter(user=neighbor_user)
+            for like in neighbor_likes:
+                if like.music not in liked_songs:
+                    recommendations.append(like.music)
+
+        print(recommendations)
+    else:
+        print("Insufficient data for recommendation")

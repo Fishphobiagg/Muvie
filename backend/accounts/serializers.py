@@ -17,7 +17,7 @@ class UserSerializer(serializers.ModelSerializer):
 class UserChangeSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['nickname', 'email', 'profile_picture']
+        fields = ['nickname', 'profile_picture']
 
 class FollowSerializer(serializers.ModelSerializer):
     following = serializers.SerializerMethodField()

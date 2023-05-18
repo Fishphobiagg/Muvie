@@ -1,8 +1,9 @@
 from django.urls import path
 from .views import PlaylistView, LikeListView, SignupAPIView, AuthAPIView, FollowAPIView, ProfileView, AccountsChangeView, PasswordChangeView, recommend_components, recommend_like, recommend_user
-from rest_framework_simplejwt.views import TokenRefreshView
+from rest_framework_simplejwt.views import TokenRefreshView, TokenObtainPairView
 
 urlpatterns = [
+    path('token', TokenObtainPairView.as_view()),
     path('playlist', PlaylistView.as_view()),
     path('like', LikeListView.as_view()),
     path('signup', SignupAPIView.as_view()),
