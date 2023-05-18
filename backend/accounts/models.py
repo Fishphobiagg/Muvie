@@ -47,7 +47,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     music_components = models.OneToOneField(MusicComponent, on_delete=models.CASCADE, blank=True, null=True)
     playlist = models.ManyToManyField(Music, blank=True)
     like_music = models.ManyToManyField(Music, blank=True, related_name="users_like_musics", through='MusicUserLike')
-    is_active = models.BooleanField(default=True)
 	# 헬퍼 클래스 사용
     objects = UserManager()
 	# 사용자의 username field는 email으로 설정 (이메일로 로그인)
