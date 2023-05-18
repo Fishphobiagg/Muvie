@@ -42,6 +42,10 @@ const loginStore = {
       state.userInfo.nickname = payload;
       console.log("로컬스토리지 닉네임 변경");
     },
+    updatePhoto(state, payload) {
+      state.userInfo.profile_picture = payload;
+      console.log("로컬스토리지 프사 변경");
+    },
   },
 };
 

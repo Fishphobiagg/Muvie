@@ -1,3 +1,4 @@
+<!-- eslint-disable no-restricted-syntax -->
 <template>
   <div>
     <div class="my-profile">
@@ -7,7 +8,21 @@
           :src="`http://127.0.0.1:8000${profile_picture}`"
           alt=""
         />
-        <i class="fas fa-camera fa-4x" v-show="editing" @click="editPhoto"></i>
+        <!-- <i class="fas fa-camera fa-4x" v-show="editing" @click="editPhoto"></i> -->
+        <!-- 이미지 파일 업로드 버튼 -->
+        <i
+          class="fas fa-camera fa-4x"
+          v-show="editing"
+          @click="handleUploadClick"
+        ></i>
+
+        <!-- 이미지 파일 선택을 위한 input 요소 -->
+        <input
+          type="file"
+          ref="fileInput"
+          style="display: none"
+          @change="handleFileChange"
+        />
       </div>
       <div class="my-profile-detail">
         <div class="nick-name-detail">
@@ -35,12 +50,13 @@ export default {
     return {
       editing: false,
       newNickname: "",
+      formData: null,
     };
   },
   computed: {
     ...mapState({
       userId: (state) => state.loginStore.userId,
-      nickname: (state) => state.mypageStore.nickname,
+      nickname: (state) => state.loginStore.userInfo.nickname,
       profile_picture: (state) => state.mypageStore.profile_picture,
     }),
   },
@@ -59,30 +75,23 @@ export default {
       this.$store.dispatch("editNickname", payload);
       this.editing = !this.editing;
     },
-    editPhoto() {
-      const payload = {
-        id: this.userId,
-        name: this.newNickname,
-        profile_picture: this.profile_picture,
-      };
-      this.$store.dispatch("editNickname", payload);
+    handleUploadClick() {
+      // 이미지 파일 선택을 위해 input 요소 클릭
+      this.$refs.fileInput.click();
+    },
+    handleFileChange(event) {
+      // 파일 선택 이벤트 처리
+      const file = event.target.files[0];
+
+      this.formData = new FormData();
+      this.formData.append("id", this.nickname); // id 추가
+      this.formData.append("profile_picture", file);
+
+      console.log(this.formData);
+      this.$store.dispatch("editPhoto", this.formData);
       this.editing = !this.editing;
     },
   },
-  // actions: {
-  //   editNickname({ commit }) {
-  //     console.log(this.newNickname);
-
-  //     commit("updateNickname", this.newNickname);
-  //     // 저장이 완료되면 editing 값을 다시 false로 설정합니다.
-  //     // this.editing = false;
-  //   },
-  // },
-  // mutations: {
-  //   updateNickname(state, payload) {
-  //     // eslint-disable-next-line no-param-reassign
-  //     state.nickname = payload;
-  //   },
 };
 </script>
 
