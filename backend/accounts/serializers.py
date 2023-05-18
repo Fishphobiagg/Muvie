@@ -6,6 +6,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'password', 'nickname', 'email', 'profile_picture']
     def create(self, validated_data):
+        print(validated_data)
         user = User.objects.create_user(
             email = validated_data['email'],
             password = validated_data['password'],
@@ -17,7 +18,7 @@ class UserSerializer(serializers.ModelSerializer):
 class UserChangeSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['nickname', 'email', 'profile_picture']
+        fields = ['nickname','profile_picture']
 
 class FollowSerializer(serializers.ModelSerializer):
     following = serializers.SerializerMethodField()

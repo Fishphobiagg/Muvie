@@ -30,7 +30,7 @@ const routes = [
   // },
   {
     path: "/:userId/profile",
-    name: "mypage",
+    name: "Profile",
     component: MypageView,
   },
 ];

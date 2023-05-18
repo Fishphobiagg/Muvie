@@ -29,11 +29,13 @@ export default {
     };
   },
   methods: {
-    navigateToProfile(id) {
+    navigateToProfile(userId) {
       // this.$store.dispatch("getProfile", id);
-      const BASE_URL = "http://127.0.0.1:8000";
-      const url = `${BASE_URL}/${id}/profile`;
-      window.location.href = url;
+      // const BASE_URL = "http://127.0.0.1:8000";
+      // const BASE_URL = "http://127.0.0.1:8000";
+      // const url = `${BASE_URL}/${id}/profile`;
+      // window.location.href = url;
+      this.$router.push({ name: "Profile", params: { userId } });
     },
     followAction(fwg) {
       if (fwg.is_followed) {

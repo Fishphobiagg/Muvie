@@ -39,15 +39,20 @@ export default {
       return this.$route.params.userId;
     },
   },
-  mounted() {
-    console.log("마이페이지뷰");
-    // if (this.userId) {
-    //   this.$store.dispatch("getProfile", this.userId);
-    // }
-    if (this.paramId) {
-      this.$store.dispatch("getProfile", this.paramId);
-    }
+  watch: {
+    paramId(newId) {
+      if (newId) {
+        this.$store.dispatch("getProfile", newId);
+      }
+    },
   },
+  // created() {
+  //   console.log("마이페이지뷰");
+  //   console.log(this.paramId);
+  //   if (this.paramId) {
+  //     this.$store.dispatch("getProfile", this.paramId);
+  //   }
+  // },
 };
 </script>
 

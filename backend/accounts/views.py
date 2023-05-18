@@ -194,16 +194,21 @@ class PasswordChangeView(APIView):
 class AccountsChangeView(APIView):
     permission_classes = [IsAuthenticated]
     def patch(self, request, user_pk):
+        print(request.data)
+        print(request.user.pk)
+        print(user_pk)
         user = User.objects.get(pk=user_pk)
         if request.user != user:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         serializer = UserChangeSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
+            print('ㅇㅇㅇ')
             return Response({"message":"Change Success",
                              "changed_data" : UserChangeSerializer(User.objects.get(pk=user_pk)).data
                              })
-        return Response(serializers.error, status=status.HTTP_400_BAD_REQUEST)
+        ㅔ
+        return Response(serializer.error, status=status.HTTP_400_BAD_REQUEST)
 
 class LikeListView(APIView):
     permission_classes = [IsAuthenticated]

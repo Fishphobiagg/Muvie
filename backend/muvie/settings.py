@@ -189,4 +189,6 @@ SIMPLE_JWT = {
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
 
+APPEND_SLASH=False
+
 
