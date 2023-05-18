@@ -51,6 +51,19 @@ const mypageStore = {
         commit("updateFollowState", id);
       });
     },
+    editNickname(_, payload) {
+      console.log(payload);
+      const data = {
+        nickname: payload.name,
+        // profile_picture: payload.profile_picture,
+      };
+      axios
+        .patch(`${BASE_URL}/accounts/edit/${payload.id}/`, data)
+        .then((res) => {
+          console.log(res);
+          // commit("updateNickname", name);
+        });
+    },
   },
   mutations: {
     getUserDetail(state, payload) {

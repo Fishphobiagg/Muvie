@@ -12,7 +12,7 @@
         type="file"
         id="file"
         class="inputFile"
-        accept="image/*"
+        accept=".gif, .jpg, .png"
       />
       <input type="email" v-model="email" placeholder="Email" />
       <input type="text" v-model="nickname" placeholder="Nickname" />
@@ -29,7 +29,7 @@
 
 <script>
 export default {
-  name: "LoginForm",
+  name: "SignupForm",
   data() {
     return {
       email: null,
@@ -37,22 +37,26 @@ export default {
       password: null,
       profilePicture: null,
       profileUrl: null,
+      formData: null,
     };
   },
   methods: {
     fileChange(e) {
       this.profilePicture = e.target.files[0];
+
+      // 프론트 화면 출력을 위한 가공
       const url = URL.createObjectURL(e.target.files[0]);
       this.profileUrl = url;
+      console.log(this.profileUrl);
     },
     onSubmit() {
-      const userInfo = {};
-      userInfo.email = this.email;
-      userInfo.password = this.password;
-      userInfo.nickname = this.nickname;
-      userInfo.profilePicture = this.profilePicture;
-      console.log(userInfo);
-      this.$store.dispatch("signup", userInfo);
+      this.formData = new FormData();
+      this.formData.append("email", this.email);
+      this.formData.append("password", this.password);
+      this.formData.append("nickname", this.nickname);
+      this.formData.append("profile_picture", this.profilePicture);
+      console.log(this.formData);
+      this.$store.dispatch("signup", this.formData);
     },
   },
 };
@@ -96,5 +100,7 @@ input::placeholder {
 .profile-image {
   width: 150px;
   height: 150px;
+  background-size: cover;
+  background-position: center;
 }
 </style>
