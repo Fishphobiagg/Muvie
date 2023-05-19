@@ -16,8 +16,6 @@ const mypageStore = {
   },
   actions: {
     getProfile({ commit }, id) {
-      // const BASE_URL = `http://127.0.0.1:8000`;
-
       // 유저 데이터 가져오기
       const MYPAGE_API = `${BASE_URL}/accounts/${id}/profile`;
       console.log(MYPAGE_API);
@@ -27,24 +25,6 @@ const mypageStore = {
           console.log("프로필 요청");
           console.log(res);
           commit("getUserDetail", res.data);
-
-          // 유저(본인) 프로필사진 가져오기
-          // if (res.data.user_profile.profile_picture) {
-          //   const PHOTO_API = `${BASE_URL}/${res.data.user_profile.profile_picture}`;
-          //   console.log(PHOTO_API);
-          //   axios
-          //     .get(PHOTO_API, {
-          //       responseType: "arraybuffer",
-          //     })
-          //     .then((response) => {
-          //       const image = new Blob([response.data], { type: "image/jpeg" });
-          //       const imageUrl = URL.createObjectURL(image);
-          //       commit("getPhoto", imageUrl);
-          //     })
-          //     .catch((error) => {
-          //       console.log(error);
-          //     });
-          // }
         })
         .catch((err) => console.log(err));
     },
@@ -78,15 +58,6 @@ const mypageStore = {
         });
     },
     editPhoto({ commit, state }, file) {
-      // console.log(payload);
-      // eslint-disable-next-line no-restricted-syntax
-      // for (const key of payload.keys()) {
-      //   console.log(key);
-      // }
-      // const data = {
-      //   profile_picture: payload.profile_picture,
-      // };
-      // console.log(data);
       console.log("로컬 유저아이디");
       console.log(state);
       axios.patch(`${BASE_URL}/accounts/edit/1/`, file).then((res) => {

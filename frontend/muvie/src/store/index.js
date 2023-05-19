@@ -4,6 +4,7 @@ import createPersistedState from "vuex-persistedstate";
 import loginStore from "./modules/loginStore";
 import signupStore from "./modules/signupStore";
 import mypageStore from "./modules/mypageStore";
+import mainStore from "./modules/mainStore";
 
 Vue.use(Vuex);
 
@@ -16,6 +17,7 @@ export default new Vuex.Store({
     loginStore,
     signupStore,
     mypageStore,
+    mainStore,
   },
   plugins: [createPersistedState({ paths: ["loginStore"] })],
 });

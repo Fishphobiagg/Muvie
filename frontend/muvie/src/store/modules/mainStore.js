@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import axios from "axios";
 
-const BASE_URL = "http://127.0.0.1:8000/";
+const BASE_URL = "http://127.0.0.1:8000";
 
 const mainStore = {
   state: {
@@ -10,11 +10,12 @@ const mainStore = {
     likeRecommends: null,
   },
   actions: {
-    // 추천 데이터 가져오기
     getComponentsRecommends({ commit }) {
       axios
-        .get(`${BASE_URL}/recommend/components`)
+        .get(`${BASE_URL}/accounts/recommend/components`)
         .then((res) => {
+          console.log("성분추천 가져오기");
+          console.log(res.data);
           commit("getComponents", res.data);
         })
         .catch((err) => {
@@ -23,8 +24,10 @@ const mainStore = {
     },
     getUserRecommends({ commit }) {
       axios
-        .get(`${BASE_URL}/recommend/user`)
+        .get(`${BASE_URL}/accounts/recommend/user`)
         .then((res) => {
+          console.log("유저추천 가져오기");
+          console.log(res.data);
           commit("getUser", res.data);
         })
         .catch((err) => {
@@ -33,8 +36,10 @@ const mainStore = {
     },
     getLikeRecommends({ commit }) {
       axios
-        .get(`${BASE_URL}/recommend/like`)
+        .get(`${BASE_URL}/accounts/recommend/like`)
         .then((res) => {
+          console.log("좋아요추천 가져오기");
+          console.log(res.data);
           commit("getLike", res.data);
         })
         .catch((err) => {
@@ -43,7 +48,6 @@ const mainStore = {
     },
   },
   mutations: {
-    // 로그인 성공 후 상태 변경
     getComponents(state, payload) {
       state.componentsRecommends = payload;
       console.log("성분추천 불러오기");
