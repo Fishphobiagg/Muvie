@@ -201,16 +201,16 @@ def recommend_components(request):
         title = recommend['name']
         artist = recommend['artists'][0]['name']
         album = recommend['album']['name']
-        uri = recommend['uri']
         poster = recommend['album']['images'][0]['url']
         if Music.objects.filter(title=title, artist=artist):
-           response['data'].append({"title":title, "artist":artist, 'album':album, "uri":uri, 'poster':poster})
+           music = Music.objects.filter(title=title, artist=artist)[0]
+           response['data'].append({"title":title, "artist":artist, 'album':album, 'poster':poster, 'like count':music.users_like_musics.count()})
         else:
             new = Music.objects.create(
-                title=title, artist=artist, uri=uri, album_cover = poster
+                title=title, artist=artist, album_cover = poster
             )
             new.save()
-            response['data'].append({"title":title, "artist":artist, 'album':album, "uri":uri, 'poster':poster})
+            response['data'].append({"title":title, "artist":artist, 'album':album, 'poster':poster, 'like count' : 0})
     return Response(response)
 
 
@@ -228,7 +228,7 @@ def recommend_user(request):
         random_user_list.append((similarity, random_user))
         
     random_user_list.sort(key=lambda x: x[0], reverse=True)
-    topusers = [user[1] for user in random_user_list[:3]]
+    topusers = [user[1] for user in random_user_list[:5]]
     user_serializer = SimpleUserSerializer(topusers, many=True)
     return Response({"recommend":user_serializer.data})
     
@@ -258,7 +258,6 @@ def collaborative_filtering(user, n=10):
 def recommend_like(request):
     user = request.user
     recommend_music, top_similar_user = collaborative_filtering(user, n=10)
-    print(top_similar_user)
     serialized_music = []
     for music in recommend_music[:5]:
         serialized_music.append(
@@ -266,6 +265,8 @@ def recommend_like(request):
                 "id":music.id,
                 "title":music.title,
                 "artist":music.artist,
+                "album_cover":music.album_cover,
+                "like_count":music.users_like_musics.count()
             }
         )
     return Response(serialized_music)
