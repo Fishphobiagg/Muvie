@@ -14,17 +14,35 @@
         :key="idx"
       ></FollowList>
     </div>
+        <div v-if="tab == 2">
+      <LikeList
+        :fwg="fwg"
+        v-for="(fwg, idx) in like_list"
+        :key="idx"
+      ></LikeList>
+    </div>
+        <div v-if="tab == 3">
+      <PlayList
+        :fwg="fwg"
+        v-for="(fwg, idx) in play_list"
+        :key="idx"
+      ></PlayList>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
 import FollowList from "../atoms/FollowList.vue";
+import LikeList from "../atoms/LikeList.vue";
+import PlayList from '../atoms/PlayList.vue';
 
 export default {
   name: "TabContainer",
   components: {
     FollowList,
+    LikeList,
+    PlayList,
   },
   props: {
     tab: Number,
@@ -34,6 +52,8 @@ export default {
       userId: (state) => state.loginStore.userId,
       followers: (state) => state.mypageStore.followers,
       following: (state) => state.mypageStore.following,
+      like_list: (state) => state.mypageStore.like_list,
+      play_list: (state) => state.mypageStore.play_list,
     }),
     paramId() {
       return this.$route.params.userId;
@@ -52,6 +72,8 @@ export default {
     console.log(this.paramId);
     if (this.paramId) {
       this.$store.dispatch("getProfile", this.paramId);
+      this.$store.dispatch("getLikeList");
+      this.$store.dispatch("getPlayList");
     }
   },
 };

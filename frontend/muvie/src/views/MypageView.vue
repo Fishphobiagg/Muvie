@@ -27,6 +27,14 @@
         >
           좋아요
         </li>
+        <li
+          class="tab-li"
+          ref="tabPlayList"
+          :class="{ active: tab === 3 }"
+          @click="clickButton(3)"
+        >
+          재생목록
+        </li>
         <div ref="line" class="line"></div>
       </ul>
       <div class="tab-container">
@@ -74,6 +82,9 @@ export default {
       }
       if (tab === 2) {
         return "Likes";
+      }
+      if (tab === 3) {
+        return "PlayList"
       }
       return "";
     },

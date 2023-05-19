@@ -176,7 +176,7 @@ class PlaylistView(APIView):
         user = request.user
         playlist = user.playlist.all()
         serializer = PlaylistSerializer(playlist, many=True)
-        return Response(serializer.data)
+        return Response({"play_list":serializer.data})
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
