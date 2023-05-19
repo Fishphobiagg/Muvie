@@ -1,3 +1,4 @@
+<!-- eslint-disable eqeqeq -->
 <!-- eslint-disable no-restricted-syntax -->
 <template>
   <div>
@@ -63,8 +64,8 @@ export default {
   },
   mounted() {
     console.log(this.userId, this.paramId);
-    console.log(this.userId == this.paramId);
-    this.me = this.userId == this.paramId;
+    console.log(this.userId === this.paramId);
+    this.me = this.userId === this.paramId;
   },
   computed: {
     ...mapState({

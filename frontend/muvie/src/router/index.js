@@ -4,6 +4,7 @@ import HomeView from "../views/HomeView.vue";
 import LoginView from "../views/LoginView.vue";
 import SignupView from "../views/SignupView.vue";
 import MypageView from "../views/MypageView.vue";
+import MainView from "../views/MainView.vue";
 
 Vue.use(VueRouter);
 
@@ -23,15 +24,15 @@ const routes = [
     name: "signup",
     component: SignupView,
   },
-  // {
-  //   path: "/mypage",
-  //   name: "mypage",
-  //   component: MypageView,
-  // },
   {
     path: "/:userId/profile",
     name: "Profile",
     component: MypageView,
+  },
+  {
+    path: "/main",
+    name: "MainView",
+    component: MainView,
   },
 ];
 
