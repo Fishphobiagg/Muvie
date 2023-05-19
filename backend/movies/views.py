@@ -33,20 +33,6 @@ def save_ost(request):
             music.save()
             movie.ost.add(music)
             print(movie, music)
-    
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def like_movie(request, movie_pk):
-    movie = Movie.objects.get(pk=movie_pk)
-    user = request.user
-    if movie not in user.like_movie.all():
-        user.like_movie.add(movie)
-        response_data = {"like_count": movie.users_like_movies.count(),"message": "Movie liked successfully."}
-    else:
-        user.like_movie.remove(movie)
-        response_data = {"like_count": movie.users_like_movies.count(), "message": "Movie unliked successfully."}
-
-    return Response(response_data)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])

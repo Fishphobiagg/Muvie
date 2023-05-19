@@ -44,7 +44,6 @@ class UserTestSerializer(serializers.ModelSerializer):
 class MyProfileSerializer(serializers.ModelSerializer):
     followers = serializers.SerializerMethodField()
     following = serializers.SerializerMethodField()
-    like_movie_list = serializers.SerializerMethodField()
     like_music_list = serializers.SerializerMethodField()
     followers_count = serializers.SerializerMethodField()
     following_count = serializers.SerializerMethodField()
@@ -52,7 +51,7 @@ class MyProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('followers', 'following','followers_count', 'following_count', 'like_movie_list', 'like_music_list', 'playlist')
+        fields = ('followers', 'following','followers_count', 'following_count', 'like_music_list', 'playlist')
 
     def __init__(self, *args, **kwargs):
         user_pk = kwargs.pop('user_pk', None)
@@ -70,10 +69,6 @@ class MyProfileSerializer(serializers.ModelSerializer):
         following = instance.following.all()
         return [{'id':follower.id, 'email':follower.email, 'nickname':follower.nickname, 'profile_picture':follower.profile_picture.url, 
                  'is_followed':True if follower in user.following.all() else "me" if follower == user else False} for follower in following]    
-    
-    def get_like_movie_list(self, instance):
-        like_movie_list = instance.like_movie.all()
-        return[{'title':movie.title, 'poster_path':movie.poster_path} for movie in like_movie_list]
     
     def get_like_music_list(self, instance):
         like_music_list = instance.like_music.all()
@@ -92,14 +87,13 @@ class MyProfileSerializer(serializers.ModelSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
     followers = serializers.SerializerMethodField()
     following = serializers.SerializerMethodField()
-    like_movie_list = serializers.SerializerMethodField()
     like_music_list = serializers.SerializerMethodField()
     followers_count = serializers.SerializerMethodField()
     following_count = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = ('followers', 'following','followers_count', 'following_count', 'like_movie_list', 'like_music_list')
+        fields = ('followers', 'following','followers_count', 'following_count', 'like_music_list')
 
     def __init__(self, *args, **kwargs):
         user_pk = kwargs.pop('user_pk', None)
@@ -118,10 +112,6 @@ class ProfileSerializer(serializers.ModelSerializer):
         return [{'id':follower.id, 'email':follower.email, 'nickname':follower.nickname, 'profile_picture':follower.profile_picture.url, 
                  'is_followed':True if follower in user.following.all() else "me" if follower == user else False} for follower in following]    
 
-    def get_like_movie_list(self, instance):
-        like_movie_list = instance.like_movie.all()
-        return[{'title':movie.title, 'poster_path':movie.poster_path} for movie in like_movie_list]
-    
     def get_like_music_list(self, instance):
         like_music_list = instance.like_music.all()
         return[{'title':music.title, 'artist':music.artist, 'uri':music.uri, } for music in like_music_list]

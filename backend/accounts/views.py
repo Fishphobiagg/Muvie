@@ -1,24 +1,29 @@
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import authenticate
-from django.db.models.functions.math import Random
+from django.contrib.auth.hashers import check_password
+from django.db.models import Count
 
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 
-from musics.serializers import PlaylistSerializer, ComponentSerializer
-from .algorithms.algorithm import recommend_ost
+from musics.serializers import PlaylistSerializer
+from .algorithms.algorithm import recommend_ost, calculate_vector
 from .serializers import *
 from musics.models import Music
+from accounts.models import MusicUserLike, User
+
 
 from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.neighbors import NearestNeighbors
+
 import numpy as np
 
-from muvie.settings import SECRET_KEY
-import jwt
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 
 class SignupAPIView(APIView):
@@ -50,80 +55,24 @@ class SignupAPIView(APIView):
             return res
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-class AuthAPIView(APIView):
-    # 유저 정보 확인
-    def get(self, request):
-        try:
-            # access token을 decode 해서 유저 id 추출 => 유저 식별
-            access = request.COOKIES['access']
-            payload = jwt.decode(access, SECRET_KEY, algorithms=['HS256'])
-            pk = payload.get('user_id')
-            user = get_object_or_404(User, pk=pk)
-            serializer = UserSerializer(instance=user)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        print(cls, user)
+        # Add custom claims
+        token['email'] = user.email
+        return token
+    
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        data['user_id'] = self.user.id
+        data['nickname'] = self.user.nickname
+        data['email'] = self.user.email
+        return data
 
-        except(jwt.exceptions.ExpiredSignatureError):
-            # 토큰 만료 시 토큰 갱신
-            data = {'refresh': request.COOKIES.get('refresh', None)}
-            serializer = TokenRefreshSerializer(data=data)
-            if serializer.is_valid(raise_exception=True):
-                access = serializer.data.get('access', None)
-                refresh = serializer.data.get('refresh', None)
-                payload = jwt.decode(access, SECRET_KEY, algorithms=['HS256'])
-                pk = payload.get('user_id')
-                user = get_object_or_404(User, pk=pk)
-                serializer = UserSerializer(instance=user)
-                res = Response(serializer.data, status=status.HTTP_200_OK)
-                res.set_cookie('access', access)
-                res.set_cookie('refresh', refresh)
-                return res
-            raise jwt.exceptions.InvalidTokenError
-
-        except(jwt.exceptions.InvalidTokenError):
-            # 사용 불가능한 토큰일 때
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-    # 로그인
-    def post(self, request):
-    	# 유저 인증
-        user = authenticate(
-            email=request.data.get("email"), password=request.data.get("password")
-        )
-        print(request.data)
-        # 이미 회원가입 된 유저일 때
-        if user is not None:
-            serializer = UserSerializer(user)
-            # jwt 토큰 접근
-            token = TokenObtainPairSerializer.get_token(user)
-            refresh_token = str(token)
-            access_token = str(token.access_token)
-            res = Response(
-                {
-                    "user": serializer.data,
-                    "message": "login success",
-                    "token": {
-                        "access": access_token,
-                        "refresh": refresh_token,
-                    },
-                },
-                status=status.HTTP_200_OK,
-            )
-            # jwt 토큰 => 쿠키에 저장
-            res.set_cookie("access", access_token, httponly=True)
-            res.set_cookie("refresh", refresh_token, httponly=True)
-            return res
-        else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-    # 로그아웃
-    def delete(self, request):  
-        # 쿠키에 저장된 토큰 삭제 => 로그아웃 처리
-        response = Response({
-            "message": "Logout success"
-            }, status=status.HTTP_202_ACCEPTED)
-        response.delete_cookie("access")
-        response.delete_cookie("refresh")
-        return response
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
 
 class FollowAPIView(APIView):
     permission_classes = [IsAuthenticated]
@@ -266,22 +215,54 @@ def recommend_components(request):
 @permission_classes([IsAuthenticated])
 def recommend_user(request):
     user = request.user
-    user_vector = np.array(user.music_components.vector)
     random_users = User.objects.order_by('?')[:10] # 대규모로 갈 경우 속도가 느려지기 때문에 후에 수정
-    most_similar_user = None
-    highest_similarity = -1
+    user_vector = calculate_vector(user)
+    random_user_list = []
 
     for random_user in random_users:
-        random_user_vector = np.array(random_user.music_components.vector)
-        similarity = cosine_similarity([user_vector], [random_user_vector])[0][0]
-        if similarity > highest_similarity:
-            highest_similarity = similarity
-            most_similar_user = random_user
-
+        random_user_vector = calculate_vector(random_user)
+        similarity = cosine_similarity(user_vector, random_user_vector)[0][0]
+        random_user_list.append((similarity, random_user))
+        
+    random_user_list.sort(key=lambda x: x[0], reverse=True)
+    topusers = [user[1] for user in random_user_list[:3]]
+    user_serializer = SimpleUserSerializer(topusers, many=True)
+    return Response({"recommend":user_serializer.data})
+    
     # 가장 유사도가 높은 사용자 정보 반환
-    return Response({'most_similar_user': most_similar_user.nickname, 'similarity': highest_similarity})
+
+
+# 최근접 이웃 협업 필터링 
+
+def collaborative_filtering(user, n=10):
+    liked_music_ids = MusicUserLike.objects.filter(user=user).values_list('music_id', flat=True)
+
+    similar_users = User.objects.filter(musicuserlike__music_id__in=liked_music_ids).exclude(id=user.id)
+
+    similarity_scores = {}
+    for similar_user in similar_users:
+        similar_user_liked_music_ids = MusicUserLike.objects.filter(user=similar_user).values_list('music_id')
+        similarity_scores[similar_user.id] = len(set(liked_music_ids) & set(similar_user_liked_music_ids))
+    sorted_similar_users = sorted(similarity_scores.items(), key=lambda x: x[1], reverse=True)
+
+    top_similar_users = [item[0] for item in sorted_similar_users[:n]]
+    recommend_music = Music.objects.filter(musicuserlike__user__id__in=top_similar_users).annotate(like_count=Count('musicuserlike')).order_by('-like_count')
+
+    return recommend_music, top_similar_users
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def recommend_like(request):
     user = request.user
+    recommend_music, top_similar_user = collaborative_filtering(user, n=10)
+    print(top_similar_user)
+    serialized_music = []
+    for music in recommend_music[:5]:
+        serialized_music.append(
+            {
+                "id":music.id,
+                "title":music.title,
+                "artist":music.artist,
+            }
+        )
+    return Response(serialized_music)

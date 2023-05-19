@@ -18,4 +18,3 @@ class MusicComponent(models.Model):
     mode = models.DecimalField(max_digits=3, decimal_places=2, validators=[MinValueValidator(0.0), MaxValueValidator(1.0)])
     loudness = models.FloatField() # 0이상 아무 숫자
     danceability = models.DecimalField(max_digits=3, decimal_places=2, validators=[MinValueValidator(0.0), MaxValueValidator(1.0)])
-    vector = models.TextField(null=True)
