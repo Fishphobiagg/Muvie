@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import axios from "axios";
+import { mapState } from "vuex";
 
 const BASE_URL = `http://127.0.0.1:8000`;
 
@@ -11,6 +12,7 @@ const mypageStore = {
     following_count: null,
     nickname: null,
     profile_picture: null,
+    userId: null,
   },
   actions: {
     getProfile({ commit }, id) {
@@ -75,23 +77,23 @@ const mypageStore = {
           commit("updateNickname", data.nickname);
         });
     },
-    editPhoto({ commit }, payload) {
-      console.log(payload);
+    editPhoto({ commit, state }, file) {
+      // console.log(payload);
       // eslint-disable-next-line no-restricted-syntax
-      for (const key of payload.keys()) {
-        console.log(key);
-      }
-      const data = {
-        profile_picture: payload.profile_picture,
-      };
-      console.log(data);
-      axios
-        .patch(`${BASE_URL}/accounts/edit/${payload.id}/`, data)
-        .then((res) => {
-          console.log(res);
-          console.log("프로필사진 변경 성공");
-          commit("updatePhoto", data.profile_picture);
-        });
+      // for (const key of payload.keys()) {
+      //   console.log(key);
+      // }
+      // const data = {
+      //   profile_picture: payload.profile_picture,
+      // };
+      // console.log(data);
+      console.log("로컬 유저아이디");
+      console.log(state);
+      axios.patch(`${BASE_URL}/accounts/edit/1/`, file).then((res) => {
+        console.log(res);
+        console.log("프로필사진 변경 성공");
+        commit("updatePhoto", file);
+      });
     },
   },
   mutations: {
@@ -102,6 +104,7 @@ const mypageStore = {
       state.following_count = payload.detail.following_count;
       state.nickname = payload.user_profile.nickname;
       state.profile_picture = payload.user_profile.profile_picture;
+      state.userId = payload.user_proile.id;
       console.log(state);
       console.log(state.profile_picture);
 
@@ -121,6 +124,11 @@ const mypageStore = {
       state.following = payload;
       console.log("언팔로잉 목록 업데이트 성공");
     },
+  },
+  computed: {
+    ...mapState({
+      userId: (state) => state.loginStore.userId,
+    }),
   },
 };
 

@@ -1,4 +1,3 @@
-<!-- eslint-disable eqeqeq -->
 <!-- eslint-disable no-restricted-syntax -->
 <template>
   <div>
@@ -50,7 +49,8 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import axios from "axios";
+import { mapState, mapMutations } from "vuex";
 
 export default {
   name: "MyProfile",
@@ -64,8 +64,10 @@ export default {
   },
   mounted() {
     console.log(this.userId, this.paramId);
-    console.log(this.userId === this.paramId);
-    this.me = this.userId === this.paramId;
+    // eslint-disable-next-line eqeqeq
+    console.log(this.userId == this.paramId);
+    // eslint-disable-next-line eqeqeq
+    this.me = this.userId == this.paramId;
   },
   computed: {
     ...mapState({
@@ -79,6 +81,7 @@ export default {
     },
   },
   methods: {
+    ...mapMutations(["updatePhoto"]),
     isFollowing() {
       console.log(this.following);
       console.log("프로필 버튼 조건문");
@@ -107,11 +110,22 @@ export default {
       const file = event.target.files[0];
 
       this.formData = new FormData();
-      this.formData.append("id", this.nickname); // id 추가
+      this.formData.append("id", this.userId); // id 추가
       this.formData.append("profile_picture", file);
 
       console.log(this.formData);
-      this.$store.dispatch("editPhoto", this.formData);
+      console.log(this.userId);
+
+      axios
+        .patch(
+          `http://127.0.0.1:8000/accounts/edit/${this.userId}/`,
+          this.formData
+        )
+        .then((res) => {
+          console.log(res);
+          console.log("프로필사진 변경 성공");
+          this.updatePhoto(file);
+        });
       this.editing = !this.editing;
     },
   },

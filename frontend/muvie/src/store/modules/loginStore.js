@@ -40,10 +40,14 @@ const loginStore = {
     },
     updateNickname(state, payload) {
       state.userInfo.nickname = payload;
+      // eslint-disable-next-line no-restricted-globals
+      location.reload();
       console.log("로컬스토리지 닉네임 변경");
     },
     updatePhoto(state, payload) {
       state.userInfo.profile_picture = payload;
+      // eslint-disable-next-line no-restricted-globals
+      location.reload();
       console.log("로컬스토리지 프사 변경");
     },
   },

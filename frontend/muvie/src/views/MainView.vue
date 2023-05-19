@@ -5,12 +5,14 @@
       Hey {{ nickname }} <br />
       Welcome Back!
     </div>
+    <CircleCarousel />
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
 import NavBar from "../organisms/NavBar.vue";
+import CircleCarousel from "../organisms/CircleCarousel.vue";
 
 export default {
   name: "MainView",
@@ -19,12 +21,19 @@ export default {
   },
   components: {
     NavBar,
+    CircleCarousel,
   },
   computed: {
     ...mapState({
       nickname: (state) => state.loginStore.userInfo.nickname,
     }),
   },
+  created() {
+    this.$store.dispatch("getComponentsRecommends");
+    this.$store.dispatch("getUserRecommends");
+    this.$store.dispatch("getLikeRecommends");
+  },
+  methods: {},
 };
 </script>
 
