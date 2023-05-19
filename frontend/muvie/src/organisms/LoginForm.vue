@@ -10,16 +10,12 @@
         autocomplete="off"
       />
       <p>Forgot Password?</p>
-      <button type="submit">Login</button>
+      <button class="submit-button" type="submit">Login</button>
     </form>
   </div>
 </template>
 
 <script>
-// import axios from "axios";
-
-// const LOGIN_URL = "http://127.0.0.1:8000/accounts/auth";
-
 export default {
   name: "LoginForm",
   data() {
@@ -38,12 +34,6 @@ export default {
       userInfo.password = this.password;
       console.log(userInfo);
       this.$store.dispatch("login", userInfo);
-
-      // axios.post(LOGIN_URL, userInfo).then((res) => {
-      //   if (res.status == 200) {
-      //     this.$store.commit('loginSuccess')
-      //   }
-      // });
     },
   },
 };
@@ -63,7 +53,7 @@ input::placeholder {
   margin-left: 5px;
 }
 
-button {
+.submit-button {
   margin: 20px;
   padding: 13px 30px;
   background: white;
@@ -73,14 +63,14 @@ button {
   border: none;
 }
 
-button:hover {
+.submit-button:hover {
   color: white;
   background: rgba(218, 138, 114, 0.8);
   letter-spacing: 2px;
   cursor: pointer;
 }
 
-button:active {
+.submit-button:active {
   transform: scale(1.1);
 }
 </style>

@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import LoginView from "../views/LoginView.vue";
 import SignupView from "../views/SignupView.vue";
+import MypageView from "../views/MypageView.vue";
 
 Vue.use(VueRouter);
 
@@ -21,6 +22,16 @@ const routes = [
     path: "/signup",
     name: "signup",
     component: SignupView,
+  },
+  // {
+  //   path: "/mypage",
+  //   name: "mypage",
+  //   component: MypageView,
+  // },
+  {
+    path: "/:userId/profile",
+    name: "Profile",
+    component: MypageView,
   },
 ];
 

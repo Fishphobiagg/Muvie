@@ -1,22 +1,24 @@
-// import router from "@/router";
 import axios from "axios";
 
 const BASE_URL = "http://127.0.0.1:8000/accounts/signup";
 
 const signupStore = {
-  state: {
-    userInfo: null,
-    isLogin: false,
-  },
+  state: {},
   mutations: {},
   actions: {
-    signup(dispatch, signupObj) {
+    signup(_, signupObj) {
       console.log(signupObj);
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data", // 파일 업로드를 위한 헤더 설정
+        },
+      };
+
       axios
-        .post(BASE_URL, signupObj)
+        .post(BASE_URL, signupObj, config)
         .then((res) => {
           console.log(res.data);
-          console.log("회원가입 성공");
+          console.log("회원가입 성공!");
         })
         .catch((err) => {
           console.log(err);
