@@ -103,6 +103,7 @@ class FollowAPIView(APIView):
             user.following.add(opponent)
             serializer = FollowSerializer(user)
             return Response(serializer.data)
+        
     def delete(self, request, user_pk):
         user = request.user
         opponent = User.objects.get(pk=user_pk)
@@ -167,7 +168,6 @@ class AccountsChangeView(APIView):
             return Response({"message":"Change Success",
                              "changed_data" : UserChangeSerializer(User.objects.get(pk=user_pk)).data
                              })
-        ㅔ
         return Response(serializer.error, status=status.HTTP_400_BAD_REQUEST)
 
 class LikeListView(APIView):
@@ -176,7 +176,7 @@ class LikeListView(APIView):
         user = request.user
         like_list = user.like_music.all()
         serializer = PlaylistSerializer(like_list, many=True)
-        return Response(serializer.data)
+        return Response({"like_list":serializer.data})
 
 class PlaylistView(APIView):
     permission_classes = [IsAuthenticated]
