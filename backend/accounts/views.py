@@ -1,6 +1,3 @@
-from django.shortcuts import get_object_or_404
-from django.contrib.auth import authenticate
-from django.contrib.auth.hashers import check_password
 from django.db.models import Count
 
 from rest_framework.views import APIView
@@ -18,9 +15,6 @@ from accounts.models import MusicUserLike, User
 
 
 from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.neighbors import NearestNeighbors
-
-import numpy as np
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -71,7 +65,8 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
             "user": {
                 "id": self.user.id,
                 "nickname": self.user.nickname,
-                "email": self.user.email
+                "email": self.user.email,
+                "profile_picture" : self.user.profile_picture.url
             },
             "message": "login success",
             "token": {
@@ -155,9 +150,6 @@ class PasswordChangeView(APIView):
 class AccountsChangeView(APIView):
     permission_classes = [IsAuthenticated]
     def patch(self, request, user_pk):
-        print(request.data)
-        print(request.user.pk)
-        print(user_pk)
         user = User.objects.get(pk=user_pk)
         if request.user != user:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
@@ -243,7 +235,7 @@ def recommend_user(request):
     # 가장 유사도가 높은 사용자 정보 반환
 
 
-# 최근접 이웃 협업 필터링 
+# 협업 필터링 
 
 def collaborative_filtering(user, n=10):
     liked_music_ids = MusicUserLike.objects.filter(user=user).values_list('music_id', flat=True)

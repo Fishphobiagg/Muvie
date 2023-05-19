@@ -9,5 +9,4 @@ class Movie(models.Model):
     vote_count = models.IntegerField()
     vote_average = models.FloatField()
     overview = models.TextField()
-    poster_path = models.URLField()
     ost = models.ManyToManyField(Music, related_name='movie_ost')

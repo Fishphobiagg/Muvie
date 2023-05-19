@@ -25,14 +25,18 @@ def save_ost(request):
 
     movies = Movie.objects.all()
     for movie in movies:
-        album = sp.search(q=movie.original_title, type='album', limit=1)['albums']['items']
+        album = sp.search(q=movie.original_title, type='album', limit=1)['albums']
+        poster = ''
+        if album['items']:
+            poster = album['items'][0]['images'][0]['url']
+        album = album['items']
         if not album:
             continue
         for track in sp.album_tracks(album[0]['id'])['items']:
-            music = Music(title=track['name'], artist=track['artists'][0]['name'], uri=track['uri'])
+            music = Music(title=track['name'], artist=track['artists'][0]['name'], uri=track['uri'], album_cover=poster)
             music.save()
             movie.ost.add(music)
-            print(movie, music)
+            print(music,movie)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])

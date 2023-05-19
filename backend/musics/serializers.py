@@ -28,16 +28,12 @@ class MusicListSerializer(serializers.ModelSerializer):
         return instance.users_like_musics.count()
     
 class PlaylistSerializer(serializers.ModelSerializer):
-    album_cover = serializers.SerializerMethodField()
     like_count = serializers.SerializerMethodField()
     movie = serializers.SerializerMethodField()
     class Meta:
         model = Music
         fields = ['title', 'artist', 'uri', 'album_cover', 'like_count', 'movie']
-    
-    def get_album_cover(self, instance):
-        album_cover = instance.movie_ost.all()[0]
-        return {"poster_path":album_cover.poster_path}
+
     def get_movie(self, instance):
         return instance.movie_ost.all()[0].title
     def get_like_count(self, instance):
