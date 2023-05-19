@@ -66,10 +66,21 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     
     def validate(self, attrs):
         data = super().validate(attrs)
-        data['user_id'] = self.user.id
-        data['nickname'] = self.user.nickname
-        data['email'] = self.user.email
-        return data
+
+        response = {
+            "user": {
+                "id": self.user.id,
+                "nickname": self.user.nickname,
+                "email": self.user.email
+            },
+            "message": "login success",
+            "token": {
+                "access": data["access"],
+                "refresh": data["refresh"]
+            }
+        }
+        
+        return response
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
