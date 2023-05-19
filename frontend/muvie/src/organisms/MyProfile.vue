@@ -34,8 +34,15 @@
             @click="editNickname"
           ></i>
         </div>
-        <button>취향 설정</button>
-        <button @click="editProfile">프로필 편집</button>
+        <!-- 내 프로필 메뉴 -->
+        <div class="my-profile" v-if="me">
+          <button>취향 설정</button>
+          <button @click="editProfile">프로필 편집</button>
+        </div>
+        <!-- 상대 프로필 메뉴 -->
+        <div class="other-profile" v-else>
+          <button>{{ isFollowing() ? "팔로잉" : "팔로우" }}</button>
+        </div>
       </div>
     </div>
   </div>
@@ -48,19 +55,34 @@ export default {
   name: "MyProfile",
   data() {
     return {
+      me: null,
       editing: false,
       newNickname: "",
       formData: null,
     };
   },
+  mounted() {
+    console.log(this.userId, this.paramId);
+    console.log(this.userId == this.paramId);
+    this.me = this.userId == this.paramId;
+  },
   computed: {
     ...mapState({
       userId: (state) => state.loginStore.userId,
       nickname: (state) => state.mypageStore.nickname,
+      following: (state) => state.mypageStore.following,
       profile_picture: (state) => state.mypageStore.profile_picture,
     }),
+    paramId() {
+      return this.$route.params.userId;
+    },
   },
   methods: {
+    isFollowing() {
+      console.log(this.following);
+      console.log("프로필 버튼 조건문");
+      return this.following.some((item) => item.id === this.paramId);
+    },
     editProfile() {
       console.log("프로필 편집");
       this.editing = !this.editing;

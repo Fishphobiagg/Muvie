@@ -42,17 +42,18 @@ export default {
   watch: {
     paramId(newId) {
       if (newId) {
+        console.log("워치 파라미터");
         this.$store.dispatch("getProfile", newId);
       }
     },
   },
-  // created() {
-  //   console.log("마이페이지뷰");
-  //   console.log(this.paramId);
-  //   if (this.paramId) {
-  //     this.$store.dispatch("getProfile", this.paramId);
-  //   }
-  // },
+  created() {
+    console.log("마이페이지뷰");
+    console.log(this.paramId);
+    if (this.paramId) {
+      this.$store.dispatch("getProfile", this.paramId);
+    }
+  },
 };
 </script>
 
