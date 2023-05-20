@@ -34,6 +34,11 @@ const routes = [
     name: "MainView",
     component: MainView,
   },
+  {
+    path: "/search/:keyword",
+    name: "SearchView",
+    component: SearchView,
+  },
 ];
 
 const router = new VueRouter({
