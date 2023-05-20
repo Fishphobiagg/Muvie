@@ -6,7 +6,7 @@
         :src="`${item.album_cover}`"
         alt="앨범 커버"
       />
-      <span class="music_name" @click="navigateToProfile(fwg.id)">{{
+      <span class="music_name" @click="navigateToProfile(item.id)">{{
         item.title
       }} </span>
       <span>{{item.artist}}</span>
@@ -26,10 +26,8 @@
 <script>
 export default {
   name: "SearchList",
-  data() {
-    return {
-      keyword: ,
-    };
+  props : {
+    item:Object
   },
   methods: {
     navigateToProfile(userId) {
@@ -44,9 +42,6 @@ export default {
         this.$store.dispatch("follow", fwg.id);
       }
     },
-  },
-  props: {
-    fwg: Object,
   },
 };
 </script>
