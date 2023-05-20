@@ -1,12 +1,37 @@
 <template>
   <div class="flex-center">
-    <div class="circular-slider">
+    <div class="circular-slider flex-center">
       <ul class="wrapper">
-        <li class="slides" style="--img-no: 1"><img src="" alt="" /></li>
-        <li class="slides" style="--img-no: 2"><img src="" alt="" /></li>
-        <li class="slides" style="--img-no: 3"><img src="" alt="" /></li>
-        <li class="slides" style="--img-no: 4"><img src="" alt="" /></li>
-        <li class="slides" style="--img-no: 5"><img src="" alt="" /></li>
+        <li class="slides" style="--img-no: 1">
+          <img
+            src="https://i.scdn.co/image/ab67616d0000b27366919acb93950333962467f8"
+            alt=""
+          />
+        </li>
+        <li class="slides" style="--img-no: 2">
+          <img
+            src="https://i.scdn.co/image/ab67616d0000b2732d8570614ef6ff95846b12e0"
+            alt=""
+          />
+        </li>
+        <li class="slides" style="--img-no: 3">
+          <img
+            src="https://i.scdn.co/image/ab67616d0000b27389e87fc1b83de2bfd5f99e1f"
+            alt=""
+          />
+        </li>
+        <li class="slides" style="--img-no: 4">
+          <img
+            src="https://i.scdn.co/image/ab67616d0000b27366919acb93950333962467f8"
+            alt=""
+          />
+        </li>
+        <li class="slides" style="--img-no: 5">
+          <img
+            src="https://i.scdn.co/image/ab67616d0000b27366919acb93950333962467f8"
+            alt=""
+          />
+        </li>
       </ul>
     </div>
   </div>
@@ -15,6 +40,9 @@
 <script>
 export default {
   name: "CircleCarousel",
+  props: {
+    components: Array,
+  },
 };
 </script>
 
@@ -45,16 +73,17 @@ export default {
   border-radius: 50%;
 
   transform: rotateZ(0deg);
-  transition: 1s ease;
+  transition: 1s ease-in-out;
 }
 
 .slides {
   position: absolute;
   left: 0;
-  transform: rotateZ(calc(360deg / 5 * var(--imga-no)))
+  transform: rotateZ(calc(360deg / 5 * var(--img-no)))
     translateY(calc(50rem / 2));
   transform-origin: calc(50rem / 2);
   width: 16vw;
+  list-style: none;
 
   cursor: pointer;
 }

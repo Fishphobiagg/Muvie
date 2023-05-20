@@ -1,18 +1,20 @@
 <template>
-  <div>
+  <div class="mainview">
     <NavBar />
     <div class="welcome-msg">
       Hey {{ nickname }} <br />
       Welcome Back!
     </div>
-    <CircleCarousel />
+    <!-- <CircleCarousel :components="components" /> -->
+    <CarouselView :components="components" />
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
 import NavBar from "../organisms/NavBar.vue";
-import CircleCarousel from "../organisms/CircleCarousel.vue";
+// import CircleCarousel from "../organisms/CircleCarousel.vue";
+import CarouselView from "../organisms/CarouselView.vue";
 
 export default {
   name: "MainView",
@@ -21,11 +23,15 @@ export default {
   },
   components: {
     NavBar,
-    CircleCarousel,
+    // CircleCarousel,
+    CarouselView,
   },
   computed: {
     ...mapState({
       nickname: (state) => state.loginStore.userInfo.nickname,
+      components: (state) => state.mainStore.componentsRecommends,
+      users: (state) => state.mainStore.userRecommends,
+      likes: (state) => state.mainStore.likeRecommends,
     }),
   },
   created() {
@@ -38,6 +44,9 @@ export default {
 </script>
 
 <style>
+.mainview {
+  background: #fff;
+}
 .welcome-msg {
   width: 500px;
   height: 200px;

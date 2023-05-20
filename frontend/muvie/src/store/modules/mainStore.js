@@ -16,7 +16,7 @@ const mainStore = {
         .then((res) => {
           console.log("성분추천 가져오기");
           console.log(res.data);
-          commit("getComponents", res.data);
+          commit("getComponents", res.data.data);
         })
         .catch((err) => {
           console.log(err);
@@ -27,8 +27,8 @@ const mainStore = {
         .get(`${BASE_URL}/accounts/recommend/user`)
         .then((res) => {
           console.log("유저추천 가져오기");
-          console.log(res.data);
-          commit("getUser", res.data);
+          console.log(res.data.recommend);
+          commit("getUser", res.data.recommend);
         })
         .catch((err) => {
           console.log(err);
