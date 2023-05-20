@@ -1,8 +1,8 @@
 <template>
   <div>
     <SearchList 
-    :fwg="item"
-    v-for= "(item, idx) in keyword"
+    :item="item"
+    v-for= "(item, idx) in searched_list"
     :key="idx">
     </SearchList>
   </div>
@@ -19,9 +19,6 @@ export default {
   components: {
     SearchList,
   },
-  props: {
-    tab: Number,
-  },
   computed: {
     ...mapState({
     searched_list: (state) => state.searchStore.searchedList
@@ -30,12 +27,12 @@ export default {
       return this.$route.params.userId;
     },
   },
-  watch: {
-    paramId(newId) {
-      if (newId) {
-        console.log("워치 파라미터");
-        this.$store.dispatch("getProfile", newId);
-      }
+  computed: {
+    ...mapState({
+        searched_list: (state) => state.searchStore.searchedList
+    }),
+    paramId() {
+      return this.$route.params.userId;
     },
   },
   mounted() {
