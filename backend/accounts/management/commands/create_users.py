@@ -3,6 +3,7 @@ from django.core.management.base import BaseCommand
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from accounts.models import MusicUserLike
+from musics.models import Music
 
 User = get_user_model()
 
@@ -22,7 +23,7 @@ class Command(BaseCommand):
             user = User.objects.create_user(email=email, password=password, nickname=nickname, profile_picture=profile_picture)
 
             # Add random music to the playlist
-            music_pks = list(range(9168, 25194))
+            music_pks = list(Music.objects.values_list('pk', flat=True))
             random.shuffle(music_pks)
             playlist = music_pks[:30]
             user.playlist.add(*playlist)
@@ -30,7 +31,8 @@ class Command(BaseCommand):
             # Add random music to the liked songs
             liked_songs = music_pks[30:60]
             for song in liked_songs:
-                MusicUserLike.objects.create(user=user, music_id=song)
+                music = Music.objects.get(pk=song)
+                MusicUserLike.objects.create(user=user, music=music)
 
             # Update user's music components with random values
             user.music_components.energy = random.uniform(0, 1)
