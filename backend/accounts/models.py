@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from musics .models import MusicComponent, Music
-from movies .models import Movie
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password, **kwargs):
@@ -39,7 +38,6 @@ class UserManager(BaseUserManager):
 
 # AbstractBaseUser를 상속해서 유저 커스텀
 class User(AbstractBaseUser, PermissionsMixin):
-    
     email = models.EmailField(max_length=30, unique=True, null=False, blank=False)
     profile_picture = models.ImageField(blank=True, null=True, upload_to='users')
     nickname = models.CharField(max_length=20, unique=True, null=True, blank=True)
@@ -51,11 +49,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 	# 사용자의 username field는 email으로 설정 (이메일로 로그인)
     USERNAME_FIELD = 'email'
-
-class MovieUserLike(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
 
 class MusicUserLike(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

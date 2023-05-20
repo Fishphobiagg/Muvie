@@ -10,7 +10,7 @@ class MovieSerializer(serializers.ModelSerializer):
     ost = serializers.SerializerMethodField()
     class Meta:
         model = Movie
-        fields = ['title', 'poster_path','ost']
+        fields = ['title','ost']
     
     def get_ost(self, instance):
         all_ost = instance.ost.all()
