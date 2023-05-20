@@ -5,6 +5,7 @@ import LoginView from "../views/LoginView.vue";
 import SignupView from "../views/SignupView.vue";
 import MypageView from "../views/MypageView.vue";
 import MainView from "../views/MainView.vue";
+import SearchView from "../views/SearchView.vue";
 
 Vue.use(VueRouter);
 
