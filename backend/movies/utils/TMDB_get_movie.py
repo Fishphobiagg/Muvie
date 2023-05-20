@@ -5,7 +5,7 @@ from django.conf import settings
 def get_popular_movies():
     url = "https://api.themoviedb.org/3/discover/movie"
     params = {
-        "api_key": settings.TMDB_API_KEY,  # 자신의 TMDB API 키로 바꿔주세요
+        "api_key": '84216c3a0ee24447b6798e642dbfa540',  # 자신의 TMDB API 키로 바꿔주세요
         "sort_by": "popularity.desc",
         "vote_count.gte": 100,
         "language":"ko-KR",
@@ -41,7 +41,6 @@ def transform_movie_data(movie):
             "vote_count": movie["vote_count"],
             "vote_average": movie["vote_average"],
             "overview": movie["overview"],
-            "poster_path": movie["poster_path"],
         }
     }
     return transformed_movie

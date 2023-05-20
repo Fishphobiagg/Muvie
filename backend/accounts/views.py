@@ -19,6 +19,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+import random
 
 class SignupAPIView(APIView):
     def post(self, request):
@@ -158,7 +159,6 @@ class AccountsChangeView(APIView):
         serializer = UserChangeSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            print('ㅇㅇㅇ')
             return Response({"message":"Change Success",
                              "changed_data" : UserChangeSerializer(User.objects.get(pk=user_pk)).data
                              })
@@ -220,7 +220,7 @@ def recommend_components(request):
 @permission_classes([IsAuthenticated])
 def recommend_user(request):
     user = request.user
-    random_users = User.objects.order_by('?')[:10] # 대규모로 갈 경우 속도가 느려지기 때문에 후에 수정
+    random_users = random.sample(list(User.objects.exclude(pk=user.pk).exclude(following=user)), (User.objects.all().count()-User.objects.exclude(pk=user.pk).exclude(following=user).count())//10) # 대규모로 갈 경우 속도가 느려지기 때문에 후에 수정
     user_vector = calculate_vector(user)
     random_user_list = []
 
@@ -242,7 +242,7 @@ def recommend_user(request):
 def collaborative_filtering(user, n=10):
     liked_music_ids = MusicUserLike.objects.filter(user=user).values_list('music_id', flat=True)
 
-    similar_users = User.objects.filter(musicuserlike__music_id__in=liked_music_ids).exclude(id=user.id)
+    similar_users = random.sample(list(User.objects.filter(musicuserlike__music_id__in=liked_music_ids).exclude(id=user.id)), 10)
 
     similarity_scores = {}
     for similar_user in similar_users:
