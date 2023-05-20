@@ -9,7 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 import spotipy
 from musics.models import Music
 from spotipy.oauth2 import SpotifyClientCredentials
-
+from django.conf import settings
 
 class MoviePagination(PageNumberPagination):
     page_size = 10
@@ -18,12 +18,16 @@ class MoviePagination(PageNumberPagination):
     max_page_size = 100
     
 def save_ost(request):
-    client_id = '150e34294220415f8bc1337af12adb58'
-    client_secret = '257cf688a26f4c8181c2b3b5447ac4e1'
-    client_credentials_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
+    sp_client_id = settings.SPOTIFY_ID
+    sp_secret = settings.SPOTIFY_SECRET
+    client_credentials_manager = SpotifyClientCredentials(client_id=sp_client_id, client_secret=sp_secret)
     sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
-
+    
     movies = Movie.objects.all()
+
+    movie_count = 0
+    music_count = 0
+
     for movie in movies:
         album = sp.search(q=movie.original_title, type='album', limit=1)['albums']
         poster = ''
@@ -32,11 +36,15 @@ def save_ost(request):
         album = album['items']
         if not album:
             continue
+        movie_count += 1
         for track in sp.album_tracks(album[0]['id'])['items']:
             music = Music(title=track['name'], artist=track['artists'][0]['name'], uri=track['uri'], album_cover=poster)
             music.save()
             movie.ost.add(music)
-            print(music,movie)
+            music_count += 1
+        print(music_count, movie_count)
+    return Response({'검색된 영화 개수':movie_count,
+                     '저장된 음악 개수':music_count})
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
