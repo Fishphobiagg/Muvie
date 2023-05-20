@@ -20,11 +20,8 @@ class MusicPagenatior(PageNumberPagination):
 @permission_classes([IsAuthenticated])
 def search_music(request, keyword):
     music_search_result = Music.objects.filter(Q(artist__icontains=keyword)|Q(title__icontains=keyword))
-    paginator = MusicPagenatior()
-    result_page = paginator.paginate_queryset(music_search_result, request)
-    serializer = MusicListSerializer(result_page, many=True)
-    return paginator.get_paginated_response(serializer.data)
-
+    serializer = MusicListSerializer(music_search_result, many=True)
+    return Response({'data':serializer.data})
 
 class MusicLikeView(APIView):
     permission_classes = [IsAuthenticated]
