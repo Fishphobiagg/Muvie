@@ -40,13 +40,17 @@ class MusicLikeView(APIView):
         user = request.user
         music = Music.objects.get(pk=music_pk)
         user.like_music.add(music)
-        return Response({'message':'like successfully'}, status=status.HTTP_202_ACCEPTED)
+        like_list = user.like_music.all()
+        serializer = PlaylistSerializer(like_list, many=True)
+        return Response({'message':'like successfully', "like_list":serializer.data}, status=status.HTTP_202_ACCEPTED)
     
     def delete(self, reqeust, music_pk):
         user = reqeust.user
         music = Music.objects.get(pk=music_pk)
         user.like_music.remove(music)
-        return Response({'message':'unlike successfully'}, status=status.HTTP_202_ACCEPTED)
+        like_list = user.like_music.all()
+        serializer = PlaylistSerializer(like_list, many=True)
+        return Response({'message':'unlike successfully', "like_list":serializer.data}, status=status.HTTP_202_ACCEPTED)
 
 class MusicPlaylistView(APIView):
     permission_classes = [IsAuthenticated]

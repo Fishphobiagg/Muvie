@@ -1,6 +1,3 @@
-from django.shortcuts import get_object_or_404
-from django.contrib.auth import authenticate
-from django.contrib.auth.hashers import check_password
 from django.db.models import Count
 
 from rest_framework.views import APIView
@@ -18,9 +15,6 @@ from accounts.models import MusicUserLike, User
 
 
 from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.neighbors import NearestNeighbors
-
-import numpy as np
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -66,10 +60,22 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     
     def validate(self, attrs):
         data = super().validate(attrs)
-        data['user_id'] = self.user.id
-        data['nickname'] = self.user.nickname
-        data['email'] = self.user.email
-        return data
+
+        response = {
+            "user": {
+                "id": self.user.id,
+                "nickname": self.user.nickname,
+                "email": self.user.email,
+                "profile_picture" : self.user.profile_picture.url
+            },
+            "message": "login success",
+            "token": {
+                "access": data["access"],
+                "refresh": data["refresh"]
+            }
+        }
+        
+        return response
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
@@ -92,6 +98,7 @@ class FollowAPIView(APIView):
             user.following.add(opponent)
             serializer = FollowSerializer(user)
             return Response(serializer.data)
+        
     def delete(self, request, user_pk):
         user = request.user
         opponent = User.objects.get(pk=user_pk)
@@ -143,9 +150,6 @@ class PasswordChangeView(APIView):
 class AccountsChangeView(APIView):
     permission_classes = [IsAuthenticated]
     def patch(self, request, user_pk):
-        print(request.data)
-        print(request.user.pk)
-        print(user_pk)
         user = User.objects.get(pk=user_pk)
         if request.user != user:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
@@ -156,7 +160,6 @@ class AccountsChangeView(APIView):
             return Response({"message":"Change Success",
                              "changed_data" : UserChangeSerializer(User.objects.get(pk=user_pk)).data
                              })
-        ㅔ
         return Response(serializer.error, status=status.HTTP_400_BAD_REQUEST)
 
 class LikeListView(APIView):
@@ -165,7 +168,7 @@ class LikeListView(APIView):
         user = request.user
         like_list = user.like_music.all()
         serializer = PlaylistSerializer(like_list, many=True)
-        return Response(serializer.data)
+        return Response({"like_list":serializer.data})
 
 class PlaylistView(APIView):
     permission_classes = [IsAuthenticated]
@@ -173,7 +176,7 @@ class PlaylistView(APIView):
         user = request.user
         playlist = user.playlist.all()
         serializer = PlaylistSerializer(playlist, many=True)
-        return Response(serializer.data)
+        return Response({"play_list":serializer.data})
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -198,16 +201,16 @@ def recommend_components(request):
         title = recommend['name']
         artist = recommend['artists'][0]['name']
         album = recommend['album']['name']
-        uri = recommend['uri']
         poster = recommend['album']['images'][0]['url']
         if Music.objects.filter(title=title, artist=artist):
-           response['data'].append({"title":title, "artist":artist, 'album':album, "uri":uri, 'poster':poster})
+           music = Music.objects.filter(title=title, artist=artist)[0]
+           response['data'].append({"title":title, "artist":artist, 'album':album, 'poster':poster, 'like count':music.users_like_musics.count()})
         else:
             new = Music.objects.create(
-                title=title, artist=artist, uri=uri, album_cover = poster
+                title=title, artist=artist, album_cover = poster
             )
             new.save()
-            response['data'].append({"title":title, "artist":artist, 'album':album, "uri":uri, 'poster':poster})
+            response['data'].append({"title":title, "artist":artist, 'album':album, 'poster':poster, 'like count' : 0})
     return Response(response)
 
 
@@ -225,14 +228,14 @@ def recommend_user(request):
         random_user_list.append((similarity, random_user))
         
     random_user_list.sort(key=lambda x: x[0], reverse=True)
-    topusers = [user[1] for user in random_user_list[:3]]
+    topusers = [user[1] for user in random_user_list[:5]]
     user_serializer = SimpleUserSerializer(topusers, many=True)
     return Response({"recommend":user_serializer.data})
     
     # 가장 유사도가 높은 사용자 정보 반환
 
 
-# 최근접 이웃 협업 필터링 
+# 협업 필터링 
 
 def collaborative_filtering(user, n=10):
     liked_music_ids = MusicUserLike.objects.filter(user=user).values_list('music_id', flat=True)
@@ -255,7 +258,6 @@ def collaborative_filtering(user, n=10):
 def recommend_like(request):
     user = request.user
     recommend_music, top_similar_user = collaborative_filtering(user, n=10)
-    print(top_similar_user)
     serialized_music = []
     for music in recommend_music[:5]:
         serialized_music.append(
@@ -263,6 +265,8 @@ def recommend_like(request):
                 "id":music.id,
                 "title":music.title,
                 "artist":music.artist,
+                "album_cover":music.album_cover,
+                "like_count":music.users_like_musics.count()
             }
         )
     return Response(serialized_music)

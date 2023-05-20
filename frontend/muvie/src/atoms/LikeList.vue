@@ -1,31 +1,33 @@
 <template>
-  <div class="profile-item">
-    <div class="user-detail">
+  <div class="like_item">
+    <div class="music-detail">
       <img
-        class="profile-photo"
-        :src="`http://127.0.0.1:8000${fwg.profile_picture}`"
-        alt="프로필 사진"
+        class="album_cover"
+        :src="`${fwg.album_cover}`"
+        alt="앨범 커버"
       />
-      <span class="user-name" @click="navigateToProfile(fwg.id)">{{
-        fwg.nickname
-      }}</span>
+      <span class="music_name" @click="navigateToProfile(fwg.id)">{{
+        fwg.title
+      }} </span>
     </div>
-    <button
-      class="follow-button"
+    <!-- <span class="like"></span> -->
+    
+    <span
+      class="like_button"
       @click="followAction(fwg)"
       :class="{ following: fwg.is_followed }"
-    >
-      {{ fwg.is_followed ? "팔로잉" : "팔로우" }}
-    </button>
+    > ♡ 
+    {{fwg.like_count}}
+    </span>
   </div>
 </template>
 
 <script>
 export default {
-  name: "FollowList",
+  name: "LikeList",
   data() {
     return {
-      buttonMsg: "팔로잉",
+      buttonMsg: "재생",
     };
   },
   methods: {
@@ -34,10 +36,10 @@ export default {
     },
     followAction(fwg) {
       if (fwg.is_followed) {
-        // 이미 팔로잉 중인 경우의 동작
+        // 이미 재생 목록에 있는 경우의 동작
         this.$store.dispatch("unfollow", fwg.id);
       } else {
-        // 팔로우할 경우의 동작
+        // 재생목록에 추가할 경우의 동작
         this.$store.dispatch("follow", fwg.id);
       }
     },
@@ -49,7 +51,7 @@ export default {
 </script>
 
 <style>
-.profile-item {
+.like_item {
   width: 1000px;
   height: 80px;
   margin: 5px auto;
@@ -60,22 +62,22 @@ export default {
   align-items: center;
 }
 
-.user-detail {
+.music-detail {
   height: 80px;
   display: flex;
   align-items: center;
 }
 
-.profile-photo {
+.album_cover {
   width: 66px;
   height: 66px;
   background-color: white;
-  border-radius: 75px;
+  border-radius: 5px;
   overflow: hidden;
   object-fit: cover;
 }
 
-.user-name {
+.music_name {
   text-decoration: none;
   border: none;
   /* background-color: transparent; */
@@ -94,7 +96,6 @@ export default {
   border: none;
   border-radius: 9px;
   cursor: pointer;
-  background-color: blue;
   color: white;
 }
 
