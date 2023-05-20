@@ -84,7 +84,7 @@ export default {
         return "Likes";
       }
       if (tab === 3) {
-        return "PlayList"
+        return "PlayList";
       }
       return "";
     },

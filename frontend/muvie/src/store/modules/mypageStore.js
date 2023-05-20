@@ -17,15 +17,15 @@ const mypageStore = {
     play_list: null,
   },
   actions: {
-    getLikeList({commit}){
+    getLikeList({ commit }) {
       const LIKELIST_API = `${BASE_URL}/accounts/like`;
       console.log(LIKELIST_API);
       axios
         .get(LIKELIST_API)
         .then((res) => {
-          console.log('좋아요 목록 요청');
+          console.log("좋아요 목록 요청");
           console.log(res);
-          commit('getUserLike', res.data);
+          commit("getUserLike", res.data);
         })
         .catch((err) => console.log(err));
     },
@@ -42,7 +42,7 @@ const mypageStore = {
         })
         .catch((err) => console.log(err));
     },
-    getPlayList({commit}){
+    getPlayList({ commit }) {
       const PLAYLIST_API = `${BASE_URL}/accounts/playlist`;
       console.log(PLAYLIST_API);
       axios
@@ -50,38 +50,33 @@ const mypageStore = {
         .then((res) => {
           console.log("재생목록 요청");
           console.log(res);
-          commit('getUserPlayList', res.data)
-        }).catch((err) => console.log(err));
+          commit("getUserPlayList", res.data);
+        })
+        .catch((err) => console.log(err));
     },
-    like({commit}, id) {
+    like({ commit }, id) {
       axios.post(`${BASE_URL}/music/like/${id}`).then((res) => {
         console.log(res);
         commit("updateLikeState", res.like_list);
-        // eslint-disable-next-line no-restricted-globals
-        location.reload();
-      })
+      });
     },
-    unlike({commit}, id) {
+    unlike({ commit }, id) {
       axios.delete(`${BASE_URL}/music/like/${id}`).then((res) => {
         console.log(res);
         commit("updateLikeState", res.like_list);
-        // eslint-disable-next-line no-restricted-globals
-        location.reload();
-      })
+      });
     },
-    addPlaylist({commit}, id){
-      axios.post(`${BASE_URL}/music/playlist/${id}`).then((res)=> {
-      console.log(res);
-      commit("updatePlayListState");
-      location.reload();
-      })
+    addPlaylist({ commit }, id) {
+      axios.post(`${BASE_URL}/music/playlist/${id}`).then((res) => {
+        console.log(res);
+        commit("updatePlayListState");
+      });
     },
-    deletePlaylist({commit}, id){
-      axios.delete(`${BASE_URL}/music/playlist/${id}`).then((res)=> {
-      console.log(res);
-      commit("updatePlayListState");
-      location.reload();
-      })
+    deletePlaylist({ commit }, id) {
+      axios.delete(`${BASE_URL}/music/playlist/${id}`).then((res) => {
+        console.log(res);
+        commit("updatePlayListState");
+      });
     },
     follow({ commit }, id) {
       axios.post(`${BASE_URL}/accounts/${id}/follow`).then((res) => {
@@ -126,7 +121,7 @@ const mypageStore = {
     getUserLike(state, payload) {
       state.like_list = payload.like_list;
       console.log(state.like_list);
-      console.log('좋아요 목록  요청 성공')
+      console.log("좋아요 목록  요청 성공");
     },
     getUserDetail(state, payload) {
       state.followers = payload.detail.followers;
@@ -144,7 +139,7 @@ const mypageStore = {
     getUserPlayList(state, payload) {
       state.play_list = payload.play_list;
       console.log(state.play_list);
-      console.log('재생목록 요청 성공 뿌뿌')
+      console.log("재생목록 요청 성공 뿌뿌");
     },
     getPhoto(state, payload) {
       state.profile_picture_usage = payload;
@@ -162,11 +157,11 @@ const mypageStore = {
     },
     updateLikeState(state, payload) {
       state.like_list = payload;
-      console.log('좋아요 목록 업데이트 성공 뿌뿌');
+      console.log("좋아요 목록 업데이트 성공 뿌뿌");
     },
     updatePlayListState(state, payload) {
       state.playlist = payload;
-      console.log('재생 목록 업데이트 성공 뿌뿌');
+      console.log("재생 목록 업데이트 성공 뿌뿌");
     },
   },
   computed: {

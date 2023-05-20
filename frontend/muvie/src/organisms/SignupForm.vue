@@ -50,11 +50,18 @@ export default {
       console.log(this.profileUrl);
     },
     onSubmit() {
-      this.formData = new FormData();
-      this.formData.append("email", this.email);
-      this.formData.append("password", this.password);
-      this.formData.append("nickname", this.nickname);
-      this.formData.append("profile_picture", this.profilePicture);
+      if (this.profilePicture == null) {
+        this.formData = new FormData();
+        this.formData.append("email", this.email);
+        this.formData.append("password", this.password);
+        this.formData.append("nickname", this.nickname);
+      } else {
+        this.formData = new FormData();
+        this.formData.append("email", this.email);
+        this.formData.append("password", this.password);
+        this.formData.append("nickname", this.nickname);
+        this.formData.append("profile_picture", this.profilePicture);
+      }
       console.log(this.formData);
       this.$store.dispatch("signup", this.formData);
     },

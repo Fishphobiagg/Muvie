@@ -49,7 +49,7 @@
 
 <script>
 export default {
-  name: "CarouselView ",
+  name: "CarouselView",
   props: {
     components: Array,
   },

@@ -6,7 +6,7 @@
         <img
           class="my-profile-photo"
           :src="`http://127.0.0.1:8000${profile_picture}`"
-          alt=""
+          alt="프로필 사진"
         />
         <!-- <i class="fas fa-camera fa-4x" v-show="editing" @click="editPhoto"></i> -->
         <!-- 이미지 파일 업로드 버튼 -->
@@ -108,6 +108,7 @@ export default {
     handleFileChange(event) {
       // 파일 선택 이벤트 처리
       const file = event.target.files[0];
+      console.log("프로필 파일 변경 요청 들어감");
 
       this.formData = new FormData();
       this.formData.append("id", this.userId); // id 추가
