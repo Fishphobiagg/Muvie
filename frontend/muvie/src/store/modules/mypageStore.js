@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import axios from "axios";
+import { mapState } from "vuex";
 
 const BASE_URL = `http://127.0.0.1:8000`;
 
@@ -11,6 +12,7 @@ const mypageStore = {
     following_count: null,
     nickname: null,
     profile_picture: null,
+    userId: null,
     like_list: null,
     play_list: null,
   },
@@ -28,8 +30,6 @@ const mypageStore = {
         .catch((err) => console.log(err));
     },
     getProfile({ commit }, id) {
-      // const BASE_URL = `http://127.0.0.1:8000`;
-
       // 유저 데이터 가져오기
       const MYPAGE_API = `${BASE_URL}/accounts/${id}/profile`;
       console.log(MYPAGE_API);
@@ -39,24 +39,6 @@ const mypageStore = {
           console.log("프로필 요청");
           console.log(res);
           commit("getUserDetail", res.data);
-
-          // 유저(본인) 프로필사진 가져오기
-          // if (res.data.user_profile.profile_picture) {
-          //   const PHOTO_API = `${BASE_URL}/${res.data.user_profile.profile_picture}`;
-          //   console.log(PHOTO_API);
-          //   axios
-          //     .get(PHOTO_API, {
-          //       responseType: "arraybuffer",
-          //     })
-          //     .then((response) => {
-          //       const image = new Blob([response.data], { type: "image/jpeg" });
-          //       const imageUrl = URL.createObjectURL(image);
-          //       commit("getPhoto", imageUrl);
-          //     })
-          //     .catch((error) => {
-          //       console.log(error);
-          //     });
-          // }
         })
         .catch((err) => console.log(err));
     },
@@ -130,23 +112,14 @@ const mypageStore = {
           commit("updateNickname", data.nickname);
         });
     },
-    editPhoto({ commit }, payload) {
-      console.log(payload);
-      // eslint-disable-next-line no-restricted-syntax
-      for (const key of payload.keys()) {
-        console.log(key);
-      }
-      const data = {
-        profile_picture: payload.profile_picture,
-      };
-      console.log(data);
-      axios
-        .patch(`${BASE_URL}/accounts/edit/${payload.id}/`, data)
-        .then((res) => {
-          console.log(res);
-          console.log("프로필사진 변경 성공");
-          commit("updatePhoto", data.profile_picture);
-        });
+    editPhoto({ commit, state }, file) {
+      console.log("로컬 유저아이디");
+      console.log(state);
+      axios.patch(`${BASE_URL}/accounts/edit/1/`, file).then((res) => {
+        console.log(res);
+        console.log("프로필사진 변경 성공");
+        commit("updatePhoto", file);
+      });
     },
   },
   mutations: {
@@ -162,6 +135,7 @@ const mypageStore = {
       state.following_count = payload.detail.following_count;
       state.nickname = payload.user_profile.nickname;
       state.profile_picture = payload.user_profile.profile_picture;
+      state.userId = payload.user_proile.id;
       console.log(state);
       console.log(state.profile_picture);
 
@@ -194,6 +168,11 @@ const mypageStore = {
       state.playlist = payload;
       console.log('재생 목록 업데이트 성공 뿌뿌');
     },
+  },
+  computed: {
+    ...mapState({
+      userId: (state) => state.loginStore.userId,
+    }),
   },
 };
 

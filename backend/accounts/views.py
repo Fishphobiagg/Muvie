@@ -66,7 +66,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
                 "id": self.user.id,
                 "nickname": self.user.nickname,
                 "email": self.user.email,
-                "profile_picture" : self.user.profile_picture.url
+                "profile_picture": self.user.profile_picture.url,
             },
             "message": "login success",
             "token": {

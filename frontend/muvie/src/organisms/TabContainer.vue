@@ -67,8 +67,8 @@ export default {
       }
     },
   },
-  created() {
-    console.log("마이페이지뷰");
+  mounted() {
+    console.log("마이페이지뷰의 파라미터 전달");
     console.log(this.paramId);
     if (this.paramId) {
       this.$store.dispatch("getProfile", this.paramId);

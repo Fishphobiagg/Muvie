@@ -5,6 +5,7 @@
       <router-link to="/login">Login</router-link> |
       <router-link to="/signup">Signup</router-link> |
       <router-link to="/mypage">Mypage</router-link> |
+      <router-link to="/main">Main</router-link> |
     </nav>
     <router-view />
   </div>
@@ -27,6 +28,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  list-style: none;
 }
 
 nav {
