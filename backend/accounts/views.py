@@ -19,6 +19,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+import random
 
 class SignupAPIView(APIView):
     def post(self, request):
@@ -218,7 +219,7 @@ def recommend_components(request):
 @permission_classes([IsAuthenticated])
 def recommend_user(request):
     user = request.user
-    random_users = User.objects.order_by('?')[:10] # 대규모로 갈 경우 속도가 느려지기 때문에 후에 수정
+    random_users = random.sample(list(User.objects.exclude(pk=user.pk)), 50) # 대규모로 갈 경우 속도가 느려지기 때문에 후에 수정
     user_vector = calculate_vector(user)
     random_user_list = []
 
