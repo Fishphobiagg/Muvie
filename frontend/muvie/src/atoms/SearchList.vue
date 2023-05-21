@@ -3,43 +3,45 @@
     <div class="music-detail">
       <img
         class="album_cover"
-        :src="`${fwg.album_cover}`"
+        :src="`${item.album_cover}`"
         alt="앨범 커버"
       />
-      <span class="music_name" @click="playMusic(fwg.id)">{{
-        fwg.title
+      <span class="music_name" @click="navigateToProfile(item.id)">{{
+        item.title
       }} </span>
-      <span class="artist_name">{{fwg.artist}}</span>
+      <span>{{item.artist}}</span>
     </div>
     <!-- <span class="like"></span> -->
-    <div class='like'>
-      <span class='like_button'>♡</span>
-      <span class="like_count">{{fwg.like_count}}</span>
-    </div>
-      <span class="delete"></span>
-
+    
+    <span
+      class="like_button"
+      @click="followAction(fwg)"
+      :class="{ following: fwg.is_followed }"
+    > ♡ 
+    {{item.like_count}}
+    </span>
   </div>
 </template>
 
 <script>
 export default {
-  name: "PlayList",
-  data() {
-    return {
-      buttonMsg: "재생",
-    };
+  name: "SearchList",
+  props : {
+    item:Object
   },
   methods: {
-    playMusic(musicId) {
-      console.log('음악 재생 요청')
+    navigateToProfile(userId) {
+      this.$router.push({ name: "Profile", params: { userId } });
     },
-    deletePlaylist(musicId){
-      console.log('플레이리스트 삭제 요청')
-      this.$store.dispatch('deletePlaylist', musicId)
-    }
-  },
-  props: {
-    fwg: Object,
+    followAction(fwg) {
+      if (fwg.is_followed) {
+        // 이미 재생 목록에 있는 경우의 동작
+        this.$store.dispatch("unfollow", fwg.id);
+      } else {
+        // 재생목록에 추가할 경우의 동작
+        this.$store.dispatch("follow", fwg.id);
+      }
+    },
   },
 };
 </script>
@@ -83,7 +85,7 @@ export default {
   vertical-align: middle;
 }
 
-.like-button {
+.follow-button {
   height: 40px;
   width: 80px;
   font-size: 15px;
@@ -97,27 +99,4 @@ export default {
   background-color: lightgray !important;
   color: black !important;
 }
-
-.delete {
-  position: relative;
-  width: 20px;
-  height: 20px;
-}
-
-.delete::before,
-.delete::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 2px;
-  height: 10px;
-  background-color: #000;
-  transform: translate(-50%, -50%) rotate(45deg);
-}
-
-.delete::after {
-  transform: translate(-50%, -50%) rotate(-45deg);
-}
-
 </style>
