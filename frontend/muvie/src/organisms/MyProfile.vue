@@ -26,8 +26,8 @@
       </div>
       <div class="my-profile-detail">
         <div class="nick-name-detail">
-          <input v-if="editing" v-model="newNickname" />
-          <p v-else>{{ nickname }}</p>
+          <input class="nick-name-input" v-if="editing" v-model="newNickname" />
+          <p class="my-profile-detail-nickname" v-else>{{ nickname }}</p>
           <i
             class="fas fa-pencil fa-lg"
             v-show="editing"
@@ -36,13 +36,17 @@
         </div>
         <!-- 내 프로필 메뉴 -->
         <div class="my-profile" v-if="me">
-          <button>취향 설정</button>
+          <button @click="handleModal">취향 설정</button>
           <button @click="editProfile">프로필 편집</button>
         </div>
         <!-- 상대 프로필 메뉴 -->
         <div class="other-profile" v-else>
           <button>{{ isFollowing() ? "팔로잉" : "팔로우" }}</button>
         </div>
+        <ModalAtom :isModalOpen="isModalOpen">
+          <h2>음악 취향</h2>
+          <PreferSelect @close-modal="closeModal" />
+        </ModalAtom>
       </div>
     </div>
   </div>
@@ -51,6 +55,8 @@
 <script>
 import axios from "axios";
 import { mapState, mapMutations } from "vuex";
+import ModalAtom from "../atoms/ModalAtom.vue";
+import PreferSelect from "./PreferSelect.vue";
 
 export default {
   name: "MyProfile",
@@ -60,7 +66,12 @@ export default {
       editing: false,
       newNickname: "",
       formData: null,
+      isModalOpen: false,
     };
+  },
+  components: {
+    ModalAtom,
+    PreferSelect,
   },
   mounted() {
     console.log(this.userId, this.paramId);
@@ -129,6 +140,14 @@ export default {
         });
       this.editing = !this.editing;
     },
+    handleModal() {
+      console.log("모달 오픈");
+      this.isModalOpen = true;
+    },
+    closeModal() {
+      console.log("모달 닫기");
+      this.isModalOpen = false;
+    },
   },
 };
 </script>
@@ -165,7 +184,7 @@ export default {
   object-fit: cover;
 }
 
-.my-profile-detail p {
+.my-profile-detail-nickname {
   font-size: 25px;
 }
 
@@ -182,7 +201,7 @@ export default {
   cursor: pointer;
 }
 
-.my-profile-detail input {
+.nick-name-input {
   margin: 10px;
   padding: 10px 20px;
   background-color: transparent;

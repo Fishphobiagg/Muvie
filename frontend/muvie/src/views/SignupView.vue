@@ -29,7 +29,7 @@ export default {
   },
   data() {
     return {
-      isModalOpen: true,
+      isModalOpen: false,
       formData: {},
     };
   },
