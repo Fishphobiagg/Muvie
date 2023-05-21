@@ -24,7 +24,9 @@ import random
 class SignupAPIView(APIView):
     def post(self, request):
         serializer = UserSerializer(data=request.data)
+        print(serializer.is_valid())
         if serializer.is_valid():
+            print(serializer)
             user = serializer.save()
             
             # jwt 토큰 접근

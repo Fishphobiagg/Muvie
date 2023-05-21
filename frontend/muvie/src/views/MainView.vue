@@ -7,6 +7,8 @@
     </div>
     <!-- <CircleCarousel :components="components" /> -->
     <CarouselView :components="components" />
+    <UsersView :users="users" />
+    <LikesView :likes="likes" />
   </div>
 </template>
 
@@ -15,6 +17,8 @@ import { mapState } from "vuex";
 import NavBar from "../organisms/NavBar.vue";
 // import CircleCarousel from "../organisms/CircleCarousel.vue";
 import CarouselView from "../organisms/CarouselView.vue";
+import UsersView from "../organisms/UsersView.vue";
+import LikesView from "../organisms/LikesView.vue";
 
 export default {
   name: "MainView",
@@ -25,6 +29,8 @@ export default {
     NavBar,
     // CircleCarousel,
     CarouselView,
+    UsersView,
+    LikesView,
   },
   computed: {
     ...mapState({
@@ -38,6 +44,7 @@ export default {
     this.$store.dispatch("getComponentsRecommends");
     this.$store.dispatch("getUserRecommends");
     this.$store.dispatch("getLikeRecommends");
+    // this.$store.dispatch("getProfile", this.userId);
   },
   methods: {},
 };

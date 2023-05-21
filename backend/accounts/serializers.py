@@ -11,7 +11,7 @@ class UserSerializer(serializers.ModelSerializer):
             email = validated_data['email'],
             password = validated_data['password'],
             nickname = validated_data['nickname'],
-            profile_picture = '/users/default.gif'if len(validated_data) == 3 else validated_data['profile_picture']
+            profile_picture = '/users/default.jpg'if len(validated_data) == 3 else validated_data['profile_picture']
         )
         return user
 

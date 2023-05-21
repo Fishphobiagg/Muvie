@@ -14,14 +14,14 @@
         :key="idx"
       ></FollowList>
     </div>
-        <div v-if="tab == 2">
+    <div v-if="tab == 2">
       <LikeList
         :fwg="fwg"
         v-for="(fwg, idx) in like_list"
         :key="idx"
       ></LikeList>
     </div>
-        <div v-if="tab == 3">
+    <div v-if="tab == 3">
       <PlayList
         :fwg="fwg"
         v-for="(fwg, idx) in play_list"
@@ -35,7 +35,7 @@
 import { mapState } from "vuex";
 import FollowList from "../atoms/FollowList.vue";
 import LikeList from "../atoms/LikeList.vue";
-import PlayList from '../atoms/PlayList.vue';
+import PlayList from "../atoms/PlayList.vue";
 
 export default {
   name: "TabContainer",
