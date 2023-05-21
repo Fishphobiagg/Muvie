@@ -7,8 +7,10 @@
     <ModalAtom :isModalOpen="isModalOpen" @close-modal="closeModal">
       <h2>음악 취향</h2>
       <PreferSelect />
-      <button @click="confirmModal">확인</button>
-      <button @click="closeModal">지금 안하기</button>
+      <div class="button-container">
+        <button @click="confirmModal">확인</button>
+        <button @click="closeModal">지금 안하기</button>
+      </div>
     </ModalAtom>
   </div>
 </template>
@@ -31,7 +33,7 @@ export default {
   },
   data() {
     return {
-      isModalOpen: false,
+      isModalOpen: true,
     };
   },
   methods: {
@@ -44,11 +46,33 @@ export default {
       this.isModalOpen = false;
     },
     confirmModal() {
-      // 확인 버튼 클릭에 대한 로직을 처리합니다.
       console.log("확인 버튼 클릭");
     },
   },
 };
 </script>
 
-<style></style>
+<style>
+.button-container > button {
+  margin: 20px;
+  padding: 13px 30px;
+  background: white;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  text-decoration: none;
+  border: none;
+  z-index: 500;
+  transition: transform 0.3s;
+}
+
+.button-container > button:hover {
+  color: white;
+  background: rgba(218, 138, 114, 0.8);
+  letter-spacing: 2px;
+  cursor: pointer;
+}
+
+.button-container > button:active {
+  transform: scale(1.1);
+}
+</style>

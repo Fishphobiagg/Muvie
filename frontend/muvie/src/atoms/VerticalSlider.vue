@@ -1,16 +1,16 @@
 <template>
-  <div>
-    <div class="slider-bar">
-      <input
-        type="range"
-        min="0"
-        max="100"
-        value="50"
-        class="slider"
-        @input="handleSliderChange"
-      />
+  <div class="slider-bar">
+    <input
+      type="range"
+      min="0"
+      max="100"
+      value="50"
+      class="slider"
+      @input="handleSliderChange"
+    />
+    <div class="slider-value-container">
       <p class="slider-value">{{ sliderValue }}</p>
-      <p class="slider-value">{{ ingredient }}</p>
+      <p class="slider-value label">{{ ingredient }}</p>
     </div>
   </div>
 </template>
@@ -36,32 +36,22 @@ export default {
 </script>
 
 <style>
-.slider-container {
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 300px;
-  gap: 10px;
-  transform: rotate(-90deg);
-}
-
 .slider-bar {
   display: flex;
-  justify-content: center;
+  width: 350px;
   align-items: center;
+  justify-content: space-between;
 }
 
 .slider {
   -webkit-appearance: none;
   appearance: none;
-  width: 300px;
+  width: 250px;
   height: 15px;
   border-radius: 20px;
-  background: #edf1f4;
-  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1), -5px -5px 10px #fff,
-    inset 5px 5px 5px rgba(0, 0, 0, 0.1);
+  background: #fff;
+  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1), -5px -5px 10px #fff,
+    inset 4px 4px 4px rgba(0, 0, 0, 0.1);
   outline: none;
   opacity: 0.9;
   -webkit-transition: 0.2s;
@@ -84,15 +74,27 @@ export default {
   cursor: pointer;
 }
 
-/* .slider::-moz-range-thumb {
+.slider::-moz-range-thumb {
   width: 15px;
   height: 15px;
   border-radius: 50%;
   background: #4caf50;
   cursor: pointer;
-} */
+}
+
+.slider-value-container {
+  display: flex;
+  width: 100px;
+  justify-content: space-between;
+  align-items: center;
+}
 
 .slider-value {
   transform: rotate(-270deg);
+}
+
+.label {
+  width: 70px;
+  height: 30px;
 }
 </style>

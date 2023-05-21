@@ -38,10 +38,11 @@ export default {
 <style>
 .slider-container {
   display: flex;
-  justify-content: center;
+  width: 56%;
+  height: 400px;
+  flex-direction: column;
   align-items: center;
-  height: 300px;
-  gap: 10px;
+  gap: 20px;
   transform: rotate(-90deg);
 }
 </style>
