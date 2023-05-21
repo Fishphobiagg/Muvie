@@ -1,24 +1,12 @@
 <template>
-  <div class="like_item">
+  <div class="like_item" @mouseover="showButtons = true" @mouseleave="showButtons = false">
     <div class="music-detail">
-      <img
-        class="album_cover"
-        :src="`${fwg.album_cover}`"
-        alt="앨범 커버"
-      />
-      <span class="music_name" @click="navigateToProfile(fwg.id)">{{
-        fwg.title
-      }} </span>
+      <img class="album_cover" :src="fwg.album_cover" alt="앨범 커버" :style="{ opacity: showButtons ? '0.8' : '1' }" />
+      <span class="music_name" @click="addPlaylist(fwg)">{{ fwg.title }}</span>
+      <span class="artist_name">{{ fwg.artist }}</span>
     </div>
-    <!-- <span class="like"></span> -->
-    
-    <span
-      class="like_button"
-      @click="followAction(fwg)"
-      :class="{ following: fwg.is_followed }"
-    > ♡ 
-    {{fwg.like_count}}
-    </span>
+    <span class="play_button" v-if="showButtons" @click="playMusic(fwg)">
+<i class="fas fa-play"></i></span>
   </div>
 </template>
 
@@ -27,21 +15,19 @@ export default {
   name: "LikeList",
   data() {
     return {
-      buttonMsg: "재생",
+      showButtons: false,
     };
   },
   methods: {
-    navigateToProfile(userId) {
-      this.$router.push({ name: "Profile", params: { userId } });
+    addPlaylist(fwg) {
+      this.$store.dispatch("addPlaylist", fwg.id);
     },
-    followAction(fwg) {
-      if (fwg.is_followed) {
-        // 이미 재생 목록에 있는 경우의 동작
-        this.$store.dispatch("unfollow", fwg.id);
-      } else {
-        // 재생목록에 추가할 경우의 동작
-        this.$store.dispatch("follow", fwg.id);
-      }
+    unlike(fwg) {
+      this.$store.dispatch("unlike", fwg.id);
+    },
+    play(fwg) {
+      this.$store.dispatch("addPlaylist", fwg.id)
+      // 음악 재생 api 추가
     },
   },
   props: {
@@ -64,7 +50,7 @@ export default {
 
 .music-detail {
   height: 80px;
-  display: flex;
+  display: flex;  
   align-items: center;
 }
 
@@ -80,7 +66,6 @@ export default {
 .music_name {
   text-decoration: none;
   border: none;
-  /* background-color: transparent; */
   margin: 0 15px 0 40px;
   font-size: 25px;
   line-height: 80px;
@@ -89,14 +74,28 @@ export default {
   vertical-align: middle;
 }
 
-.follow-button {
-  height: 40px;
-  width: 80px;
-  font-size: 15px;
-  border: none;
-  border-radius: 9px;
+.button_container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.like_button {
+  font-size: 25px;
   cursor: pointer;
-  color: white;
+  margin-right: 10px;
+
+}
+
+.play_button {
+  font-size: 18px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.play_button i {
+  display: inline-block;
+  font-size: 18px;
 }
 
 .following {
