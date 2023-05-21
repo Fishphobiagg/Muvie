@@ -1,4 +1,4 @@
-<h1 align="center"> Muvie 🎵
+<h1 align="center">🎵 Muvie 🎬
  </h1>
 <br>
 <p align="center">DRF(Django REST Framework) & Vue를 이용한 Restful 웹 프로젝트</p>
@@ -33,7 +33,6 @@
     - [X] [@정예륜](https://github.com/YeryunJung)의 개발일지
     - [X] [@이명우](https://github.com/Fishphobiagg)의 개발일지
 
----
 
 ## 소개
 
@@ -41,7 +40,6 @@
 
 
 
----
 ## 👩‍💻 TEAM 🧑‍💻
 <br>
 
@@ -50,6 +48,7 @@
 | Front-end | Back-end |
 | [@YeryunJung](https://github.com/YeryunJung) | [@Fishphobiagg](https://github.com/Fishphobiagg) |
 <br>
+
 #### 👉 [팀원 소개](https://perfect-bluebell-dba.notion.site/Member-2eaf53660b9f47638c0edc7a2e63f147) 👈
 
 ----
@@ -59,8 +58,6 @@
 
 <p align="center">Muvie 기능 소개 + 핵심 알고리즘에 대한 설명
 <p/>
-
-----
 
 ### 1️⃣ 회원 상호작용
 
