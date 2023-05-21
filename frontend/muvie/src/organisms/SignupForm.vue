@@ -50,6 +50,8 @@ export default {
       console.log(this.profileUrl);
     },
     onSubmit() {
+      // 모달 오픈 이벤트 상위 SignupView로 전달
+      this.$emit("open-modal");
       if (this.profilePicture == null) {
         this.formData = new FormData();
         this.formData.append("email", this.email);

@@ -1,7 +1,11 @@
 <template>
   <div class="navbar">
     <MuvieLogo />
-    <input class="input-atoms" v-model="inputData" />
+    <input
+      class="input-atoms"
+      v-model="inputData"
+      @keydown.enter="handleSearch"
+    />
     <div class="my-account">
       <p class="my-nickname">{{ nickname }}</p>
       <img
@@ -33,6 +37,17 @@ export default {
       nickname: (state) => state.loginStore.userInfo.nickname,
       profile_picture: (state) => state.loginStore.userInfo.profile_picture,
     }),
+  },
+  methods: {
+    handleSearch() {
+      if (this.inputData.trim() !== "") {
+        this.$router.push({
+          name: "SearchView",
+          params: { query: this.inputData },
+        });
+        this.inputData = "";
+      }
+    },
   },
 };
 </script>
