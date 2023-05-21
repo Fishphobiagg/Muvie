@@ -30,10 +30,12 @@ export default {
 }
 
 .modal-content {
+  display: flex;
+  flex-direction: column;
   background-color: white;
   padding: 20px;
-  max-width: 90%;
-  max-height: 90%;
+  width: 80%;
+  min-height: 60%;
   overflow: auto;
 }
 </style>

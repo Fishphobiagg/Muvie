@@ -5,8 +5,8 @@
     </GlassCard>
     <YellowCircle />
     <ModalAtom :isModalOpen="isModalOpen" @close-modal="closeModal">
-      <h2>모달 내용</h2>
-      <p>취향 선택</p>
+      <h2>음악 취향</h2>
+      <PreferSelect />
       <button @click="confirmModal">확인</button>
       <button @click="closeModal">지금 안하기</button>
     </ModalAtom>
@@ -17,6 +17,7 @@
 import GlassCard from "../atoms/GlassCard.vue";
 import YellowCircle from "../atoms/YellowCircle.vue";
 import SignupForm from "../organisms/SignupForm.vue";
+import PreferSelect from "../organisms/PreferSelect.vue";
 import ModalAtom from "../atoms/ModalAtom.vue";
 
 export default {
@@ -26,6 +27,7 @@ export default {
     SignupForm,
     YellowCircle,
     ModalAtom,
+    PreferSelect,
   },
   data() {
     return {
