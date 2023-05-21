@@ -4,13 +4,9 @@
       <SignupForm @open-modal="handleModal" />
     </GlassCard>
     <YellowCircle />
-    <ModalAtom :isModalOpen="isModalOpen" @close-modal="closeModal">
+    <ModalAtom :isModalOpen="isModalOpen">
       <h2>음악 취향</h2>
-      <PreferSelect />
-      <div class="button-container">
-        <button @click="confirmModal">확인</button>
-        <button @click="closeModal">지금 안하기</button>
-      </div>
+      <PreferSelect @close-modal="closeModal" />
     </ModalAtom>
   </div>
 </template>
@@ -34,6 +30,7 @@ export default {
   data() {
     return {
       isModalOpen: true,
+      formData: {},
     };
   },
   methods: {
@@ -44,35 +41,10 @@ export default {
     closeModal() {
       console.log("모달 닫기");
       this.isModalOpen = false;
-    },
-    confirmModal() {
-      console.log("확인 버튼 클릭");
+      this.$router.push("/login");
     },
   },
 };
 </script>
 
-<style>
-.button-container > button {
-  margin: 20px;
-  padding: 13px 30px;
-  background: white;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-  border-radius: 15px;
-  text-decoration: none;
-  border: none;
-  z-index: 500;
-  transition: transform 0.3s;
-}
-
-.button-container > button:hover {
-  color: white;
-  background: rgba(218, 138, 114, 0.8);
-  letter-spacing: 2px;
-  cursor: pointer;
-}
-
-.button-container > button:active {
-  transform: scale(1.1);
-}
-</style>
+<style></style>

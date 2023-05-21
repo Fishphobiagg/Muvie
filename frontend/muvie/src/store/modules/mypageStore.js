@@ -38,7 +38,7 @@ const mypageStore = {
         .then((res) => {
           console.log("프로필 요청");
           console.log(res);
-          commit("getUserDetail", res.data);
+          c 
         })
         .catch((err) => console.log(err));
     },

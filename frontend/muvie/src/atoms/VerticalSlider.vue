@@ -28,8 +28,9 @@ export default {
   },
   methods: {
     handleSliderChange(event) {
-      this.sliderValue = event.target.value;
+      this.sliderValue = event.target.value / 100;
       console.log("슬라이드 바 값:", this.sliderValue);
+      this.$emit("slider-change", this.sliderValue);
     },
   },
 };
