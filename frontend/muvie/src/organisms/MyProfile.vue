@@ -73,12 +73,18 @@ export default {
     ModalAtom,
     PreferSelect,
   },
-  mounted() {
-    console.log(this.userId, this.paramId);
-    // eslint-disable-next-line eqeqeq
-    console.log(this.userId == this.paramId);
-    // eslint-disable-next-line eqeqeq
-    this.me = this.userId == this.paramId;
+  // created() {
+  //   console.log(this.userId, this.paramId);
+  //   // eslint-disable-next-line eqeqeq
+  //   console.log(this.userId == this.paramId);
+  //   // eslint-disable-next-line eqeqeq
+  // },
+  watch: {
+    paramId(newParamId) {
+      // eslint-disable-next-line eqeqeq
+      this.me = this.userId == newParamId;
+      console.log(`이 유저는 내가 ${this.me}`);
+    },
   },
   computed: {
     ...mapState({
@@ -142,6 +148,7 @@ export default {
     },
     handleModal() {
       console.log("모달 오픈");
+      this.$store.dispatch("getPreference");
       this.isModalOpen = true;
     },
     closeModal() {

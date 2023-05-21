@@ -19,13 +19,13 @@ const preferenceStore = {
           console.log(err);
         });
     },
-    getPreference({ commit }) {
+    getPreference() {
       axios
-        .post(BASE_URL)
+        .get(BASE_URL)
         .then((res) => {
           console.log("음악성분 조회");
           console.log(res.data);
-          commit("getIngredients", res.data);
+          this.$refs.verticalSlider.setValue(res.data);
         })
         .catch((err) => {
           console.log(err);

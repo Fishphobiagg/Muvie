@@ -52,7 +52,17 @@ export default {
     };
   },
   methods: {
+    setValue(obj) {
+      Object.keys(obj).forEach((key) => {
+        if (key in this.preferences) {
+          this.preferences[key] = obj[key];
+        }
+      });
+      console.log("조회한 성분 데이터 할당");
+      console.log(this.preferences);
+    },
     handleSliderChange(idx, value) {
+      // tempo와 loudness만 값 조정
       if (idx === 6 || idx === 8) {
         this.preferences[this.ingredients[idx]] = value * 1000;
         console.log("슬라이드 바 값 저장:", this.preferences);
