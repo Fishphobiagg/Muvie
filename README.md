@@ -64,14 +64,11 @@
 ## 프로젝트
 
 <br>
-
 <h1 align="center">🚀 서비스
-
 <br>
-
 <p align="center">Muvie 기능 소개 + 핵심 알고리즘에 대한 설명
-<p/>
-<h2/>
+</p>
+</h2>
 
 
 ### 1️⃣ 회원 상호작용
@@ -150,10 +147,13 @@
   
 <br>
 
-<h2 align="center">📝개발일지<h2/>
+<h2 align="center">📝개발일지
+<br>
+</h2>
 
 <br>
 
-<a align="center" href="https://perfect-bluebell-dba.notion.site/2961c75bb5af47a4a35a6ce27cf8e6ec">👉 정예륜의 개발일지 👈</a>
-<a align="center" href="https://perfect-bluebell-dba.notion.site/9fc715b299ee4870b366511b6d56ef95">👉 이명우의 개발일지 👈</a>
+* 📕 [개발일지(정예륜)](https://perfect-bluebell-dba.notion.site/2961c75bb5af47a4a35a6ce27cf8e6ec)
+* 📘 [개발일지(이명우)](https://perfect-bluebell-dba.notion.site/9fc715b299ee4870b366511b6d56ef95)
+
 <br>
