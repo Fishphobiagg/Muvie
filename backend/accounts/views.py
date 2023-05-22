@@ -48,8 +48,11 @@ class SignupAPIView(APIView):
             # jwt 토큰 => 쿠키에 저장
             res.set_cookie("access", access_token, httponly=True)
             res.set_cookie("refresh", refresh_token, httponly=True)
-            
             return res
+        if 'email' in serializer.errors:
+            return Response({"message":"Email is already registered"}, status=status.HTTP_409_CONFLICT)
+        elif 'nickname' in serializer.errors:
+            return Response({"message":"Nickname is already registered"}, status=status.HTTP_409_CONFLICT)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):

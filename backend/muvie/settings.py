@@ -1,15 +1,19 @@
 from pathlib import Path
 from datetime import timedelta
-from decouple import config
-
+import environ
+import os
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-SECRET_KEY = config('SECRET_KEY')
-DEBUG = config('DEBUG')
-SPOTIFY_ID = config('SPOTIFY_ID')
-SPOTIFY_SECRET = config('SPOTIFY_SECRET_KEY')
-TMDB_API_KEY = config('TMDB_API_KEY')
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+DEBUG = env('DEBUG')
+SECRET_KEY = env('SECRET_KEY')
+SPOTIFY_ID = env('SPOTIFY_ID')
+SPOTIFY_SECRET = env('SPOTIFY_SECRET_KEY')
+TMDB_API_KEY = env('TMDB_API_KEY')
 
 ALLOWED_HOSTS = []
 

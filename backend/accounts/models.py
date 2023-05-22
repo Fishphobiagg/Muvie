@@ -22,9 +22,9 @@ class UserManager(BaseUserManager):
             acousticness=0.5,
             speechiness=0.5,
             valence=0.5,
-            tempo=80,
+            tempo=200,
             mode=0.5,
-            loudness=50,
+            loudness=-30,
             danceability=0.5,
         )
         
