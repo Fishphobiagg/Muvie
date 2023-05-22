@@ -7,7 +7,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 
-from musics.serializers import PlaylistSerializer
+from musics.serializers import MusicListSerializer
 from .algorithms.algorithm import recommend_ost, calculate_vector
 from .serializers import *
 from musics.models import Music
@@ -134,7 +134,6 @@ class ProfileView(APIView):
             user = User.objects.get(pk=user_pk)
             serializer = ProfileSerializer(instance=user, user_pk=me.pk)
             user_serializer = SimpleUserSerializer(user)
-            print(123412412412342, user_serializer.data)
             response = {
                 "user_profile" : user_serializer.data,
                 "detail" : serializer.data
@@ -177,7 +176,7 @@ class LikeListView(APIView):
     def get(self, request):
         user = request.user
         like_list = user.like_music.all()
-        serializer = PlaylistSerializer(like_list, many=True)
+        serializer = MusicListSerializer(like_list, many=True, user_pk=user.pk)
         return Response({"like_list":serializer.data})
 
 class PlaylistView(APIView):
@@ -185,7 +184,7 @@ class PlaylistView(APIView):
     def get(self, request):
         user = request.user
         playlist = user.playlist.all()
-        serializer = PlaylistSerializer(playlist, many=True)
+        serializer = MusicListSerializer(playlist, many=True, user_pk=user.pk)
         return Response({"play_list":serializer.data})
 
 @api_view(['GET'])

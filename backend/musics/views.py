@@ -20,9 +20,9 @@ class MusicPagenatior(PageNumberPagination):
 @permission_classes([IsAuthenticated])
 def search_music(request, keyword):
     music_search_result = Music.objects.filter(Q(artist__icontains=keyword)|Q(title__icontains=keyword)|Q(movie_ost__title__icontains=keyword)|Q(movie_ost__original_title__icontains=keyword))
-    serializer = MusicListSerializer(music_search_result, many=True)
-    return Response({'data':serializer.data})
-
+    serializer = MusicListSerializer(instance=music_search_result, many=True, user_pk=request.user.pk)
+    return Response({'data':serializer.data}, status=status.HTTP_206_PARTIAL_CONTENT)
+    
 class MusicLikeView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request, **kwargs):
@@ -30,7 +30,7 @@ class MusicLikeView(APIView):
         like_list = user.like_music.all()
         paginator = MusicPagenatior()
         result_page = paginator.paginate_queryset(like_list, request)
-        serializer = PlaylistSerializer(result_page, many=True)
+        serializer = MusicListSerializer(result_page, many=True, user_pk=user.pk)
         return paginator.get_paginated_response(serializer.data)
 
     def post(self, request, music_pk):
@@ -38,7 +38,7 @@ class MusicLikeView(APIView):
         music = Music.objects.get(pk=music_pk)
         user.like_music.add(music)
         like_list = user.like_music.all()
-        serializer = PlaylistSerializer(like_list, many=True)
+        serializer = MusicListSerializer(like_list, many=True, user_pk=user.pk)
         return Response({'message':'like successfully', "like_list":serializer.data}, status=status.HTTP_202_ACCEPTED)
     
     def delete(self, reqeust, music_pk):
@@ -46,7 +46,7 @@ class MusicLikeView(APIView):
         music = Music.objects.get(pk=music_pk)
         user.like_music.remove(music)
         like_list = user.like_music.all()
-        serializer = PlaylistSerializer(like_list, many=True)
+        serializer = MusicListSerializer(like_list, many=True, user_pk=user.pk)
         return Response({'message':'unlike successfully', "like_list":serializer.data}, status=status.HTTP_202_ACCEPTED)
 
 class MusicPlaylistView(APIView):
