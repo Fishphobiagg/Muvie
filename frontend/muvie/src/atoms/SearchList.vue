@@ -1,46 +1,37 @@
 <template>
   <div class="like_item">
     <div class="music-detail">
-      <img
-        class="album_cover"
-        :src="`${item.album_cover}`"
-        alt="앨범 커버"
-      />
-      <span class="music_name" @click="navigateToProfile(item.id)">{{
-        item.title
-      }} </span>
-      <span>{{item.artist}}</span>
+      <img class="album_cover" :src="`${item.album_cover}`" alt="앨범 커버" />
+      <div class="music-info">
+        <div class="title-wrapper">
+          <div class="title-container">
+            <span class="music_name" @click="navigateToProfile(item.id)">
+              {{ truncateTitle(item.title) }}
+            </span>
+            <span class="artist_name">{{ item.artist }}</span>
+          </div>
+        </div>
+      </div>
     </div>
-    <!-- <span class="like"></span> -->
-    
-    <span
-      class="like_button"
-      @click="followAction(fwg)"
-      :class="{ following: fwg.is_followed }"
-    > ♡ 
-    {{item.like_count}}
-    </span>
   </div>
 </template>
 
 <script>
 export default {
   name: "SearchList",
-  props : {
-    item:Object
+  props: {
+    item: Object,
   },
   methods: {
     navigateToProfile(userId) {
       this.$router.push({ name: "Profile", params: { userId } });
     },
-    followAction(fwg) {
-      if (fwg.is_followed) {
-        // 이미 재생 목록에 있는 경우의 동작
-        this.$store.dispatch("unfollow", fwg.id);
-      } else {
-        // 재생목록에 추가할 경우의 동작
-        this.$store.dispatch("follow", fwg.id);
+    truncateTitle(title) {
+      const maxLength = 50;
+      if (title.length > maxLength) {
+        return title.substring(0, maxLength) + "...";
       }
+      return title;
     },
   },
 };
@@ -73,30 +64,39 @@ export default {
   object-fit: cover;
 }
 
+.music-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: 15px;
+}
+
+.title-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.title-container {
+  display: flex;
+  align-items: center;
+}
+
 .music_name {
   text-decoration: none;
   border: none;
-  /* background-color: transparent; */
-  margin: 0 15px 0 40px;
-  font-size: 25px;
+  font-size: 16px;
   line-height: 80px;
   cursor: pointer;
-  display: inline-block;
-  vertical-align: middle;
+  width: 500px; /* Adjust the desired width here */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  justify-content: start;
 }
 
-.follow-button {
-  height: 40px;
-  width: 80px;
+.artist_name {
+  margin-left: 10px;
   font-size: 15px;
-  border: none;
-  border-radius: 9px;
-  cursor: pointer;
-  color: white;
-}
-
-.following {
-  background-color: lightgray !important;
-  color: black !important;
+  color: gray;
 }
 </style>

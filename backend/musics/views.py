@@ -19,7 +19,7 @@ class MusicPagenatior(PageNumberPagination):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def search_music(request, keyword):
-    music_search_result = Music.objects.filter(Q(artist__icontains=keyword)|Q(title__icontains=keyword))
+    music_search_result = Music.objects.filter(Q(artist__icontains=keyword)|Q(title__icontains=keyword)|Q(movie_ost__title__icontains=keyword)|Q(movie_ost__original_title__icontains=keyword))
     serializer = MusicListSerializer(music_search_result, many=True)
     return Response({'data':serializer.data})
 
