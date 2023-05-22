@@ -1,14 +1,15 @@
 <template>
-  <div class="like_item">
+  <div class="like_item" @mouseover="showButtons = true" @mouseleave="showButtons = false">
     <div class="music-detail">
-      <img class="album_cover" :src="`${item.album_cover}`" alt="앨범 커버" />
+      <img class="album_cover" :src="`${item.album_cover}`" alt="앨범 커버" :style="{ opacity: showButtons ? '0.8' : '1' }"/>
       <div class="music-info">
         <div class="title-wrapper">
           <div class="title-container">
-            <span class="music_name" @click="navigateToProfile(item.id)">
+            <span class="music_name">
               {{ truncateTitle(item.title) }}
             </span>
             <span class="artist_name">{{ item.artist }}</span>
+              <span class="play_button" v-if="showButtons" @click="playMusic(fwg)"><i class="fas fa-play"></i></span>
           </div>
         </div>
       </div>
@@ -19,13 +20,15 @@
 <script>
 export default {
   name: "SearchList",
+  data (){
+    return{
+      showButtons: false,
+    }
+  },
   props: {
     item: Object,
   },
   methods: {
-    navigateToProfile(userId) {
-      this.$router.push({ name: "Profile", params: { userId } });
-    },
     truncateTitle(title) {
       const maxLength = 50;
       if (title.length > maxLength) {
@@ -91,7 +94,7 @@ export default {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  justify-content: start;
+  text-align: start;
 }
 
 .artist_name {
@@ -99,4 +102,16 @@ export default {
   font-size: 15px;
   color: gray;
 }
+
+.play_button {
+  font-size: 18px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.play_button i {
+  display: inline-block;
+  font-size: 18px;
+}
+
 </style>

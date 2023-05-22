@@ -74,12 +74,6 @@ export default {
   vertical-align: middle;
 }
 
-.button_container {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
 .like_button {
   font-size: 25px;
   cursor: pointer;
