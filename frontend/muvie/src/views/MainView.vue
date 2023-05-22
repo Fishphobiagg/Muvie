@@ -3,7 +3,7 @@
     <div class="mainview">
       <NavBar class="navbar" @open-modal="handleModal" />
       <div class="welcome-msg">
-        Hey {{ nickname }} <br />
+        Hey {{ nickname || "익명의 유저" }} <br />
         Welcome Back!
       </div>
       <!-- <CircleCarousel :components="components" /> -->
@@ -24,7 +24,7 @@
       </ul>
     </ModalAtom>
     <ModalAtom class="login-request" :isModalOpen="isModal2Open">
-      <div>로그인하기</div>
+      <div @click="navigateToLogin()">로그인하기</div>
       <div>회원가입하기</div>
     </ModalAtom>
   </div>
@@ -57,15 +57,6 @@ export default {
     ModalAtom,
   },
   methods: {
-    handleLocalStorageChange(value) {
-      console.log("로컬스토리지 감시");
-      if (!value) {
-        this.isModal2Open = true;
-      } else {
-        this.isModal2Open = false;
-      }
-      console.log(this.isModal2Open);
-    },
     handleModal() {
       console.log("부모 컴포넌트에서 모달 오픈");
       this.isModal1Open = !this.isModal1Open;
@@ -88,6 +79,15 @@ export default {
         // eslint-disable-next-line eqeqeq
         localStorage.getItem("vuex") != undefined;
     },
+    handleLocalStorageChange(value) {
+      console.log("있으면 감시");
+      if (!value) {
+        this.isModal2Open = true;
+      } else {
+        this.isModal2Open = false;
+      }
+      console.log(this.isModal2Open);
+    },
   },
   watch: {
     localStorageValue: {
@@ -102,15 +102,134 @@ export default {
       nickname: (state) =>
         localStorage.getItem("vuex")
           ? state.loginStore.userInfo.nickname
-          : "유저",
+          : "익명의 유저",
       components: (state) =>
         localStorage.getItem("vuex")
           ? state.mainStore.componentsRecommends
-          : [],
+          : [
+              {
+                title: "American Beauty",
+                artist: "Thomas Newman",
+                album: "American Beauty (Soundtrack)",
+                poster:
+                  "https://i.scdn.co/image/ab67616d0000b273e0deac21921480ebcb0ecae0",
+                "like count": 0,
+              },
+              {
+                title: "Sally's Song",
+                artist: "Catherine O'Hara",
+                album: "Nightmare Before Christmas Special Edition",
+                poster:
+                  "https://i.scdn.co/image/ab67616d0000b27347cc5d86f3528b233f2b78ff",
+                "like count": 0,
+              },
+              {
+                title: "Abraham's Daughter",
+                artist: "Arcade Fire",
+                album: "The Hunger Games: Songs From District 12 And Beyond",
+                poster:
+                  "https://i.scdn.co/image/ab67616d0000b273d29a5d713277b0b3d517507b",
+                "like count": 0,
+              },
+              {
+                title: "Wheel of Fortune",
+                artist: "Hans Zimmer",
+                album:
+                  "Pirates Of The Caribbean - Dead Man's Chest Original Soundtrack (English Version)",
+                poster:
+                  "https://i.scdn.co/image/ab67616d0000b273d80f11f52191d80b84e80221",
+                "like count": 0,
+              },
+              {
+                title:
+                  'Noble Maiden Fair (A Mhaighdean Bhan Uasal) - From "Brave"/Soundtrack',
+                artist: "Emma Thompson",
+                album: "Brave",
+                poster:
+                  "https://i.scdn.co/image/ab67616d0000b2738ce48a7507eab97d87c70687",
+                "like count": 0,
+              },
+            ],
       users: (state) =>
-        localStorage.getItem("vuex") ? state.mainStore.userRecommends : [],
+        localStorage.getItem("vuex")
+          ? state.mainStore.userRecommends
+          : [
+              {
+                id: 54,
+                email: "minji20@example.com",
+                nickname: "민지20",
+                profile_picture: "users/default.gif",
+              },
+              {
+                id: 36,
+                email: "minji1@example.com",
+                nickname: "민지1",
+                profile_picture: "/users/default.gif",
+              },
+              {
+                id: 43,
+                email: "minji8@example.com",
+                nickname: "민지8",
+                profile_picture: "/users/default.gif",
+              },
+              {
+                id: 50,
+                email: "minji16@example.com",
+                nickname: "민지16",
+                profile_picture: "/users/default.gif",
+              },
+              {
+                id: 51,
+                email: "minji17@example.com",
+                nickname: "민지17",
+                profile_picture: "/users/default.gif",
+              },
+            ],
       likes: (state) =>
-        localStorage.getItem("vuex") ? state.mainStore.likeRecommends : [],
+        localStorage.getItem("vuex")
+          ? state.mainStore.likeRecommends
+          : [
+              {
+                id: 28344,
+                title: "Only Way",
+                artist: "Danny Elfman",
+                album_cover:
+                  "https://i.scdn.co/image/ab67616d0000b2731eba7c491721451464a322a7",
+                like_count: 2,
+              },
+              {
+                id: 30000,
+                title: "Ba Do Bleep",
+                artist: "The Minions",
+                album_cover:
+                  "https://i.scdn.co/image/ab67616d0000b2737d15f4754a70b55dac6cd56e",
+                like_count: 3,
+              },
+              {
+                id: 34000,
+                title: "The House of Belonging",
+                artist: "Junkie XL",
+                album_cover:
+                  "https://i.scdn.co/image/ab67616d0000b27311eb862950737980343df57d",
+                like_count: 3,
+              },
+              {
+                id: 24344,
+                title: "Colette Shows Him Le Ropes",
+                artist: "Michael Giacchino",
+                album_cover:
+                  "https://i.scdn.co/image/ab67616d0000b273da96ceef85aba33d1e68b773",
+                like_count: 1,
+              },
+              {
+                id: 25252,
+                title: "I'm Goblin",
+                artist: "Hans Zimmer",
+                album_cover:
+                  "https://i.scdn.co/image/ab67616d0000b273aedd0ee1a89b21cd9da5c9b3",
+                like_count: 1,
+              },
+            ],
     }),
   },
   created() {
