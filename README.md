@@ -49,7 +49,7 @@
 
 ## 프로젝트
 
----
+<br>
 
 <h1 align="center">🚀 서비스
 
@@ -82,7 +82,7 @@
 
 👉 [추천 알고리즘 상세 설명](https://www.notion.so/Recommendation-algorithms-aca53ba69dac448292604dc6aff46721?pvs=4) 👈
 
-<hr>
+<br>
 
 ## 관련 문서
 <br>
@@ -134,7 +134,7 @@
 * 문제 발생 -> 해결 -> 개발일지 작성
 * 사과 금지 자책 금지
   
-
+<br>
 
 <h2 align="center">📝개발일지<h2/>
 
