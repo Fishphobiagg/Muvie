@@ -7,7 +7,7 @@ from . models import Music
 from . serializers import *
 from rest_framework.views import APIView
 from rest_framework import status
-from sklearn.preprocessing import StandardScaler
+from decimal import Decimal
 
 
 class MusicPagenatior(PageNumberPagination):
@@ -67,33 +67,66 @@ class MusicComponentView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
         user = request.user
-        component = user.music_components
-        serializer = ComponentSerializer(component)
-        return Response(serializer.data)
+        data = user.music_components
+        response_data = {
+    "id": 5,
+    "energy": int(float(data.energy) * 100),
+    "instrumentalness": int(float(data.instrumentalness) * 100),
+    "liveness": int(float(data.liveness) * 100),
+    "acousticness": int(float(data.acousticness) * 100),
+    "speechiness": int(float(data.speechiness) * 100),
+    "valence": int(float(data.valence) * 100),
+    "tempo": int((data.tempo-50)/3),
+    "mode": int(float(data.mode) * 100),
+    "loudness": int(-data.loudness*5/3),
+    "danceability": int(float(data.danceability) * 100)
+}
+
+        return Response(response_data)
     
+    # def post(self, request):
+    #         serializer = ComponentSerializer(data=request.data)
+    #         user = request.user
+    #         if serializer.is_valid():
+    #             component = user.music_components
+    #             for field, value in serializer.validated_data.items():
+    #                 setattr(component, field, value)
+    #             component.save()
+    #             return Response({"component":user.music_components}, status=status.HTTP_201_CREATED)
+    #         else:
+    #             return Response(serializer.errors, status=status.HTTP_406_NOT_ACCEPTABLE)
+
+
     def post(self, request):
-            serializer = ComponentSerializer(data=request.data)
-            scaler = StandardScaler()
-            user = request.user
-            if serializer.is_valid():
-                component = user.music_components
-                for field, value in serializer.validated_data.items():
-                    setattr(component, field, value)
-                component.vector = scaler.fit_transform([
-                    [user.music_components.energy],
-                    [user.music_components.instrumentalness],
-                    [user.music_components.liveness],
-                    [user.music_components.speechiness],
-                    [user.music_components.acousticness],
-                    [user.music_components.valence],
-                    [user.music_components.tempo*0.1],
-                    [user.music_components.mode],
-                    [user.music_components.loudness*0.1],
-                    [user.music_components.danceability],
-                ])
-                component.save()
-                
-                return Response({"vector":user.music_components.vector}, status=status.HTTP_201_CREATED)
-            else:
-                return Response(serializer.errors, status=status.HTTP_406_NOT_ACCEPTABLE)
+        serializer = ComponentSerializer(data=request.data)
+        user = request.user
+        if serializer.is_valid():
+            component = user.music_components
+            for field, value in serializer.validated_data.items():
+                if field == 'tempo':
+                    if 0 <= value <= 100:
+                        value = (value / 100) * 300 + 50  # 비율에 맞게 50부터 350 사이 값으로 변환
+                    else:
+                        value = min(max(value, 50), 350)  # 범위 조정: 50부터 350 사이 값으로
+                elif field == 'loudness':
+                    if 0 <= value <= 100:
+                        value = (value / 100) * -60  # 비율에 맞게 -60부터 0 사이 값으로 변환
+                    else:
+                        value = min(max(value, -60), 0)  # 범위 조정: -60부터 0 사이 값으로
+                else:
+                    value = float(value)  # 문자열을 실수형으로 변환
+                    value = min(max(value, 0.0), 1.0)  # 범위 조정: 0부터 1 사이로 제한
+
+                setattr(component, field, value)
+            component.save()
+            
+            # 직렬화 시에 0부터 100 사이 값으로 변환하여 응답 데이터 생성
+            serialized_data = {
+        field: int(Decimal(value) * 100) if field not in ['tempo', 'loudness'] else int((value-50)/3) if field == 'tempo' else int(-value*5/3)
+                for field, value in serializer.validated_data.items()
+            }
+            
+            return Response(serialized_data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_406_NOT_ACCEPTABLE)
 
