@@ -25,7 +25,7 @@
     </ModalAtom>
     <ModalAtom class="login-request" :isModalOpen="isModal2Open">
       <div @click="navigateToLogin()">로그인하기</div>
-      <div>회원가입하기</div>
+      <div @click="navigateToSignup()">회원가입하기</div>
     </ModalAtom>
   </div>
 </template>
@@ -64,6 +64,12 @@ export default {
     },
     navigateToProfile(userId) {
       this.$router.push({ name: "Profile", params: { userId } });
+    },
+    navigateToLogin() {
+      this.$router.push({ name: "Login" });
+    },
+    navigateToSignup() {
+      this.$router.push({ name: "Signup" });
     },
     logout() {
       localStorage.removeItem("vuex");
@@ -297,5 +303,11 @@ export default {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+}
+
+.login-request .modal-content {
+  width: 350px;
+  min-height: 200px;
+  justify-content: center;
 }
 </style>
