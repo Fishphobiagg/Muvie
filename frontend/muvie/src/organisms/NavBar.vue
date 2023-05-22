@@ -12,6 +12,7 @@
         class="my-profile-photo"
         :src="`http://127.0.0.1:8000${profile_picture}`"
         alt="내 계정"
+        @click="handleModal"
       />
     </div>
   </div>
@@ -48,6 +49,10 @@ export default {
         this.inputData = "";
       }
     },
+    handleModal() {
+      console.log("프사 클릭");
+      this.$emit("open-modal");
+    },
   },
 };
 </script>
@@ -70,12 +75,10 @@ export default {
   align-items: center;
   justify-content: center;
 }
-.my-account img {
+.my-profile-photo {
   width: 62px;
   height: 62px;
   margin-left: 20px;
-}
-.my-nickname {
-  /* margin - */
+  z-index: 400;
 }
 </style>

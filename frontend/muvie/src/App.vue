@@ -13,6 +13,10 @@
 
 <style>
 @import "./assets/css/global.css";
+@font-face {
+  font-family: "appleGothic";
+  src: url("assets/AppleGothic.ttf");
+}
 
 body {
   box-sizing: border-box;
@@ -23,7 +27,7 @@ body {
 }
 
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: "appleGothic", Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;

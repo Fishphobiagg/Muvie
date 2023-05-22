@@ -4,34 +4,67 @@
       type="range"
       min="0"
       max="100"
-      value="50"
+      :value="myPreference[ingredientsTitle[idx]]"
       class="slider"
-      @input="handleSliderChange"
+      @input="handleSliderChange($event, idx)"
     />
     <div class="slider-value-container">
-      <p class="slider-value">{{ sliderValue }}</p>
+      <p class="slider-value">{{ myPreference[ingredientsTitle[idx]] }}</p>
       <p class="slider-value label">{{ ingredient }}</p>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState, mapMutations } from "vuex";
+
 export default {
   name: "VerticalSlider",
   data() {
     return {
-      sliderValue: 50,
+      ingredientsTitle: [
+        "energy",
+        "instrumentalness",
+        "liveness",
+        "acousticness",
+        "speechiness",
+        "valence",
+        "tempo",
+        "mode",
+        "loudness",
+        "danceability",
+      ],
     };
   },
   props: {
     ingredient: String,
+    idx: Number,
   },
   methods: {
-    handleSliderChange(event) {
-      this.sliderValue = event.target.value / 100;
-      console.log("슬라이드 바 값:", this.sliderValue);
-      this.$emit("slider-change", this.sliderValue);
+    handleSliderChange(event, idx) {
+      console.log("이벤트 타겟 값", event.target.value);
+      // this.sliderInitialValue = event.target.value * 100;
+      // console.log("슬라이드 바 값:", this.sliderInitialValue);
+      if (idx === 6 || idx === 8) {
+        this.setPreference({
+          ingredient: this.ingredientsTitle[idx],
+          value: event.target.value,
+        });
+      } else {
+        this.setPreference({
+          ingredient: this.ingredientsTitle[idx],
+          value: event.target.value / 100,
+        });
+      }
+      console.log("스토어 값 변경");
+      console.log(this.myPreference);
     },
+    ...mapMutations(["setPreference"]),
+  },
+  computed: {
+    ...mapState({
+      myPreference: (state) => state.preferenceStore.myPreference,
+    }),
   },
 };
 </script>
