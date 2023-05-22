@@ -92,8 +92,4 @@ export default {
   font-size: 18px;
 }
 
-.following {
-  background-color: lightgray !important;
-  color: black !important;
-}
 </style>

@@ -1,21 +1,22 @@
 <template>
   <div class="like_item" @mouseover="showButtons = true" @mouseleave="showButtons = false">
     <div class="music-detail">
-      <img class="album_cover" :src="`${item.album_cover}`" alt="앨범 커버" :style="{ opacity: showButtons ? '0.8' : '1' }"/>
-      <div class="music-info">
-        <div class="title-wrapper">
-          <div class="title-container">
-            <span class="music_name">
-              {{ truncateTitle(item.title) }}
-            </span>
-            <span class="artist_name">{{ item.artist }}</span>
-              <span class="play_button" v-if="showButtons" @click="playMusic(fwg)"><i class="fas fa-play"></i></span>
-          </div>
-        </div>
+      <img class="album_cover" :src="item.album_cover" alt="앨범 커버" :style="{ opacity: showButtons ? '0.8' : '1' }" />
+      <div class="music_info">
+        <span class="music_name" @click="addPlaylist(item)">{{ truncateTitle(item.title) }}</span>
       </div>
+      <span class="artist_name">{{ item.artist }}</span>
     </div>
+    <span class="play_button" @click="addPlaylist(item)" :style="{ color: showButtons ? '#BDC3C7' : '#BDC3C7', marginRight: showButtons ? '5px' : '5px' }" v-if="showButtons" @click="playMusic(item)">
+      <i class="fas fa-play"></i>
+    </span>
+    <span class="like_button" @click="!isLiked? like(item):unlike(item)" :style="{ color: item.isLiked ? '#BDC3C7' : '#BDC3C7', marginRight: showButtons ? '5px' : '5px' }" v-if="showButtons">
+      <i class="fas" :class="item.isLiked ? 'fa fa-heart' : 'fa fa-heart-o'"></i>
+    </span>
+    <p class="like_count" @click="console.log(1)" v-if="showButtons">{{ item.like_count }}</p>
   </div>
 </template>
+
 
 <script>
 export default {
@@ -30,13 +31,22 @@ export default {
   },
   methods: {
     truncateTitle(title) {
-      const maxLength = 50;
+      const maxLength = 42;
       if (title.length > maxLength) {
         return title.substring(0, maxLength) + "...";
       }
       return title;
     },
-  },
+    },
+    addPlaylist(item) {
+      this.$store.dispatch("addPlaylist", item.id);
+    },
+    like(item) {
+      this.$store.dispatch("like", item.id)
+    },
+    unlike(item) {
+      this.$store.dispatch("unlike", item.id);
+    },
 };
 </script>
 
@@ -67,51 +77,56 @@ export default {
   object-fit: cover;
 }
 
-.music-info {
+.music_info {
+  width: 500px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  margin-left: 15px;
-}
-
-.title-wrapper {
-  display: flex;
-  align-items: center;
-}
-
-.title-container {
-  display: flex;
-  align-items: center;
 }
 
 .music_name {
   text-decoration: none;
   border: none;
-  font-size: 16px;
-  line-height: 80px;
+  margin-right: 10px;
+  font-size: 20px;
+  line-height: 40px;
   cursor: pointer;
-  width: 500px; /* Adjust the desired width here */
-  white-space: nowrap;
   overflow: hidden;
+  white-space: nowrap;
   text-overflow: ellipsis;
-  text-align: start;
+  text-align: left;
 }
 
 .artist_name {
-  margin-left: 10px;
-  font-size: 15px;
-  color: gray;
+  font-size: 16px;
+  line-height: 30px;
 }
 
-.play_button {
-  font-size: 18px;
+.play_button,
+.like_button {
+  font-size: 16px;
   cursor: pointer;
-  margin-right: 10px;
 }
 
-.play_button i {
+.play_button i,
+.like_button i {
   display: inline-block;
   font-size: 18px;
 }
 
+.like_button i {
+  color: #BDC3C7;
+}
+
+.fa-heart {
+  color: #BDC3C7;
+}
+
+.fa-heart-o {
+  color: #ccc;
+}
+
+.like_count {
+  color: #BDC3C7;
+  margin-right: 5px;
+}
 </style>
