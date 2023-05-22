@@ -114,8 +114,11 @@ class MusicComponentView(APIView):
                     else:
                         value = min(max(value, -60), 0)  # 범위 조정: -60부터 0 사이 값으로
                 else:
-                    value = float(value)  # 문자열을 실수형으로 변환
-                    value = min(max(value, 0.0), 1.0)  # 범위 조정: 0부터 1 사이로 제한
+                    if 0 <= value <= 100:
+                        value = float(value/100)  # 문자열을 실수형으로 변환
+                    else:
+                        value = float(value)
+                      # 범위 조정: 0부터 1 사이로 조정
 
                 setattr(component, field, value)
             component.save()
