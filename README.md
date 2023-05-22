@@ -5,7 +5,20 @@
 <p align="center"><a>Muvie</a>는 영화 OST를 스트리밍할 수 있고, 다른 사용자와의 상호작용을 통해 자신의 취향에 알맞는 음악을 추천받을 수 있는 서비스입니다.</p>
 <br>
 
----
+## Tech Stack
+
+### Back-end & Front-end
+![Django](https://img.shields.io/badge/Django-092E20.svg?&style=for-the-badge&logo=Django&logoColor=#092E20)
+![Vue.js](https://img.shields.io/badge/Vue.js-4FC08D.svg?&style=for-the-badge&logo=Vue.js&logoColor=092E20)
+
+### Collaboration Tools
+![Notion](https://img.shields.io/badge/Notion-000000.svg?&style=for-the-badge&logo=Notion&logoColor=로고색상)
+![Github](https://img.shields.io/badge/Github-181717.svg?&style=for-the-badge&logo=Github&logoColor=로고색상)
+![Discord](https://img.shields.io/badge/Discord-5865F2.svg?&style=for-the-badge&logo=Discord&logoColor=092E20)
+![Gitbook](https://img.shields.io/badge/Gitbook-3884FF.svg?&style=for-the-badge&logo=Gitbook&logoColor=092E20)
+<br>
+
+## ✔ 목차
 
 ### ✔︎ 소개
   - [X] 팀 소개
@@ -33,11 +46,12 @@
     - [X] [@이명우](https://github.com/Fishphobiagg)의 개발일지
 
 <br>
-<h1 align="center">소개</h1>
+<h1 align="center">✔ 소개</h1>
+
 ## 👩‍💻 TEAM 🧑‍💻
 <br>
 
-| 정예륜 | 이명우 |
+| 정예륜(팀원) | 이명우(PM) |
 | --- | --- |
 | <p align="left" style="color:pink">Front-end<p/> | <p align="left" style="color:skyblue">Back-end<p/> |
 | [@YeryunJung](https://github.com/YeryunJung) | [@Fishphobiagg](https://github.com/Fishphobiagg) |
@@ -87,11 +101,11 @@
 ## 관련 문서
 <br>
 
-### ✒✏ 기획 
+### ✒ 기획 
 
 #### [ERD](https://github.com/Fishphobiagg/Muvie/wiki/ERD)
 #### [요구사항 정의서](https://perfect-bluebell-dba.notion.site/1e54ff56a7a34de8b57aca5876a0b84b)
-#### [디자인] ()
+#### [디자인](https://youtu.be/p1cE9T0CFCQ)
 
 ### 🛠 개발
 
@@ -139,5 +153,7 @@
 <h2 align="center">📝개발일지<h2/>
 
 <br>
-<p align="center" href="https://perfect-bluebell-dba.notion.site/2961c75bb5af47a4a35a6ce27cf8e6ec">👉 정예륜의 개발일지 👈<p/>
-<p align="center" href="https://perfect-bluebell-dba.notion.site/9fc715b299ee4870b366511b6d56ef95">👉 이명우의 개발일지 👈<p/>
+
+<a align="center" href="https://perfect-bluebell-dba.notion.site/2961c75bb5af47a4a35a6ce27cf8e6ec">👉 정예륜의 개발일지 👈</a>
+<a align="center" href="https://perfect-bluebell-dba.notion.site/9fc715b299ee4870b366511b6d56ef95">👉 이명우의 개발일지 👈</a>
+<br>
