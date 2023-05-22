@@ -98,38 +98,11 @@ class MusicComponentView(APIView):
 
 
     def post(self, request):
-        serializer = ComponentSerializer(data=request.data)
         user = request.user
+        component_data = request.data
+
+        serializer = ComponentSerializer(user.music_components, data=component_data)
         if serializer.is_valid():
-            component = user.music_components
-            for field, value in serializer.validated_data.items():
-                if field == 'tempo':
-                    if 0 <= value <= 100:
-                        value = (value / 100) * 300 + 50  # 비율에 맞게 50부터 350 사이 값으로 변환
-                    else:
-                        value = min(max(value, 50), 350)  # 범위 조정: 50부터 350 사이 값으로
-                elif field == 'loudness':
-                    if 0 <= value <= 100:
-                        value = (value / 100) * -60  # 비율에 맞게 -60부터 0 사이 값으로 변환
-                    else:
-                        value = min(max(value, -60), 0)  # 범위 조정: -60부터 0 사이 값으로
-                else:
-                    if 0 <= value <= 100:
-                        value = float(value/100)  # 문자열을 실수형으로 변환
-                    else:
-                        value = float(value)
-                      # 범위 조정: 0부터 1 사이로 조정
-
-                setattr(component, field, value)
-            component.save()
-            
-            # 직렬화 시에 0부터 100 사이 값으로 변환하여 응답 데이터 생성
-            serialized_data = {
-        field: int(Decimal(value) * 100) if field not in ['tempo', 'loudness'] else int((value-50)/3) if field == 'tempo' else int(-value*5/3)
-                for field, value in serializer.validated_data.items()
-            }
-            
-            return Response(serialized_data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_406_NOT_ACCEPTABLE)
-
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

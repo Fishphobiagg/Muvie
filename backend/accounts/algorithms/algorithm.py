@@ -21,8 +21,12 @@ def recommend_ost(components):
     float(components['loudness']),
     float(components['danceability'])
     ]
-    seed_features = [round(num, 3) for num in user_features]
-    recommendations = sp.recommendations(seed_genres=['movies'],market='KR',seed_features=seed_features, limit=10)
+    recommendations = sp.recommendations(seed_genres=['movies'],
+    target_valence=components['valence'],target_energy=components['energy'],
+    target_liveness=components['liveness'], target_speechiness=components['speechiness'],
+    target_tempo=int(components['tempo']),target_acousticness=components['acousticness'],
+    target_loudness=-int(components['loudness']) ,target_danceability=components['danceability'],
+    target_instrumentalness=components['instrumentalness'],limit=10)
     return recommendations
 
 def calculate_vector(self):
