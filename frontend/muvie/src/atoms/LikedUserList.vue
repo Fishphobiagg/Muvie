@@ -21,13 +21,18 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   name: "LikedUserList",
   data() {
     return {
-      buttonMsg: "팔로잉",
+      isLoading: true,
+      loadedUsers:null,
     };
   },
+    mounted(){
+      this.loadLikedUsers
+    },
   methods: {
     navigateToProfile(userId) {
       this.$router.push({ name: "Profile", params: { userId } });
@@ -41,7 +46,10 @@ export default {
         this.$store.dispatch("follow", fwg.id);
       }
     },
-  },
+    loadLikedUsers(){
+      this.loadedUsers = $store.dispatch()
+    }
+  }, 
   props: {
     fwg: Object,
   },
