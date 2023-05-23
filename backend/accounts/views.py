@@ -7,7 +7,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 
-from musics.serializers import PlaylistSerializer
+from musics.serializers import MusicListSerializer
 from .algorithms.algorithm import recommend_ost, calculate_vector
 from .serializers import *
 from musics.models import Music
@@ -134,7 +134,6 @@ class ProfileView(APIView):
             user = User.objects.get(pk=user_pk)
             serializer = ProfileSerializer(instance=user, user_pk=me.pk)
             user_serializer = SimpleUserSerializer(user)
-            print(123412412412342, user_serializer.data)
             response = {
                 "user_profile" : user_serializer.data,
                 "detail" : serializer.data
@@ -177,7 +176,7 @@ class LikeListView(APIView):
     def get(self, request):
         user = request.user
         like_list = user.like_music.all()
-        serializer = PlaylistSerializer(like_list, many=True)
+        serializer = MusicListSerializer(like_list, many=True, user_pk=user.pk)
         return Response({"like_list":serializer.data})
 
 class PlaylistView(APIView):
@@ -185,7 +184,7 @@ class PlaylistView(APIView):
     def get(self, request):
         user = request.user
         playlist = user.playlist.all()
-        serializer = PlaylistSerializer(playlist, many=True)
+        serializer = MusicListSerializer(playlist, many=True, user_pk=user.pk)
         return Response({"play_list":serializer.data})
 
 @api_view(['GET'])
@@ -228,10 +227,9 @@ def recommend_components(request):
 @permission_classes([IsAuthenticated])
 def recommend_user(request):
     user = request.user
-    random_users = random.sample(list(User.objects.exclude(pk=user.pk).exclude(following=user)), (User.objects.all().count()-User.objects.exclude(pk=user.pk).exclude(following=user).count())//10) # 대규모로 갈 경우 속도가 느려지기 때문에 후에 수정
+    random_users = random.sample(list(User.objects.exclude(pk=user.pk).exclude(following=user)), (User.objects.all().count() - User.objects.filter(following=user).count())//10) # 대규모로 갈 경우 속도가 느려지기 때문에 후에 수정
     user_vector = calculate_vector(user)
     random_user_list = []
-
     for random_user in random_users:
         random_user_vector = calculate_vector(random_user)
         similarity = cosine_similarity(user_vector, random_user_vector)[0][0]
@@ -241,11 +239,7 @@ def recommend_user(request):
     topusers = [user[1] for user in random_user_list[:5]]
     user_serializer = SimpleUserSerializer(topusers, many=True)
     return Response({"recommend":user_serializer.data})
-    
-    # 가장 유사도가 높은 사용자 정보 반환
 
-
-# 협업 필터링 
 
 def collaborative_filtering(user, n=10):
     liked_music_ids = MusicUserLike.objects.filter(user=user).values_list('music_id', flat=True)
@@ -262,6 +256,7 @@ def collaborative_filtering(user, n=10):
     recommend_music = Music.objects.filter(musicuserlike__user__id__in=top_similar_users).annotate(like_count=Count('musicuserlike')).order_by('-like_count')
 
     return recommend_music, top_similar_users
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
