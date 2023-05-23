@@ -5,11 +5,13 @@
 <script>
 export default {
   name: "MuvieLogo",
+  methods: {},
 };
 </script>
 
 <style>
 .logo {
   width: 100px;
+  cursor: pointer;
 }
 </style>
