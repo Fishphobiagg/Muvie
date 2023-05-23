@@ -1,6 +1,6 @@
 <template>
   <div class="navbar">
-    <MuvieLogo />
+    <MuvieLogo @click="navigateToMain" />
     <input
       class="input-atoms"
       v-model="inputData"
@@ -59,6 +59,10 @@ export default {
     handleModal() {
       console.log("프사 클릭");
       this.$emit("open-modal");
+    },
+    navigateToMain() {
+      console.log("로고 클릭");
+      this.$router.push({ name: "MainView" });
     },
   },
 };

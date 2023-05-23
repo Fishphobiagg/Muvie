@@ -1,24 +1,21 @@
 <template>
   <div class="like_item">
     <div class="music-detail">
-      <img
-        class="album_cover"
-        :src="`${item.album_cover}`"
-        alt="앨범 커버"
-      />
-      <span class="music_name" @click="navigateToProfile(item.id)">{{
-        item.title
-      }} </span>
-      <span>{{item.artist}}</span>
+      <img class="album_cover" :src="`${item.album_cover}`" alt="앨범 커버" />
+      <span class="music_name" @click="navigateToProfile(item.id)"
+        >{{ item.title }}
+      </span>
+      <span>{{ item.artist }}</span>
     </div>
     <!-- <span class="like"></span> -->
-    
+
     <span
       class="like_button"
       @click="followAction(fwg)"
       :class="{ following: fwg.is_followed }"
-    > ♡ 
-    {{item.like_count}}
+    >
+      ♡
+      {{ item.like_count }}
     </span>
   </div>
 </template>
@@ -26,8 +23,8 @@
 <script>
 export default {
   name: "SearchList",
-  props : {
-    item:Object
+  props: {
+    item: Object,
   },
   methods: {
     navigateToProfile(userId) {
