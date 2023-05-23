@@ -16,6 +16,8 @@
 </template>
 
 <script>
+import EventBus from "../EventBus";
+
 export default {
   name: "LoginForm",
   data() {
@@ -35,6 +37,13 @@ export default {
       console.log(userInfo);
       this.$store.dispatch("login", userInfo);
     },
+    handleLoginSuccess() {
+      this.$router.push({ name: "MainView" });
+    },
+  },
+  created() {
+    // 이벤트 수신하기
+    EventBus.$on("loginComplete", this.handleLoginSuccess);
   },
 };
 </script>

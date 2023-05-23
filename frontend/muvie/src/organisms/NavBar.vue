@@ -15,11 +15,12 @@
       <div class="search-bar-line"></div>
     </div>
     <div class="my-account">
-      <p class="my-nickname">{{ nickname }}</p>
+      <p class="my-nickname">{{ nickname || "익명의 유저" }}</p>
       <img
         class="my-profile-photo"
-        :src="`http://127.0.0.1:8000${profile_picture}`"
+        :src="`http://127.0.0.1:8000${profile_picture || '/users/default.gif'}`"
         alt="내 계정"
+        @click="handleModal"
       />
     </div>
   </div>
@@ -41,9 +42,16 @@ export default {
   },
   computed: {
     ...mapState({
-      userId: (state) => state.loginStore.userId,
-      nickname: (state) => state.loginStore.userInfo.nickname,
-      profile_picture: (state) => state.loginStore.userInfo.profile_picture,
+      userId: (state) =>
+        localStorage.getItem("vuex") ? state.loginStore.userId : -1,
+      nickname: (state) =>
+        localStorage.getItem("vuex")
+          ? state.loginStore.userInfo.nickname
+          : "익명의 유저",
+      profile_picture: (state) =>
+        localStorage.getItem("vuex")
+          ? state.loginStore.userInfo.profile_picture
+          : "/users/default.gif",
     }),
   },
   methods: {
@@ -55,6 +63,10 @@ export default {
         });
         this.inputData = "";
       }
+    },
+    handleModal() {
+      console.log("프사 클릭");
+      this.$emit("open-modal");
     },
   },
 };
@@ -117,7 +129,10 @@ export default {
   margin-left: 20px;
 }
 
-.my-nickname {
-  /* margin - */
+.my-profile-photo {
+  width: 62px;
+  height: 62px;
+  margin-left: 20px;
+  z-index: 400;
 }
 </style>

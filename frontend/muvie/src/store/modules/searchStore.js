@@ -3,9 +3,9 @@ import axios from "axios";
 
 const BASE_URL = "http://127.0.0.1:8000";
 
-const mainStore = {
+const searchStore = {
   state: {
-    searchedList : null,
+    searchedList: null,
   },
   actions: {
     getSearchList({ commit }, keyword) {
@@ -51,4 +51,4 @@ const mainStore = {
   },
 };
 
-export default mainStore;
+export default searchStore;

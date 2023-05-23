@@ -50,15 +50,15 @@ export default {
       console.log(this.profileUrl);
     },
     onSubmit() {
-      // 모달 오픈 이벤트 상위 SignupView로 전달
-      this.$emit("open-modal");
       if (this.profilePicture == null) {
         this.formData = new FormData();
+        console.log(this.email, this.password, this.nickname);
         this.formData.append("email", this.email);
         this.formData.append("password", this.password);
         this.formData.append("nickname", this.nickname);
       } else {
         this.formData = new FormData();
+        console.log(this.email, this.password, this.nickname);
         this.formData.append("email", this.email);
         this.formData.append("password", this.password);
         this.formData.append("nickname", this.nickname);
@@ -66,6 +66,8 @@ export default {
       }
       console.log(this.formData);
       this.$store.dispatch("signup", this.formData);
+      // 모달 오픈 이벤트 상위 SignupView로 전달
+      // this.$emit("open-modal");
     },
   },
 };

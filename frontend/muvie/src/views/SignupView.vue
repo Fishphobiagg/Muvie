@@ -4,11 +4,9 @@
       <SignupForm @open-modal="handleModal" />
     </GlassCard>
     <YellowCircle />
-    <ModalAtom :isModalOpen="isModalOpen" @close-modal="closeModal">
+    <ModalAtom :isModalOpen="isModalOpen">
       <h2>음악 취향</h2>
-      <PreferSelect />
-      <button @click="confirmModal">확인</button>
-      <button @click="closeModal">지금 안하기</button>
+      <PreferSelect @close-modal="closeModal" />
     </ModalAtom>
   </div>
 </template>
@@ -32,6 +30,7 @@ export default {
   data() {
     return {
       isModalOpen: false,
+      formData: {},
     };
   },
   methods: {
@@ -42,10 +41,7 @@ export default {
     closeModal() {
       console.log("모달 닫기");
       this.isModalOpen = false;
-    },
-    confirmModal() {
-      // 확인 버튼 클릭에 대한 로직을 처리합니다.
-      console.log("확인 버튼 클릭");
+      this.$router.push("/login");
     },
   },
 };

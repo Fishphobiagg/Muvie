@@ -8,6 +8,10 @@ const signupStore = {
   actions: {
     signup(_, signupObj) {
       console.log(signupObj);
+      // eslint-disable-next-line no-restricted-syntax
+      for (const key of signupObj.keys()) {
+        console.log(key);
+      }
       const config = {
         headers: {
           "Content-Type": "multipart/form-data", // 파일 업로드를 위한 헤더 설정

@@ -4,9 +4,11 @@
     :item="item"
     v-for="(item, idx) in searched_list"
     :key="idx">
+
     </SearchList>
   </div>
 </template>
+
 
 <script>
 
@@ -36,6 +38,4 @@ export default {
   },
 };
 </script>
-
-
 <style></style>
