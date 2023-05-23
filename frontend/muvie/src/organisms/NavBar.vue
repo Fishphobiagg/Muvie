@@ -1,11 +1,19 @@
 <template>
   <div class="navbar">
-    <MuvieLogo @click="navigateToMain" />
-    <input
-      class="input-atoms"
-      v-model="inputData"
-      @keydown.enter="handleSearch"
-    />
+    <MuvieLogo />
+    <div class="search-bar">
+      <div class="search-input">
+        <button class="search-button" @click="handleSearch">
+          <i class="fas fa-search"></i>
+        </button>
+        <input
+          class="input-atoms"
+          v-model="inputData"
+          @keydown.enter="handleSearch"
+        />
+      </div>
+      <div class="search-bar-line"></div>
+    </div>
     <div class="my-account">
       <p class="my-nickname">{{ nickname || "익명의 유저" }}</p>
       <img
@@ -51,7 +59,7 @@ export default {
       if (this.inputData.trim() !== "") {
         this.$router.push({
           name: "SearchView",
-          params: { query: this.inputData },
+          params: { keyword: this.inputData },
         });
         this.inputData = "";
       }
@@ -74,18 +82,57 @@ export default {
   align-items: center;
   justify-content: space-between;
 }
+
+.search-bar {
+  position: relative;
+}
+
+.search-input {
+  display: flex;
+  align-items: center;
+}
+
 .input-atoms {
-  margin: 10px;
+  margin: 10px 0 10px 10px;
   padding: 5px;
   background-color: transparent;
-  border-bottom: 1px solid;
+  border: none;
   outline: none;
 }
+
+.search-button {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #888;
+  margin-right: 10px;
+}
+
+.search-button i {
+  width: 16px;
+  height: 16px;
+}
+
+.search-bar-line {
+  height: 1px;
+  background-color: #ccc;
+  margin-top: -10px;
+}
+
 .my-account {
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
+.my-account img {
+  width: 62px;
+  height: 62px;
+  margin-left: 20px;
+}
+
 .my-profile-photo {
   width: 62px;
   height: 62px;

@@ -22,9 +22,9 @@ class UserManager(BaseUserManager):
             acousticness=0.5,
             speechiness=0.5,
             valence=0.5,
-            tempo=80,
+            tempo=200,
             mode=0.5,
-            loudness=50,
+            loudness=-30,
             danceability=0.5,
         )
         
@@ -54,3 +54,4 @@ class MusicUserLike(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     music = models.ForeignKey(Music, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+

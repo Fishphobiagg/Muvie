@@ -90,7 +90,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     like_music_list = serializers.SerializerMethodField()
     followers_count = serializers.SerializerMethodField()
     following_count = serializers.SerializerMethodField()
-
+    
     class Meta:
         model = User
         fields = ('followers', 'following','followers_count', 'following_count', 'like_music_list')
