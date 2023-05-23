@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import axios from "axios";
+import EventBus from "../../EventBus";
 
 const BASE_URL = "http://127.0.0.1:8000/accounts/login/";
 
@@ -19,6 +20,7 @@ const loginStore = {
         .then((res) => {
           console.log(axios.defaults);
           commit("loginSuccess", res.data);
+          EventBus.$emit("loginComplete");
         })
         .catch((err) => {
           console.log(err);

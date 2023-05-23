@@ -32,10 +32,12 @@ export default {
 .modal-content {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   background-color: white;
+  border-radius: 15px;
   padding: 20px;
-  width: 80%;
+  width: 60%;
   min-height: 60%;
-  overflow: auto;
+  overflow: hidden;
 }
 </style>
