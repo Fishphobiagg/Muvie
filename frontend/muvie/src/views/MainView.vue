@@ -27,6 +27,7 @@
       <div @click="navigateToLogin()">로그인하기</div>
       <div @click="navigateToSignup()">회원가입하기</div>
     </ModalAtom>
+    <YoutubePlayer />
   </div>
 </template>
 
@@ -38,6 +39,7 @@ import CarouselView from "../organisms/CarouselView.vue";
 import UsersView from "../organisms/UsersView.vue";
 import LikesView from "../organisms/LikesView.vue";
 import ModalAtom from "../atoms/ModalAtom.vue";
+import YoutubePlayer from "../organisms/YoutubePlayer.vue";
 
 export default {
   name: "MainView",
@@ -55,6 +57,7 @@ export default {
     UsersView,
     LikesView,
     ModalAtom,
+    YoutubePlayer,
   },
   methods: {
     handleModal() {

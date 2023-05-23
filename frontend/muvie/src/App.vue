@@ -8,8 +8,20 @@
       <router-link to="/main">Main</router-link> |
     </nav>
     <router-view />
+    <YoutubePlayer />
   </div>
 </template>
+
+<script>
+import YoutubePlayer from "./organisms/YoutubePlayer.vue";
+
+export default {
+  name: "App",
+  components: {
+    YoutubePlayer,
+  },
+};
+</script>
 
 <style>
 @import "./assets/css/global.css";
