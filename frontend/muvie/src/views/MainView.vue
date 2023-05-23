@@ -256,7 +256,7 @@ export default {
 
 <style>
 .mainview {
-  background: #fff;
+  background: #eef3f7;
 }
 
 .welcome-msg {

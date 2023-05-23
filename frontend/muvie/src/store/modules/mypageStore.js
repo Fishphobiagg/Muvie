@@ -249,8 +249,10 @@ const mypageStore = {
       console.log("비디오 아이디 전달");
     },
     setDuration(state, payload) {
-      state.duration = payload;
-      console.log("비디오 길이 전달");
+      const numbersOnly = payload.match(/\d+/g).map(Number);
+      const sec = numbersOnly[0] * 60 + numbersOnly[1];
+      state.duration = sec;
+      console.log("비디오 길이 전달", state.duration);
     },
   },
   computed: {

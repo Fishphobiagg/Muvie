@@ -32,6 +32,7 @@ export default {
 
 body {
   box-sizing: border-box;
+  background-color: #dfe7ef;
   width: 100%;
   height: 100%;
   margin: 0px;
