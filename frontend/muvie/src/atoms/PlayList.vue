@@ -1,32 +1,29 @@
 <template>
-  <div class="like_item">
+  <div class="like_item" @mouseover="showButtons = true" @mouseleave="showButtons = false">
     <div class="music-detail">
-      <img
-        class="album_cover"
-        :src="`${fwg.album_cover}`"
-        alt="앨범 커버"
-      />
-      <span class="music_name" @click="playMusic(fwg.id)">{{
-        fwg.title
-      }} </span>
-      <span class="artist_name">{{fwg.artist}}</span>
+      <img class="album_cover" :src="fwg.album_cover" alt="앨범 커버" :style="{ opacity: showButtons ? '0.8' : '1' }" />
+      <div class="music_info">
+      <span class="music_name" @click="addPlaylist(fwg)">{{ fwg.title }}</span>
+      </div>
+      <span class="artist_name">{{ fwg.artist }}</span>
     </div>
-    <!-- <span class="like"></span> -->
-    <div class='like'>
-      <span class='like_button'>♡</span>
-      <span class="like_count">{{fwg.like_count}}</span>
-    </div>
-      <span class="delete"></span>
-
+    <span class="like_button" @click="!fwg.isLiked? like(fwg):unlike(fwg)" :style="{ color: fwg.isLiked ? '#BDC3C7' : '#BDC3C7', marginRight: showButtons ? '5px' : '5px' }" v-if="showButtons">
+      <i class="fas" :class="fwg.isLiked ? 'fa fa-heart' : 'fa fa-heart-o'"></i>
+    </span>
+    <span class="delete_button" @clike="deletePlaylist(fwg.id)" ><i class="fa fa-trash"></i></span>
+    <p class="like_count" v-if="showButtons" @click="showLikes=!showLikes">{{fwg.like_count}}</p>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   name: "PlayList",
   data() {
     return {
-      buttonMsg: "재생",
+      showButtons: false,
+      showLikes: false,
     };
   },
   methods: {
@@ -36,12 +33,24 @@ export default {
     deletePlaylist(musicId){
       console.log('플레이리스트 삭제 요청')
       this.$store.dispatch('deletePlaylist', musicId)
-    }
+    },
+    like(fwg) {
+      this.$store.dispatch("like", fwg.id)
+    },
+    unlike(fwg) {
+      this.$store.dispatch("unlike", fwg.id);
+    },
   },
   props: {
     fwg: Object,
   },
+  computed: {
+    ...mapState({
+      liked_list: (state) => state.mypageStore.liked_list,
+    })
+  }
 };
+
 </script>
 
 <style>
@@ -54,6 +63,7 @@ export default {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  position: relative;
 }
 
 .music-detail {
@@ -71,53 +81,77 @@ export default {
   object-fit: cover;
 }
 
+.music_info {
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
 .music_name {
   text-decoration: none;
   border: none;
-  /* background-color: transparent; */
-  margin: 0 15px 0 40px;
-  font-size: 25px;
-  line-height: 80px;
+  margin-right: 10px;
+  font-size: 20px;
+  line-height: 40px;
   cursor: pointer;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+
+.artist_name {
+  font-size: 16px;
+  line-height: 30px;
+}
+
+.like_button {
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.like_button i {
   display: inline-block;
-  vertical-align: middle;
+  font-size: 18px;
+  color: #BDC3C7;
 }
 
-.like-button {
-  height: 40px;
-  width: 80px;
-  font-size: 15px;
-  border: none;
-  border-radius: 9px;
-  cursor: pointer;
-  color: white;
+.fa-heart {
+  color: #BDC3C7;
 }
 
-.following {
-  background-color: lightgray !important;
-  color: black !important;
+.fa-heart-o {
+  color: #BDC3C7;
 }
 
-.delete {
-  position: relative;
-  width: 20px;
-  height: 20px;
+.like_count {
+  color: #BDC3C7;
+  margin-right: 5px;
 }
 
-.delete::before,
-.delete::after {
-  content: "";
+.user_option {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: absolute; /* Add absolute positioning */
+  top: 50%; /* Position it in the middle vertically */
+  right: 0; /* Position it at the right edge */
+  transform: translateY(-50%); /* Adjust vertical alignment */
+}
+.like_count_tooltip {
   position: absolute;
-  top: 50%;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 5px;
+  top: 100%;
   left: 50%;
-  width: 2px;
-  height: 10px;
-  background-color: #000;
-  transform: translate(-50%, -50%) rotate(45deg);
+  transform: translateX(-50%);
+  z-index: 999;
 }
 
-.delete::after {
-  transform: translate(-50%, -50%) rotate(-45deg);
+.like_count_tooltip span {
+  display: block;
+  margin-top: 5px;
 }
-
 </style>

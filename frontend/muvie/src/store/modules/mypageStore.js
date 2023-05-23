@@ -14,9 +14,23 @@ const mypageStore = {
     profile_picture: null,
     userId: null,
     like_list: null,
+    liked_list: null,
     play_list: null,
   },
   actions: {
+    getLikedList({commit}, id){
+      const LIKEDLIST_API = `${BASE_URL}/music/like/${id}/users`
+      console.log(LIKEDLIST_API);
+      axios
+        .get(LIKEDLIST_API)
+        .then((res) => {
+          console.log('좋아요 누른 사람 목록 요청');
+          console.log(res);
+          commit("getMusicLiked", res.data);
+        })
+        .catch((err) => console.log(err));
+
+    },
     getLikeList({ commit }) {
       const LIKELIST_API = `${BASE_URL}/accounts/like`;
       console.log(LIKELIST_API);
@@ -121,7 +135,12 @@ const mypageStore = {
     getUserLike(state, payload) {
       state.like_list = payload.like_list;
       console.log(state.like_list);
-      console.log("좋아요 목록  요청 성공");
+      console.log("좋아요 목록 요청 성공");
+    },
+    getMusicLiked(state, payload){
+      state.liked_list = payload.liked_list;
+      console.log(state.liked_list);
+      console.log("좋아요 누른 사람 목록 요청 성공")
     },
     getUserDetail(state, payload) {
       state.followers = payload.detail.followers;

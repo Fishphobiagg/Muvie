@@ -15,9 +15,9 @@ def recommend_ost(components):
     float(components['liveness']),
     float(components['acousticness']),
     float(components['speechiness']),
-    float(components['valence']),
     float(components['tempo']),
     float(components['mode']),
+    float(components['valence']),
     float(components['loudness']),
     float(components['danceability'])
     ]

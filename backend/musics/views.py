@@ -7,8 +7,6 @@ from . models import Music
 from . serializers import *
 from rest_framework.views import APIView
 from rest_framework import status
-from decimal import Decimal
-
 
 class MusicPagenatior(PageNumberPagination):
     page_size = 10
@@ -106,3 +104,15 @@ class MusicComponentView(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def liked_users(request, music_pk):
+    music = Music.objects.get(pk=music_pk)
+    user = request.user
+    liked_users = music.users_like_musics.all()
+    serializer = LikedUserSerializer(instance=liked_users, many=True, user_pk=user.pk)
+    if serializer.is_valid():
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.error, status=status.HTTP_406_NOT_ACCEPTABLE)

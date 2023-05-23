@@ -7,7 +7,8 @@
       </div>
       <span class="artist_name">{{ item.artist }}</span>
     </div>
-    <span class="play_button" @click="addPlaylist(item)" :style="{ color: showButtons ? '#BDC3C7' : '#BDC3C7', marginRight: showButtons ? '5px' : '5px' }" v-if="showButtons" @click="playMusic(item)">
+    <div class="user_option" v-show="showButtons">
+    <span class="play_button" @click="addPlaylistAndPlayMusic(item)" :style="{ color: showButtons ? '#BDC3C7' : '#BDC3C7', marginRight: showButtons ? '5px' : '5px' }" v-if="showButtons">
       <i class="fas fa-play"></i>
     </span>
     <span class="like_button" @click="!isLiked? like(item):unlike(item)" :style="{ color: item.isLiked ? '#BDC3C7' : '#BDC3C7', marginRight: showButtons ? '5px' : '5px' }" v-if="showButtons">
@@ -15,6 +16,7 @@
     </span>
     <p class="like_count" @click="console.log(1)" v-if="showButtons">{{ item.like_count }}</p>
   </div>
+    </div>
 </template>
 
 
@@ -36,10 +38,11 @@ export default {
         return title.substring(0, maxLength) + "...";
       }
       return title;
+    }
     },
-    },
-    addPlaylist(item) {
+    addPlaylistAndPlayMusic(item) {
       this.$store.dispatch("addPlaylist", item.id);
+      console.log('재생은 아직')
     },
     like(item) {
       this.$store.dispatch("like", item.id)
@@ -60,6 +63,7 @@ export default {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  position: relative;
 }
 
 .music-detail {
@@ -111,9 +115,6 @@ export default {
 .like_button i {
   display: inline-block;
   font-size: 18px;
-}
-
-.like_button i {
   color: #BDC3C7;
 }
 
@@ -122,11 +123,22 @@ export default {
 }
 
 .fa-heart-o {
-  color: #ccc;
+  color: #BDC3C7;
 }
 
 .like_count {
   color: #BDC3C7;
   margin-right: 5px;
 }
+
+.user_option {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: absolute; /* Add absolute positioning */
+  top: 50%; /* Position it in the middle vertically */
+  right: 0; /* Position it at the right edge */
+  transform: translateY(-50%); /* Adjust vertical alignment */
+}
+
 </style>
