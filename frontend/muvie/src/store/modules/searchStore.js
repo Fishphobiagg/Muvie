@@ -13,8 +13,8 @@ const searchStore = {
         .get(`${BASE_URL}/music/search/${keyword}`)
         .then((res) => {
           console.log("검색 결과 가져오기");
-          console.log(res.data);
-          commit("getSearchedList", res.data);
+          console.log(res.data.data);
+          commit("getSearchedList", res.data.data);
         })
         .catch((err) => {
           console.log(err);

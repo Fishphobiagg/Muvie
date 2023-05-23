@@ -1,11 +1,17 @@
 <template>
   <div class="navbar">
     <MuvieLogo />
-    <input
-      class="input-atoms"
-      v-model="inputData"
-      @keydown.enter="handleSearch"
-    />
+    <div class="search-bar">
+      <input
+        class="input-atoms"
+        v-model="inputData"
+        @keydown.enter="handleSearch"
+        placeholder="검색어를 입력하세요..."
+      />
+      <button class="search-button" @click="handleSearch">
+        <i class="fas fa-search"></i>
+      </button>
+    </div>
     <div class="my-account">
       <p class="my-nickname">{{ nickname || "익명의 유저" }}</p>
       <img
@@ -51,7 +57,7 @@ export default {
       if (this.inputData.trim() !== "") {
         this.$router.push({
           name: "SearchView",
-          params: { query: this.inputData },
+          params: { keyword: this.inputData },
         });
         this.inputData = "";
       }
@@ -74,8 +80,30 @@ export default {
   margin: 10px;
   padding: 5px;
   background-color: transparent;
-  border-bottom: 1px solid;
+  border-radius: 20px; /* Make the input field round */
+  border: 1px solid #ccc;
   outline: none;
+}
+.search-bar {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.search-button {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #888;
+}
+.search-button i {
+  width: 16px;
+  height: 16px;
 }
 .my-account {
   display: flex;
