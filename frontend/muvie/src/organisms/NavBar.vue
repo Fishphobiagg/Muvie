@@ -68,6 +68,10 @@ export default {
       console.log("프사 클릭");
       this.$emit("open-modal");
     },
+    navigateToMain() {
+      console.log("로고 클릭");
+      this.$router.push({ name: "MainView" });
+    },
   },
 };
 </script>
