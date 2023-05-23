@@ -13,17 +13,31 @@
     <span class="like_button" @click="unlike(fwg)" :style="{ color: fwg.isLiked ? '#BDC3C7' : '#BDC3C7', marginRight: showButtons ? '5px' : '5px' }" v-if="showButtons">
       <i class="fas" :class="fwg.isLiked ? 'fa fa-heart' : 'fa fa-heart-o'"></i>
     </span>
-    <p class="like_count" v-if="showButtons">{{fwg.like_count}}</p>
+      <p class="like_count" v-if="showButtons">{{fwg.like_count}}</p>
+        <LikedUserList :fwg="fwg" v-for="(fwg, idx) in liked_list" :key="idx"></LikedUserList>
   </div>
+
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import LikedUserList from './LikedUserList.vue';
+
 export default {
   name: "LikeList",
+  components: {
+    LikedUserList,
+  },
   data() {
     return {
       showButtons: false,
+      showLikedUsers: false,
     };
+  },
+  computed: {
+    ...mapState({
+      liked_list: (state) => state.mypageStore.liked_list
+    })
   },
   methods: {
     addPlaylist(fwg) {
@@ -44,22 +58,13 @@ export default {
 </script>
 
 <style>
-.like_item {
-  width: 1000px;
+.music-detail {
+  width: 800px;
   height: 80px;
-  margin: 5px auto;
-  padding: 10px 60px;
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
   align-items: center;
 }
 
-.music-detail {
-  height: 80px;
-  display: flex;  
-  align-items: center;
-}
 
 .album_cover {
   width: 66px;
@@ -84,8 +89,7 @@ export default {
 .like_button {
   font-size: 25px;
   cursor: pointer;
-  margin-right: 10px;
-
+  margin-right: 10px;;
 }
 
 .play_button {

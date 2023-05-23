@@ -7,15 +7,13 @@
       </div>
       <span class="artist_name">{{ item.artist }}</span>
     </div>
-    <div class="user_option" v-show="showButtons">
-    <span class="play_button" @click="addPlaylistAndPlayMusic(item)" :style="{ color: showButtons ? '#BDC3C7' : '#BDC3C7', marginRight: showButtons ? '5px' : '5px' }" v-if="showButtons">
+    <span class="play_button" @click="addPlaylist(item)" :style="{ color: showButtons ? '#BDC3C7' : '#BDC3C7', marginRight: showButtons ? '5px' : '5px' }" v-if="showButtons" >
       <i class="fas fa-play"></i>
     </span>
-    <span class="like_button" @click="!isLiked? like(item):unlike(item)" :style="{ color: item.isLiked ? '#BDC3C7' : '#BDC3C7', marginRight: showButtons ? '5px' : '5px' }" v-if="showButtons">
+    <span class="like_button" @click="unlike(item)" :style="{ color: item.isLiked ? '#BDC3C7' : '#BDC3C7', marginRight: showButtons ? '5px' : '5px' }" v-if="showButtons">
       <i class="fas" :class="item.isLiked ? 'fa fa-heart' : 'fa fa-heart-o'"></i>
     </span>
-    <p class="like_count" @click="console.log(1)" v-if="showButtons">{{ item.like_count }}</p>
-  </div>
+      <p class="like_count" v-if="showButtons">{{item.like_count}}</p>
     </div>
 </template>
 

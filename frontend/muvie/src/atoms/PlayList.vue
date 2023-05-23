@@ -10,8 +10,11 @@
     <span class="like_button" @click="!fwg.isLiked? like(fwg):unlike(fwg)" :style="{ color: fwg.isLiked ? '#BDC3C7' : '#BDC3C7', marginRight: showButtons ? '5px' : '5px' }" v-if="showButtons">
       <i class="fas" :class="fwg.isLiked ? 'fa fa-heart' : 'fa fa-heart-o'"></i>
     </span>
-    <span class="delete_button" @clike="deletePlaylist(fwg.id)" ><i class="fa fa-trash"></i></span>
     <p class="like_count" v-if="showButtons" @click="showLikes=!showLikes">{{fwg.like_count}}</p>
+    <span class="delete_button" v-if="showButtons" @clike="deletePlaylist(fwg.id)" ><i class="fa fa-trash"></i></span>
+    <div class="liked_users" v-if="showLikedUsers">
+      <FollowList :fwg="fwg" v-for="(fwg, idx) in likedUsers" :key="idx"></FollowList>
+    </div>
   </div>
 </template>
 
@@ -54,19 +57,9 @@ export default {
 </script>
 
 <style>
-.like_item {
-  width: 1000px;
-  height: 80px;
-  margin: 5px auto;
-  padding: 10px 60px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
-}
 
 .music-detail {
+  width: 800px;
   height: 80px;
   display: flex;
   align-items: center;
