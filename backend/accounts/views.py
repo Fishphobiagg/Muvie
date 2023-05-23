@@ -165,6 +165,11 @@ class AccountsChangeView(APIView):
             return Response({"message":"Change Success",
                              "changed_data" : UserChangeSerializer(User.objects.get(pk=user_pk)).data
                              })
+        if 'email' in serializer.errors:
+            return Response({"message":"Email is already registered"}, status=status.HTTP_409_CONFLICT)
+        elif 'nickname' in serializer.errors:
+            return Response({"message":"Nickname is already registered"}, status=status.HTTP_409_CONFLICT)
+
         return Response(serializer.error, status=status.HTTP_400_BAD_REQUEST)
 
 class LikeListView(APIView):
