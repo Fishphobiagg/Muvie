@@ -11,11 +11,20 @@
       allowfullscreen
       :style="{ display: 'none' }"
     ></iframe>
+
+    <div class="detail-and-bar">
+      <div class="song-detail scrolling-text-container">
+        <span id="song-title" ref="songTitleRef" class="scrolling-text">{{
+          title
+        }}</span>
+        <span id="song-artist">{{ artist }}</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress" :style="{ width: `${progress}%` }"></div>
+      </div>
+    </div>
     <i v-if="isPlaying" @click="stopPlayer" class="fas fa-pause"></i>
     <i v-else @click="startPlayer()" class="fas fa-play"></i>
-    <div class="progress-bar">
-      <div class="progress" :style="{ width: `${progress}%` }"></div>
-    </div>
   </div>
 </template>
 
@@ -37,28 +46,11 @@ export default {
       duration: (state) => state.playerStore.duration,
       albumCover: (state) => state.playerStore.albumCover,
       isPlaying: (state) => state.playerStore.isPlaying,
+      title: (state) => state.playerStore.title,
+      artist: (state) => state.playerStore.artist,
     }),
   },
   methods: {
-    // onPlayerReady(event) {
-    //   console.log("플레이어 준비");
-    //   if (this.isPlaying) {
-    //     // 플레이어가 준비되면 소리
-    //     event.target.unMute();
-    //     // 상태 변경
-    //     this.$store.dispatch("startPlayerState");
-    //   }
-    // },
-    // onPlayerReady(event) {
-    //   console.log("플레이어 준비");
-    //   if (this.isPlaying) {
-    //     console.log("플레이어 시작");
-    //     console.log(event.target);
-    //     event.target.playVideo(); // 플레이어 재생
-    //     this.startTimer(); // 타이머 시작
-    //     this.$store.dispatch("startPlayerState"); // 상태 변경
-    //   }
-    // },
     startPlayer() {
       this.$store.dispatch("startPlayerState");
       const { youtubeIframe } = this.$refs;
@@ -66,11 +58,6 @@ export default {
         youtubeIframe.src = this.videoId; // iframe의 src를 빈 문자열로 설정하여 멈추기
       }
       console.log("하단바로 시작 요청");
-
-      // console.log(event);
-      // this.$store.dispatch("startPlayerState"); // 상태 변경
-      // this.onPlayerReady(event);
-      // console.log("플레이어 시작 요청");
     },
     stopPlayer() {
       const { youtubeIframe } = this.$refs;
@@ -124,6 +111,16 @@ export default {
       console.log("페이지 새로고침됨");
       this.$store.dispatch("stopPlayerState");
     },
+    startTextAnimation() {
+      const songTitleElement = this.$refs.songTitleRef;
+      const containerWidth = songTitleElement.offsetWidth;
+      const textWidth = songTitleElement.scrollWidth;
+      if (textWidth > containerWidth) {
+        const animationDuration = textWidth / 50; // 원하는 속도로 조정하세요
+        songTitleElement.style.animationDuration = `${animationDuration}s`;
+        songTitleElement.classList.add("scrolling-text");
+      }
+    },
   },
   watch: {
     $route() {
@@ -157,6 +154,7 @@ export default {
     },
   },
   mounted() {
+    this.startTextAnimation();
     if (!this.isPlaying) {
       console.log("새로고침됐지만 멈춰");
       this.$store.dispatch("stopPlayerState");
@@ -170,6 +168,29 @@ export default {
 </script>
 
 <style>
+.scrolling-text-container {
+  width: 53%;
+  overflow: hidden;
+  position: relative;
+  padding-right: 100px;
+}
+
+.scrolling-text {
+  white-space: nowrap;
+  position: absolute;
+  animation: scrollText linear infinite;
+  animation-duration: 10s; /* 원하는 속도로 조정하세요 */
+}
+
+@keyframes scrollText {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
 .albumCover {
   width: 66px;
   height: 66px;
@@ -177,6 +198,9 @@ export default {
   border-radius: 5px;
   overflow: hidden;
   object-fit: cover;
+  margin-right: 50px;
+  /* transform: scale(0.9);
+  filter: blur(10px); */
 }
 
 #player {
@@ -186,12 +210,11 @@ export default {
   width: 100%;
   height: 12%;
   background-color: #eef3f7;
-  /* opacity: 0.3; */
-  box-shadow: 0px -5px 15px -10px rgba(50, 88, 130, 0.22);
+  box-shadow: 0px 55px 15px 50px rgba(50, 88, 130, 0.22);
   text-align: center;
-  display: flex; /* 요소들을 가로 방향으로 정렬하기 위해 flexbox 사용 */
-  align-items: center; /* 수직 방향으로 중앙 정렬 */
-  justify-content: center; /* 수평 방향으로 중앙 정렬 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-top: 50px;
 }
 
@@ -201,29 +224,33 @@ export default {
 }
 
 #player i.fas.fa-play {
-  font-size: 1.8em; /* 2배 크기로 설정 */
+  font-size: 2em; /* 2배 크기로 설정 */
   color: white; /* 색상 변경 */
-  filter: drop-shadow(0 18px 6px rgba(172, 184, 204, 0.45));
+  filter: drop-shadow(0 0px 12px rgba(172, 184, 204, 205));
 }
 
 #player i.fa-pause {
-  font-size: 1.8em; /* 2배 크기로 설정 */
+  font-size: 2em; /* 2배 크기로 설정 */
   color: white; /* 색상 변경 */
-  filter: drop-shadow(0 18px 6px rgba(172, 184, 204, 0.45));
+  filter: drop-shadow(0 0px 30px rgba(172, 184, 204, 405));
+}
+
+.detail-and-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* 수정된 부분 */
+  justify-content: center;
+  width: 60%;
 }
 
 .progress-bar {
-  /* width: 200px;
-  height: 5px;
-  background-color: red;
-  margin: 10px auto;
-  position: relative; */
-  height: 6px;
-  width: 70%;
+  /* filter: drop-shadow(0 11px 6px rgba(172, 184, 204, 0.45)); */
+  height: 10px;
+  width: 90%;
   background-color: #d0d8e6;
   display: inline-block;
   border-radius: 10px;
-  /* filter: drop-shadow(0 11px 6px rgba(172, 184, 204, 0.45)); */
+  margin-bottom: 70px;
 }
 
 .progress {
@@ -231,5 +258,29 @@ export default {
   background-color: #a3b3ce;
   border-radius: 10px;
   transition: width 0.3s linear;
+}
+
+.song-detail {
+  height: 30px;
+  margin-bottom: 10px;
+  margin-top: 5px;
+  padding-top: 70px;
+  text-align: right;
+  font-size: 17px;
+}
+
+#song-title {
+  margin-right: 300px;
+  margin-left: 10px;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+#song-artist {
+  font-weight: 700;
+  opacity: 0.8;
+  position: relative;
+  /* left: 300px; */
+  /* padding-left: 2300px; */
 }
 </style>

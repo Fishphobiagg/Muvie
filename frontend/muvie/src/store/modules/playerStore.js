@@ -9,9 +9,12 @@ const playerStore = {
     duration: null,
     albumCover: null,
     isPlaying: false,
+    title: null,
+    artist: null,
   },
   actions: {
     playMusic({ commit }, { title, artist }) {
+      commit("setVideoDetail", { title, artist });
       console.log(title, artist);
       const searchRequest = axios.get(
         `https://content-youtube.googleapis.com/youtube/v3/search?q=${title}${artist}&part=snippet&maxResults=1&type=video&key=${process.env.VUE_APP_YOUTUBE_APIKEY}`
@@ -80,6 +83,12 @@ const playerStore = {
     stopPlayerState(state) {
       state.isPlaying = false;
       console.log("지금 플레이어 상태는 ", state, state.isPlaying);
+    },
+    setVideoDetail(state, { title, artist }) {
+      console.log("비디오 디테일 저장");
+      console.log(title, artist);
+      state.title = title;
+      state.artist = artist;
     },
   },
 };
