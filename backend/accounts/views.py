@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.db.models import Count
 
 from rest_framework.views import APIView
@@ -12,6 +13,7 @@ from .algorithms.algorithm import recommend_ost, calculate_vector
 from .serializers import *
 from musics.models import Music
 from accounts.models import MusicUserLike, User
+
 
 
 from sklearn.metrics.pairwise import cosine_similarity
@@ -275,3 +277,28 @@ def recommend_like(request):
             }
         )
     return Response(serialized_music)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def search_user(request, keyword):
+    user = request.user
+    liked_music_ids = MusicUserLike.objects.filter(user=user).values_list('music_id', flat=True)
+    searched_users = User.objects.filter(Q(nickname__icontains=keyword)).exclude(pk=user.pk)
+    similarity_scores = {}
+    for similar_user in searched_users:
+        similar_user_liked_music_ids = MusicUserLike.objects.filter(user=similar_user).values_list('music_id')
+        similarity_scores[similar_user.id] = len(set(liked_music_ids) & set(similar_user_liked_music_ids))
+    sorted_similar_users = sorted(similarity_scores.items(), key=lambda x: x[1], reverse=True)
+    responses = []
+    for user_id, like in sorted_similar_users:
+        searched_user = User.objects.get(pk=user_id)
+        responses.append(
+        {
+            'id':searched_user.id,
+            'nickname':searched_user.nickname,
+            'email':searched_user.email,
+            'profile_picture':searched_user.profile_picture.url,
+            'is_followed': searched_user.following.filter(pk=user.pk).exists()
+        }
+        )
+    return Response({"data":responses}, status=status.HTTP_200_OK)

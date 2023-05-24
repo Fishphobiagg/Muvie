@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import PlaylistView, LikeListView, SignupAPIView, MyTokenObtainPairView, FollowAPIView, ProfileView, AccountsChangeView, PasswordChangeView, recommend_components, recommend_like, recommend_user 
+from .views import PlaylistView, LikeListView, SignupAPIView, MyTokenObtainPairView, FollowAPIView, ProfileView, AccountsChangeView, PasswordChangeView, recommend_components, recommend_like, recommend_user, search_user
 
 urlpatterns = [
     path('login/', MyTokenObtainPairView.as_view()),
@@ -13,4 +13,5 @@ urlpatterns = [
     path('recommend/components', recommend_components),
     path('recommend/user', recommend_user),
     path('recommend/like', recommend_like),
+    path('search/<keyword>',search_user )
 ]

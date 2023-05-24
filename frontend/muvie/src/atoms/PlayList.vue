@@ -27,14 +27,11 @@
       }"
       v-if="showButtons"
     >
-      <i class="fas" :class="fwg.isLiked ? 'fa fa-heart' : 'fa fa-heart-o'"></i>
+      <i class="fas" :class="fwg.isLiked ? 'fa fa-heart' : 'fa fa-heart-o'">{{fwg.like_count}}</i>
     </span>
-    <span class="delete_button" @clike="deletePlaylist(fwg.id)"
+    <span class="delete_button" @click="deletePlaylist(fwg.id)" v-if="showButtons"
       ><i class="fa fa-trash"></i
     ></span>
-    <p class="like_count" v-if="showButtons" @click="showLikes = !showLikes">
-      {{ fwg.like_count }}
-    </p>
   </div>
 </template>
 
@@ -80,6 +77,10 @@ export default {
 </script>
 
 <style>
+
+.delete_button{
+  cursor: pointer;
+}
 .music-detail {
   width: 800px;
   height: 80px;
@@ -123,6 +124,7 @@ export default {
 .like_button {
   font-size: 16px;
   cursor: pointer;
+  letter-spacing: 10px;
 }
 
 .like_button i {
