@@ -32,6 +32,7 @@ export default {
     return {
       progress: 0, // 막대기의 길이를 나타내는 변수
       timer: null, // 타이머 변수
+      isPlaying: true,
     };
   },
   computed: {
