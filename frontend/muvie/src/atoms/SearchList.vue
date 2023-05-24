@@ -1,53 +1,104 @@
 <template>
-  <div class="like_item" @mouseover="showButtons = true" @mouseleave="showButtons = false">
+  <div
+    class="like_item"
+    @mouseover="showButtons = true"
+    @mouseleave="showButtons = false"
+  >
     <div class="music-detail">
-      <img class="album_cover" :src="item.album_cover" alt="앨범 커버" :style="{ opacity: showButtons ? '0.8' : '1' }" />
+      <img
+        class="album_cover"
+        :src="item.album_cover"
+        alt="앨범 커버"
+        :style="{ opacity: showButtons ? '0.8' : '1' }"
+      />
       <div class="music_info">
-        <span class="music_name" @click="addPlaylist(item)">{{ truncateTitle(item.title) }}</span>
+        <span class="music_name" @click="addPlaylist(item)">{{
+          truncateTitle(item.title)
+        }}</span>
       </div>
       <span class="artist_name">{{ item.artist }}</span>
     </div>
-    <span class="play_button" @click="addPlaylist(item)" :style="{ color: showButtons ? '#BDC3C7' : '#BDC3C7', marginRight: showButtons ? '5px' : '5px' }" v-if="showButtons" >
-      <i class="fas fa-play"></i>
-    </span>
-    <span class="like_button" @click="unlike(item)" :style="{ color: item.isLiked ? '#BDC3C7' : '#BDC3C7', marginRight: showButtons ? '5px' : '5px' }" v-if="showButtons">
-      <i class="fas" :class="item.isLiked ? 'fa fa-heart' : 'fa fa-heart-o'"></i>
-    </span>
-      <p class="like_count" v-if="showButtons">{{item.like_count}}</p>
+    <div class="user_option" v-show="showButtons">
+      <span
+        class="play_button"
+        @click="addPlaylistAndPlayMusic(item)"
+        :style="{
+          color: showButtons ? '#BDC3C7' : '#BDC3C7',
+          marginRight: showButtons ? '5px' : '5px',
+        }"
+        v-if="showButtons"
+      >
+        <i class="fas fa-play"></i>
+      </span>
+      <span
+        class="like_button"
+        @click="!isLiked ? like(item) : unlike(item)"
+        :style="{
+          color: item.isLiked ? '#BDC3C7' : '#BDC3C7',
+          marginRight: showButtons ? '5px' : '5px',
+        }"
+        v-if="showButtons"
+      >
+        <i
+          class="fas"
+          :class="item.isLiked ? 'fa fa-heart' : 'fa fa-heart-o'"
+        ></i>
+      </span>
+      <p class="like_count" @click="console.log(1)" v-if="showButtons">
+        {{ item.like_count }}
+      </p>
     </div>
+  </div>
 </template>
 
-
 <script>
+// import { mapState } from "vuex";
+
 export default {
   name: "SearchList",
-  data (){
-    return{
+  data() {
+    return {
       showButtons: false,
-    }
+      // videoId: null,
+    };
   },
   props: {
     item: Object,
   },
   methods: {
+    addPlaylist(fwg) {
+      this.$store.dispatch("addPlaylist", fwg.id);
+    },
     truncateTitle(title) {
       const maxLength = 42;
       if (title.length > maxLength) {
-        return title.substring(0, maxLength) + "...";
+        return `${title.substring(0, maxLength)}...`;
       }
       return title;
-    }
     },
     addPlaylistAndPlayMusic(item) {
-      this.$store.dispatch("addPlaylist", item.id);
-      console.log('재생은 아직')
+      this.$store.dispatch("playMusic", {
+        title: item.title,
+        artist: item.artist,
+      });
+      // this.$store.dispatch("getVideoDuration", this.videoId);
+      // this.$store.dispatch("addPlaylist", item.id);
+
+      // console.log("재생은 아직");
     },
     like(item) {
-      this.$store.dispatch("like", item.id)
+      this.$store.dispatch("like", item.id);
     },
     unlike(item) {
       this.$store.dispatch("unlike", item.id);
     },
+  },
+  // computed: {
+  //   ...mapState({
+  //     // videoId를 getters를 통해 가져옴
+  //     videoId: (state) => state.mypageStore.getters.getVideoId,
+  //   }),
+  // },
 };
 </script>
 
@@ -113,19 +164,19 @@ export default {
 .like_button i {
   display: inline-block;
   font-size: 18px;
-  color: #BDC3C7;
+  color: #bdc3c7;
 }
 
 .fa-heart {
-  color: #BDC3C7;
+  color: #bdc3c7;
 }
 
 .fa-heart-o {
-  color: #BDC3C7;
+  color: #bdc3c7;
 }
 
 .like_count {
-  color: #BDC3C7;
+  color: #bdc3c7;
   margin-right: 5px;
 }
 
@@ -138,5 +189,4 @@ export default {
   right: 0; /* Position it at the right edge */
   transform: translateY(-50%); /* Adjust vertical alignment */
 }
-
 </style>

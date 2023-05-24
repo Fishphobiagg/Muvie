@@ -1,25 +1,45 @@
 <template>
-  <div class="like_item" @mouseover="showButtons = true" @mouseleave="showButtons = false">
+  <div
+    class="like_item"
+    @mouseover="showButtons = true"
+    @mouseleave="showButtons = false"
+  >
     <div class="music-detail">
-      <img class="album_cover" :src="fwg.album_cover" alt="앨범 커버" :style="{ opacity: showButtons ? '0.8' : '1' }" />
+      <img
+        class="album_cover"
+        :src="fwg.album_cover"
+        alt="앨범 커버"
+        :style="{ opacity: showButtons ? '0.8' : '1' }"
+      />
       <div class="music_info">
-      <span class="music_name" @click="addPlaylist(fwg)">{{ fwg.title }}</span>
+        <span class="music_name" @click="addPlaylist(fwg)">{{
+          fwg.title
+        }}</span>
       </div>
       <span class="artist_name">{{ fwg.artist }}</span>
     </div>
-    <span class="like_button" @click="!fwg.isLiked? like(fwg):unlike(fwg)" :style="{ color: fwg.isLiked ? '#BDC3C7' : '#BDC3C7', marginRight: showButtons ? '5px' : '5px' }" v-if="showButtons">
+    <span
+      class="like_button"
+      @click="!fwg.isLiked ? like(fwg) : unlike(fwg)"
+      :style="{
+        color: fwg.isLiked ? '#BDC3C7' : '#BDC3C7',
+        marginRight: showButtons ? '5px' : '5px',
+      }"
+      v-if="showButtons"
+    >
       <i class="fas" :class="fwg.isLiked ? 'fa fa-heart' : 'fa fa-heart-o'"></i>
     </span>
-    <p class="like_count" v-if="showButtons" @click="showLikes=!showLikes">{{fwg.like_count}}</p>
-    <span class="delete_button" v-if="showButtons" @clike="deletePlaylist(fwg.id)" ><i class="fa fa-trash"></i></span>
-    <div class="liked_users" v-if="showLikedUsers">
-      <FollowList :fwg="fwg" v-for="(fwg, idx) in likedUsers" :key="idx"></FollowList>
-    </div>
+    <span class="delete_button" @clike="deletePlaylist(fwg.id)"
+      ><i class="fa fa-trash"></i
+    ></span>
+    <p class="like_count" v-if="showButtons" @click="showLikes = !showLikes">
+      {{ fwg.like_count }}
+    </p>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
 
 export default {
   name: "PlayList",
@@ -30,15 +50,19 @@ export default {
     };
   },
   methods: {
-    playMusic(musicId) {
-      console.log('음악 재생 요청')
+    addPlaylist(fwg) {
+      this.$store.dispatch("addPlaylist", fwg.id);
     },
-    deletePlaylist(musicId){
-      console.log('플레이리스트 삭제 요청')
-      this.$store.dispatch('deletePlaylist', musicId)
+    playMusic(musicId) {
+      console.log("음악 재생 요청");
+      console.log(musicId);
+    },
+    deletePlaylist(musicId) {
+      console.log("플레이리스트 삭제 요청");
+      this.$store.dispatch("deletePlaylist", musicId);
     },
     like(fwg) {
-      this.$store.dispatch("like", fwg.id)
+      this.$store.dispatch("like", fwg.id);
     },
     unlike(fwg) {
       this.$store.dispatch("unlike", fwg.id);
@@ -50,10 +74,9 @@ export default {
   computed: {
     ...mapState({
       liked_list: (state) => state.mypageStore.liked_list,
-    })
-  }
+    }),
+  },
 };
-
 </script>
 
 <style>
@@ -106,19 +129,19 @@ export default {
 .like_button i {
   display: inline-block;
   font-size: 18px;
-  color: #BDC3C7;
+  color: #bdc3c7;
 }
 
 .fa-heart {
-  color: #BDC3C7;
+  color: #bdc3c7;
 }
 
 .fa-heart-o {
-  color: #BDC3C7;
+  color: #bdc3c7;
 }
 
 .like_count {
-  color: #BDC3C7;
+  color: #bdc3c7;
   margin-right: 5px;
 }
 

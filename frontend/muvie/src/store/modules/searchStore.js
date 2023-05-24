@@ -20,24 +20,18 @@ const searchStore = {
           console.log(err);
         });
     },
-    like({ commit }, id) {
-      axios.post(`${BASE_URL}/music/like/${id}`).then((res) => {
-        console.log(res);
-        commit("updateSearchedList", res.like_list);
-      });
-    },
-    unlike({ commit }, id) {
-      axios.delete(`${BASE_URL}/music/like/${id}`).then((res) => {
-        console.log(res);
-        commit("updateSearchedList", res.like_list);
-      });
-    },
-    addPlaylist({ commit }, id) {
-      axios.post(`${BASE_URL}/music/playlist/${id}`).then((res) => {
-        console.log(res);
-        commit("updateSearchedList", res.data.like_list);
-      });
-    },
+    // like({ commit }, id) {
+    //   axios.post(`${BASE_URL}/music/like/${id}`).then((res) => {
+    //     console.log(res);
+    //     commit("updateSearchedList", res.like_list);
+    //   });
+    // },
+    // unlike({ commit }, id) {
+    //   axios.delete(`${BASE_URL}/music/like/${id}`).then((res) => {
+    //     console.log(res);
+    //     commit("updateSearchedList", res.like_list);
+    //   });
+    // },
   },
   mutations: {
     getSearchedList(state, payload) {
@@ -46,8 +40,8 @@ const searchStore = {
     },
     updateSearchedList(state, payload) {
       state.searchedList = payload;
-      console.log("검색 결과에 반영")
-    }
+      console.log("검색 결과에 반영");
+    },
   },
 };
 
