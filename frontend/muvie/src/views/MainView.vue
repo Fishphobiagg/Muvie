@@ -24,8 +24,16 @@
       </ul>
     </ModalAtom>
     <ModalAtom class="login-request" :isModalOpen="isModal2Open">
-      <div @click="navigateToLogin()">로그인하기</div>
-      <div @click="navigateToSignup()">회원가입하기</div>
+      <div>
+
+      </div>
+      <img class="modal-logo" src="../assets/logo.png" alt="">
+      <h2 class="explanation">당신의 영화를 듣고, <br>좋아하고, <br>즐겨보세요</h2>
+      <p>로그인하면 더 많은 음악을 만나실 수 있습니다!</p>
+      <div class="option-container">
+      <div @click="navigateToLogin()" class="option">로그인</div>
+      <div @click="navigateToSignup()" class="option">회원가입</div>
+      </div>
     </ModalAtom>
     <YoutubePlayer />
   </div>
@@ -255,6 +263,50 @@ export default {
 </script>
 
 <style>
+.explanation{
+ margin-right: 50px; 
+ margin-left: 50px;
+}
+
+.option-container{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.modal-logo{
+  margin-right: 2px;
+  margin-bottom: 20px;
+}
+
+.option-container{
+  height: 250px;
+}
+
+.option{
+  margin-top: 20px;
+  padding: 10px;
+  color: white;
+  border: 2px solid white;
+  border-radius: 10px;
+  background: rgb(123, 86, 232);
+
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.option:hover{
+  margin-top: 20px;
+  padding: 10px;
+  color: white;
+  border: 2px solid white;
+  border-radius: 10px;
+  background: rgb(123, 86, 232, 0.8);
+
+  font-size: 20px;
+  cursor: pointer;
+}
+
 .mainview {
   background: #eef3f7;
 }
@@ -307,10 +359,13 @@ export default {
   justify-content: center;
   cursor: pointer;
 }
-
+.login-request{
+  display: flex;
+}
 .login-request .modal-content {
-  width: 350px;
-  min-height: 200px;
+  width: 400px;
+  min-height: 580px;
   justify-content: center;
+
 }
 </style>

@@ -298,7 +298,7 @@ def search_user(request, keyword):
             'nickname':searched_user.nickname,
             'email':searched_user.email,
             'profile_picture':searched_user.profile_picture.url,
-            'is_followed': searched_user.following.filter(pk=user.pk).exists()
+            'is_followed': user.following.filter(pk=user_id).exists()
         }
         )
     return Response({"data":responses}, status=status.HTTP_200_OK)

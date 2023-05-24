@@ -1,6 +1,6 @@
 <template>
   <div class="navbar">
-    <MuvieLogo />
+    <img src="../assets/logo.png" alt="로고" class="logo">
     <div class="search-bar">
       <div class="search-input">
         <button class="search-button" @click="handleSearch">
@@ -77,6 +77,10 @@ export default {
 </script>
 
 <style>
+.logo{
+  filter: ;
+}
+
 .navbar {
   display: flex;
   align-items: center;

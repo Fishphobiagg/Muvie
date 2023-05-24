@@ -67,7 +67,7 @@ class MusicComponentView(APIView):
         user = request.user
         data = user.music_components
         response_data = {
-    "id": 5,
+    "id": user.id,
     "energy": int(float(data.energy) * 100),
     "instrumentalness": int(float(data.instrumentalness) * 100),
     "liveness": int(float(data.liveness) * 100),
