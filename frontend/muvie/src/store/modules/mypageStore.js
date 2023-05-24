@@ -149,10 +149,9 @@ const mypageStore = {
         commit("updatePlayListState");
       });
     },
-    deletePlaylist({ commit }, id) {
+    deletePlaylist(_, id) {
       axios.delete(`${BASE_URL}/music/playlist/${id}`).then((res) => {
         console.log(res);
-        commit("updatePlayListState");
       });
     },
     follow({ commit }, id) {
@@ -218,11 +217,11 @@ const mypageStore = {
 
       console.log("마이페이지 성공");
     },
-    // getUserPlayList(state, payload) {
-    //   state.play_list = payload.play_list;
-    //   console.log(state.play_list);
-    //   console.log("재생목록 요청 성공 뿌뿌");
-    // },
+    getUserPlayList(state, payload) {
+      state.play_list = payload.play_list;
+      console.log(state.play_list);
+      console.log("재생목록 요청 성공 뿌뿌");
+    },
     getPhoto(state, payload) {
       state.profile_picture_usage = payload;
 
