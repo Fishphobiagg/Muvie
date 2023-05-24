@@ -49,7 +49,6 @@
           </div>
         <!-- 상대 프로필 메뉴 -->
         <div class="other-profile" v-else>
-        </div>
         <div class="follow_info">
           <span class="count">{{followers_count}}
             <p class="follow_tag">팔로워</p>
@@ -58,6 +57,7 @@
             <p class="follow_tag">팔로잉</p>
             </span> 
           <button>{{ isFollowing() ? "팔로잉" : "팔로우" }}</button>
+        </div>
         </div>
         <ModalAtom :isModalOpen="isModalOpen">
           <h2>음악 취향</h2>
@@ -78,7 +78,7 @@ export default {
   name: "MyProfile",
   data() {
     return {
-      me: null,
+      me: true,
       editing: false,
       newNickname: "",
       formData: null,
@@ -101,6 +101,9 @@ export default {
       this.me = this.userId == newParamId;
       console.log(`이 유저는 내가 ${this.me}`);
     },
+  },
+  mounted: {
+    
   },
   computed: {
     ...mapState({
