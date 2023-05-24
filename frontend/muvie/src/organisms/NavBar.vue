@@ -58,7 +58,7 @@ export default {
     handleSearch() {
       if (this.inputData.trim() !== "") {
         this.$router.push({
-          name: "SearchView",
+          name: "SearchResultView",
           params: { keyword: this.inputData },
         });
         this.inputData = "";
