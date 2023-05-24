@@ -19,6 +19,17 @@
       <span class="artist_name">{{ fwg.artist }}</span>
     </div>
     <span
+      class="like_button"
+      @click="unlike(fwg)"
+      :style="{
+        color: fwg.isLiked ? '#BDC3C7' : '#BDC3C7',
+        marginRight: showButtons ? '5px' : '5px',
+      }"
+      v-if="showButtons"
+    >
+      <i class="fas" :class="fwg.isLiked ? 'fa fa-heart' : 'fa fa-heart-o'">{{ fwg.like_count }}</i>
+    </span>
+    <span
       class="play_button"
       @click="addPlaylist(fwg)"
       :style="{
@@ -29,18 +40,6 @@
     >
       <i class="fas fa-play"></i>
     </span>
-    <span
-      class="like_button"
-      @click="unlike(fwg)"
-      :style="{
-        color: fwg.isLiked ? '#BDC3C7' : '#BDC3C7',
-        marginRight: showButtons ? '5px' : '5px',
-      }"
-      v-if="showButtons"
-    >
-      <i class="fas" :class="fwg.isLiked ? 'fa fa-heart' : 'fa fa-heart-o'"></i>
-    </span>
-    <p class="like_count" v-if="showButtons">{{ fwg.like_count }}</p>
   </div>
 
 </template>
