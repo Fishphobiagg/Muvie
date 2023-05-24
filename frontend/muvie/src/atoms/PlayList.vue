@@ -80,19 +80,9 @@ export default {
 </script>
 
 <style>
-.like_item {
-  width: 1000px;
-  height: 80px;
-  margin: 5px auto;
-  padding: 10px 60px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
-}
 
 .music-detail {
+  width: 800px;
   height: 80px;
   display: flex;
   align-items: center;
