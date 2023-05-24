@@ -6,7 +6,7 @@ class Music(models.Model):
     artist = models.CharField(max_length=30)
     uri = models.URLField(blank=False)
     album_cover = models.URLField(blank=True)
-    video_id = models.TextField(blank=True)
+
 
 class MusicComponent(models.Model):
     energy = models.DecimalField(max_digits=3, decimal_places=2, validators=[MinValueValidator(0.0), MaxValueValidator(1.0)])
