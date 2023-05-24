@@ -42,15 +42,28 @@
     </span>
     <p class="like_count" v-if="showButtons">{{ fwg.like_count }}</p>
   </div>
+
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import LikedUserList from './LikedUserList.vue';
+
 export default {
   name: "LikeList",
+  components: {
+    LikedUserList,
+  },
   data() {
     return {
       showButtons: false,
+      showLikedUsers: false,
     };
+  },
+  computed: {
+    ...mapState({
+      liked_list: (state) => state.mypageStore.liked_list
+    })
   },
   methods: {
     addPlaylist(fwg) {
@@ -71,22 +84,13 @@ export default {
 </script>
 
 <style>
-.like_item {
-  width: 1000px;
+.music-detail {
+  width: 800px;
   height: 80px;
-  margin: 5px auto;
-  padding: 10px 60px;
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
   align-items: center;
 }
 
-.music-detail {
-  height: 80px;
-  display: flex;
-  align-items: center;
-}
 
 .album_cover {
   width: 66px;
@@ -111,7 +115,7 @@ export default {
 .like_button {
   font-size: 25px;
   cursor: pointer;
-  margin-right: 10px;
+  margin-right: 10px;;
 }
 
 .play_button {

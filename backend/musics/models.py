@@ -7,6 +7,7 @@ class Music(models.Model):
     uri = models.URLField(blank=False)
     album_cover = models.URLField(blank=True)
 
+
 class MusicComponent(models.Model):
     energy = models.DecimalField(max_digits=3, decimal_places=2, validators=[MinValueValidator(0.0), MaxValueValidator(1.0)])
     instrumentalness = models.DecimalField(max_digits=3, decimal_places=2, validators=[MinValueValidator(0.0), MaxValueValidator(1.0)])
