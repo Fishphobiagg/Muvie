@@ -16,20 +16,21 @@ const mypageStore = {
     like_list: null,
     liked_list: null,
     play_list: null,
+    videoId: null,
+    duration: null,
   },
   actions: {
-    getLikedList({commit}, id){
-      const LIKEDLIST_API = `${BASE_URL}/music/like/${id}/users`
+    getLikedList({ commit }, id) {
+      const LIKEDLIST_API = `${BASE_URL}/music/like/${id}/users`;
       console.log(LIKEDLIST_API);
       axios
         .get(LIKEDLIST_API)
         .then((res) => {
-          console.log('좋아요 누른 사람 목록 요청');
+          console.log("좋아요 누른 사람 목록 요청");
           console.log(res);
           commit("getMusicLiked", res.data);
         })
         .catch((err) => console.log(err));
-
     },
     getLikeList({ commit }) {
       const LIKELIST_API = `${BASE_URL}/accounts/like`;
@@ -80,6 +81,67 @@ const mypageStore = {
         commit("updateLikeState", res.like_list);
       });
     },
+    playMusic({ commit }, { title, artist }) {
+      console.log(title, artist);
+      const searchRequest = axios.get(
+        `https://content-youtube.googleapis.com/youtube/v3/search?q=${title}${artist}&part=snippet&maxResults=1&type=video&key=${process.env.VUE_APP_YOUTUBE_APIKEY}`
+      );
+
+      searchRequest
+        .then((res) => {
+          console.log("비디오 아이디");
+          const { videoId } = res.data.items[0].id;
+          console.log(videoId);
+          commit("setVideoId", videoId);
+
+          const durationRequest = axios.get(
+            `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&maxResults=1&id=${videoId}&key=${process.env.VUE_APP_YOUTUBE_APIKEY}`
+          );
+
+          durationRequest
+            // eslint-disable-next-line no-shadow
+            .then((res) => {
+              const { duration } = res.data.items[0].contentDetails;
+              console.log(duration);
+              commit("setDuration", duration);
+            })
+            .catch((error) => {
+              console.error("API 요청 에러:", error);
+            });
+        })
+        .catch((error) => {
+          console.error("API 요청 에러:", error);
+        });
+    },
+    // playMusic({ commit }, { title, artist }) {
+    //   console.log(title, artist);
+    //   axios
+    //     .get(
+    //       `https://content-youtube.googleapis.com/youtube/v3/search?q=${title}${artist}&part=snippet&maxResults=1&type=video&key=${process.env.VUE_APP_YOUTUBE_APIKEY}`
+    //     )
+    //     .then((res) => {
+    //       console.log("비디오 아이디");
+    //       // console.log(res.data.items[0].id.videoId);
+    //       const { videoId } = res.data.items[0].id;
+    //       console.log(videoId);
+    //       commit("setVideoId", videoId);
+    //     });
+    // },
+    // getVideoDuration(_, videoId) {
+    //   console.log(videoId, "듀레이션 가져오기");
+    //   axios
+    //     .get(
+    //       `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&maxResults=1&id=${videoId}&key=${process.env.VUE_APP_YOUTUBE_APIKEY}`
+    //     )
+    //     .then((res) => {
+    //       // const { duration } = res.data.items[0].contentDetails;
+    //       console.log(res.items);
+    //       // commit("setDuration", duration);
+    //     })
+    //     .catch((error) => {
+    //       console.error("API 요청 에러:", error);
+    //     });
+    // },
     addPlaylist({ commit }, id) {
       axios.post(`${BASE_URL}/music/playlist/${id}`).then((res) => {
         console.log(res);
@@ -137,10 +199,10 @@ const mypageStore = {
       console.log(state.like_list);
       console.log("좋아요 목록 요청 성공");
     },
-    getMusicLiked(state, payload){
+    getMusicLiked(state, payload) {
       state.liked_list = payload.liked_list;
       console.log(state.liked_list);
-      console.log("좋아요 누른 사람 목록 요청 성공")
+      console.log("좋아요 누른 사람 목록 요청 성공");
     },
     getUserDetail(state, payload) {
       state.followers = payload.detail.followers;
@@ -149,7 +211,7 @@ const mypageStore = {
       state.following_count = payload.detail.following_count;
       state.nickname = payload.user_profile.nickname;
       state.profile_picture = payload.user_profile.profile_picture;
-      state.userId = payload.user_proile.id;
+      state.userId = payload.user_profile.id;
       console.log(state);
       console.log(state.profile_picture);
 
@@ -181,6 +243,16 @@ const mypageStore = {
     updatePlayListState(state, payload) {
       state.playlist = payload;
       console.log("재생 목록 업데이트 성공 뿌뿌");
+    },
+    setVideoId(state, payload) {
+      state.videoId = payload;
+      console.log("비디오 아이디 전달");
+    },
+    setDuration(state, payload) {
+      const numbersOnly = payload.match(/\d+/g).map(Number);
+      const sec = numbersOnly[0] * 60 + numbersOnly[1];
+      state.duration = sec;
+      console.log("비디오 길이 전달", state.duration);
     },
   },
   computed: {

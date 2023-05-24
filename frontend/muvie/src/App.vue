@@ -8,8 +8,20 @@
       <router-link to="/main">Main</router-link> |
     </nav>
     <router-view />
+    <YoutubePlayer />
   </div>
 </template>
+
+<script>
+import YoutubePlayer from "./organisms/YoutubePlayer.vue";
+
+export default {
+  name: "App",
+  components: {
+    YoutubePlayer,
+  },
+};
+</script>
 
 <style>
 @import "./assets/css/global.css";
@@ -20,6 +32,7 @@
 
 body {
   box-sizing: border-box;
+  background-color: #dfe7ef;
   width: 100%;
   height: 100%;
   margin: 0px;
