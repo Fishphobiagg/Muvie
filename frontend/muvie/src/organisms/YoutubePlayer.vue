@@ -11,8 +11,8 @@
       allowfullscreen
       :style="{ display: 'none' }"
     ></iframe>
-    <i @click="stopPlayer" class="fas fa-play"></i>
-    <i class="fa-solid fa-pause"></i>
+    <i v-if="isPlaying" @click="stopPlayer" class="fas fa-pause"></i>
+    <i v-else @click="startPlayer()" class="fas fa-play"></i>
     <div class="progress-bar">
       <div class="progress" :style="{ width: `${progress}%` }"></div>
     </div>
@@ -28,7 +28,7 @@ export default {
     return {
       progress: 0, // 막대기의 길이를 나타내는 변수
       timer: null, // 타이머 변수
-      isPlaying: true,
+      currentVideoId: "", // 현재 동영상 id
     };
   },
   computed: {
@@ -36,34 +36,65 @@ export default {
       videoId: (state) => state.playerStore.videoId,
       duration: (state) => state.playerStore.duration,
       albumCover: (state) => state.playerStore.albumCover,
+      isPlaying: (state) => state.playerStore.isPlaying,
     }),
   },
   methods: {
-    onPlayerReady(event) {
-      // 플레이어가 준비되면 소리 키기
-      event.target.unMute();
+    // onPlayerReady(event) {
+    //   console.log("플레이어 준비");
+    //   if (this.isPlaying) {
+    //     // 플레이어가 준비되면 소리
+    //     event.target.unMute();
+    //     // 상태 변경
+    //     this.$store.dispatch("startPlayerState");
+    //   }
+    // },
+    // onPlayerReady(event) {
+    //   console.log("플레이어 준비");
+    //   if (this.isPlaying) {
+    //     console.log("플레이어 시작");
+    //     console.log(event.target);
+    //     event.target.playVideo(); // 플레이어 재생
+    //     this.startTimer(); // 타이머 시작
+    //     this.$store.dispatch("startPlayerState"); // 상태 변경
+    //   }
+    // },
+    startPlayer() {
+      this.$store.dispatch("startPlayerState");
+      const { youtubeIframe } = this.$refs;
+      if (youtubeIframe) {
+        youtubeIframe.src = this.videoId; // iframe의 src를 빈 문자열로 설정하여 멈추기
+      }
+      console.log("하단바로 시작 요청");
+
+      // console.log(event);
+      // this.$store.dispatch("startPlayerState"); // 상태 변경
+      // this.onPlayerReady(event);
+      // console.log("플레이어 시작 요청");
     },
     stopPlayer() {
       const { youtubeIframe } = this.$refs;
       if (youtubeIframe) {
-        youtubeIframe.src = ""; // iframe의 src를 빈 문자열로 설정하여 멈춥니다.
+        youtubeIframe.src = ""; // iframe의 src를 빈 문자열로 설정하여 멈추기
       }
       clearInterval(this.timer); // 타이머 멈춤
-      this.progress = 100; // 막대기의 길이를 최대로 설정하여 이동을 멈춥니다.\
+      this.progress = 100; // 막대기의 길이를 최대로 설정하여 이동 멈추기
       this.$store.dispatch("stopPlayerState");
     },
     startTimer() {
       console.log("스타트 타이머");
-      this.progress = 0; // 막대기의 길이 초기화
+      this.progress = 0; // 막대기 길이 초기화
       this.timer = setInterval(
         this.updateProgress,
         (this.duration * 1000) / 100
       ); // duration 동안 100번에 걸쳐서 updateProgress 메서드 호출
+      this.$store.dispatch("startPlayerState");
     },
     updateProgress() {
       if (this.progress >= 100) {
         // 막대기가 이미 최대 길이에 도달한 경우
         clearInterval(this.timer); // 타이머 멈춤
+        this.$store.dispatch("stopPlayerState");
         return; // 함수 종료
       }
 
@@ -73,16 +104,67 @@ export default {
         // 막대기가 최대 길이에 도달한 경우
         this.progress = 100; // 최대 길이로 설정
         clearInterval(this.timer); // 타이머 멈춤
-        // 원하는 동작 수행
+        this.$store.dispatch("stopPlayerState");
         console.log("타이머 종료"); // 예시로 콘솔에 메시지 출력
+      }
+    },
+    loadVideoById(videoId) {
+      const player = document.getElementById("player");
+      player.src = `https://www.youtube.com/embed/${videoId}`;
+    },
+    playVideo() {
+      const player = document.getElementById("player");
+      player.contentWindow.postMessage(
+        '{"event":"command","func":"playVideo","args":""}',
+        "*"
+      );
+    },
+    reloadPage() {
+      // 페이지 새로고침 시 실행되는 동작을 여기에 작성합니다.
+      console.log("페이지 새로고침됨");
+      this.$store.dispatch("stopPlayerState");
+    },
+  },
+  watch: {
+    $route() {
+      this.reloadPage();
+    },
+    // isPlaying이 false면 무조건 플레이어 멈추기
+    isPlaying(newValue) {
+      if (!newValue) {
+        console.log("플레이어 멈춰", newValue);
+        this.stopPlayer();
+      }
+    },
+    duration(newValue) {
+      console.log("듀레이션 값 변경", newValue);
+      const { youtubeIframe } = this.$refs;
+      if (youtubeIframe) {
+        console.log("듀레이션 바뀜");
+        youtubeIframe.contentWindow.postMessage(
+          '{"event":"command","func":"playVideo","args":""}',
+          "*"
+        ); // 플레이어 재생
+      }
+      this.startTimer(); // 타이머 시작
+      this.$store.dispatch("startPlayerState"); // 상태 변경
+    },
+    currentVideoId(newValue) {
+      if (newValue) {
+        this.loadVideoById(newValue); // 동영상 로드
+        this.playVideo(); // 동영상 재생
       }
     },
   },
   mounted() {
-    // duration 값이 변경되면 타이머 시작
-    this.$watch("duration", () => {
-      this.startTimer();
-    });
+    if (!this.isPlaying) {
+      console.log("새로고침됐지만 멈춰");
+      this.$store.dispatch("stopPlayerState");
+      const { youtubeIframe } = this.$refs;
+      if (youtubeIframe) {
+        youtubeIframe.src = ""; // iframe의 src를 빈 문자열로 설정하여 멈추기
+      }
+    }
   },
 };
 </script>
@@ -104,6 +186,7 @@ export default {
   width: 100%;
   height: 12%;
   background-color: #eef3f7;
+  /* opacity: 0.3; */
   box-shadow: 0px -5px 15px -10px rgba(50, 88, 130, 0.22);
   text-align: center;
   display: flex; /* 요소들을 가로 방향으로 정렬하기 위해 flexbox 사용 */
@@ -114,6 +197,7 @@ export default {
 
 #player i {
   margin-right: 10px;
+  cursor: pointer;
 }
 
 #player i.fas.fa-play {

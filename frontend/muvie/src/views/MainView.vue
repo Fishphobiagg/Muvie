@@ -267,7 +267,6 @@ export default {
   font-size: 70px;
   margin-top: 100px;
   margin-left: 80px;
-  opacity: 0.7;
   text-align: left;
 }
 

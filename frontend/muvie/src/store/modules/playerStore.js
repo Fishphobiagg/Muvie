@@ -47,8 +47,11 @@ const playerStore = {
     saveAlbumCover({ commit }, albumCover) {
       commit("setAlbumCover", albumCover);
     },
-    stopPlayerState({ commit }, albumCover) {
-      commit("stopPlayerState", albumCover);
+    startPlayerState({ commit }) {
+      commit("startPlayerState");
+    },
+    stopPlayerState({ commit }) {
+      commit("stopPlayerState");
     },
   },
   mutations: {
