@@ -7,6 +7,8 @@ const playerStore = {
   state: {
     videoId: null,
     duration: null,
+    albumCover: null,
+    isPlaying: false,
   },
   actions: {
     playMusic({ commit }, { title, artist }) {
@@ -32,6 +34,7 @@ const playerStore = {
               const { duration } = res.data.items[0].contentDetails;
               console.log(duration);
               commit("setDuration", duration);
+              commit("startPlayerState");
             })
             .catch((error) => {
               console.error("API 요청 에러:", error);
@@ -41,6 +44,12 @@ const playerStore = {
           console.error("API 요청 에러:", error);
         });
     },
+    saveAlbumCover({ commit }, albumCover) {
+      commit("setAlbumCover", albumCover);
+    },
+    stopPlayerState({ commit }, albumCover) {
+      commit("stopPlayerState", albumCover);
+    },
   },
   mutations: {
     setVideoId(state, payload) {
@@ -49,9 +58,25 @@ const playerStore = {
     },
     setDuration(state, payload) {
       const numbersOnly = payload.match(/\d+/g).map(Number);
-      const sec = numbersOnly[0] * 60 + numbersOnly[1];
-      state.duration = sec;
+      if (numbersOnly.length === 1) {
+        const sec = numbersOnly[0];
+        state.duration = sec;
+      } else {
+        const sec = numbersOnly[0] * 60 + numbersOnly[1];
+        state.duration = sec;
+      }
       console.log("비디오 길이 전달", state.duration);
+    },
+    setAlbumCover(state, albumCover) {
+      state.albumCover = albumCover;
+    },
+    startPlayerState(state) {
+      state.isPlaying = true;
+      console.log("지금 플레이어 상태는 ", state, state.isPlaying);
+    },
+    stopPlayerState(state) {
+      state.isPlaying = false;
+      console.log("지금 플레이어 상태는 ", state, state.isPlaying);
     },
   },
 };

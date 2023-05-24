@@ -1,10 +1,6 @@
 <template>
   <div id="player">
-    <!-- <img
-      class="album_cover"
-      :src="album_cover"
-      alt="앨범 커버"
-    /> -->
+    <img class="albumCover" :src="albumCover" alt="앨범 커버" />
     <iframe
       ref="youtubeIframe"
       width="100"
@@ -37,8 +33,9 @@ export default {
   },
   computed: {
     ...mapState({
-      videoId: (state) => state.mypageStore.videoId,
-      duration: (state) => state.mypageStore.duration,
+      videoId: (state) => state.playerStore.videoId,
+      duration: (state) => state.playerStore.duration,
+      albumCover: (state) => state.playerStore.albumCover,
     }),
   },
   methods: {
@@ -52,7 +49,8 @@ export default {
         youtubeIframe.src = ""; // iframe의 src를 빈 문자열로 설정하여 멈춥니다.
       }
       clearInterval(this.timer); // 타이머 멈춤
-      this.progress = 100; // 막대기의 길이를 최대로 설정하여 이동을 멈춥니다.
+      this.progress = 100; // 막대기의 길이를 최대로 설정하여 이동을 멈춥니다.\
+      this.$store.dispatch("stopPlayerState");
     },
     startTimer() {
       console.log("스타트 타이머");
@@ -90,6 +88,15 @@ export default {
 </script>
 
 <style>
+.albumCover {
+  width: 66px;
+  height: 66px;
+  background-color: white;
+  border-radius: 5px;
+  overflow: hidden;
+  object-fit: cover;
+}
+
 #player {
   position: fixed;
   left: 0;

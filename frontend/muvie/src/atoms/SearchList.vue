@@ -76,6 +76,7 @@ export default {
       return title;
     },
     addPlaylistAndPlayMusic(item) {
+      this.$store.dispatch("saveAlbumCover", item.album_cover);
       this.$store.dispatch("playMusic", {
         title: item.title,
         artist: item.artist,

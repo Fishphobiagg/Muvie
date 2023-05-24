@@ -80,7 +80,6 @@ export default {
 </script>
 
 <style>
-
 .music-detail {
   width: 800px;
   height: 80px;
