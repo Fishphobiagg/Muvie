@@ -249,7 +249,7 @@ def collaborative_filtering(user, n=10):
     elif len(liked_music_ids) < 10:
         other_query = list(Music.objects.order_by('?').values_list('id', flat=True)[:10 - len(liked_music_ids)])
         liked_music_ids.extend(other_query)
-    similar_users = random.sample(list(User.objects.filter(musicuserlike__music_id__in=liked_music_ids).exclude(id=user.id)), 10)
+    similar_users = random.sample(list(User.objects.filter(musicuserlike__music_id__in=liked_music_ids)), 10)
     similarity_scores = {}
     for similar_user in similar_users:
         similar_user_liked_music_ids = MusicUserLike.objects.filter(user=similar_user).values_list('music_id')
