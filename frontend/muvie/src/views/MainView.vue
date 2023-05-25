@@ -7,14 +7,26 @@
         Welcome Back!
       </div>
       <!-- <CircleCarousel :components="components" /> -->
-      <div v-if="components">
-        <CarouselView :components="components" />
+      <div class="full-height-container">
+        <transition name="slide">
+          <div class="full-height-scroll">
+            <CarouselView :components="components" />
+          </div>
+        </transition>
       </div>
-      <div v-if="users">
-        <UsersView :users="users" />
+      <div class="full-height-container">
+        <transition name="slide">
+          <div class="full-height-scroll">
+            <UsersView :users="users" />
+          </div>
+        </transition>
       </div>
-      <div v-if="likes">
-        <LikesView :likes="likes" />
+      <div class="full-height-container">
+        <transition name="slide">
+          <div class="full-height-scroll">
+            <LikesView :likes="likes" />
+          </div>
+        </transition>
       </div>
     </div>
     <ModalAtom class="profile-modal" :isModalOpen="isModal1Open">
@@ -259,6 +271,17 @@ export default {
 <style>
 .mainview {
   background: #eef3f7;
+  height: 100vh;
+  overflow-y: auto;
+}
+.full-height-container {
+  height: 100vh;
+  display: flex;
+}
+.full-height-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
 }
 
 .welcome-msg {

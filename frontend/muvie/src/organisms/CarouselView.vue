@@ -1,48 +1,43 @@
 <template>
-  <div class="flex-center">
-    <div class="circular-slider flex-center">
-      <ul class="wrapper">
-        <li class="slides" style="--img-no: 1">
-          <img :src="components[0].poster" alt="성분 추천 음악" />
-          <div>
-            <div>{{ components[0].title }}</div>
-            <div>{{ components[0].artist }}</div>
-            <div>{{ components[0].album }}</div>
+  <div class="carousel-wrapper">
+    <div
+      class="carousel"
+      @wheel="handleWheel"
+      @mousedown="handleMouseDown"
+      @touchstart="handleMouseDown"
+      @mousemove="handleMouseMove"
+      @touchmove="handleMouseMove"
+      @mouseup="handleMouseUp"
+      @touchend="handleMouseUp"
+      ref="carousel"
+    >
+      <div
+        v-for="(component, index) in components"
+        :key="index"
+        class="carousel-item"
+        :class="{ active: index === active }"
+        :style="{
+          transform: `translateX(${
+            (index - active) * (itemWidth + spacing)
+          }px) translateY(${(index - active) * (itemWidth / -2)}px) rotateZ(${
+            (index - active) * 15
+          }deg)`,
+          zIndex: components.length - Math.abs(active - index),
+          opacity: 1 - Math.abs(active - index) / components.length,
+        }"
+        @click="clickAnimation(index)"
+      >
+        <div class="carousel-box">
+          <div class="image-container">
+            <img :src="component.poster" alt="성분 추천 음악" />
           </div>
-        </li>
-        <li class="slides" style="--img-no: 2">
-          <img :src="components[1].poster" alt="성분 추천 음악" />
           <div>
-            <div>{{ components[1].title }}</div>
-            <div>{{ components[1].artist }}</div>
-            <div>{{ components[1].album }}</div>
+            <div>{{ component.title }}</div>
+            <div>{{ component.artist }}</div>
+            <div>{{ component.album }}</div>
           </div>
-        </li>
-        <li class="slides" style="--img-no: 3">
-          <img :src="components[2].poster" alt="성분 추천 음악" />
-          <div>
-            <div>{{ components[2].title }}</div>
-            <div>{{ components[2].artist }}</div>
-            <div>{{ components[2].album }}</div>
-          </div>
-        </li>
-        <li class="slides" style="--img-no: 4">
-          <img :src="components[3].poster" alt="성분 추천 음악" />
-          <div>
-            <div>{{ components[3].title }}</div>
-            <div>{{ components[3].artist }}</div>
-            <div>{{ components[3].album }}</div>
-          </div>
-        </li>
-        <li class="slides" style="--img-no: 5">
-          <img :src="components[4].poster" alt="성분 추천 음악" />
-          <div>
-            <div>{{ components[4].title }}</div>
-            <div>{{ components[4].artist }}</div>
-            <div>{{ components[4].album }}</div>
-          </div>
-        </li>
-      </ul>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -53,43 +48,114 @@ export default {
   props: {
     components: Array,
   },
+  data() {
+    return {
+      active: 0,
+      isDown: false,
+      startX: 0,
+      itemWidth: 180,
+      spacing: 20,
+    };
+  },
+  methods: {
+    clickAnimation(index) {
+      this.active = index;
+    },
+    handleWheel(event) {
+      event.preventDefault();
+      this.active += event.deltaY > 0 ? 1 : -1;
+      this.active = Math.max(
+        0,
+        Math.min(this.active, this.components.length - 1)
+      );
+    },
+    handleMouseDown(event) {
+      this.isDown = true;
+      this.startX =
+        event.clientX || (event.touches && event.touches[0].clientX) || 0;
+    },
+    handleMouseMove(event) {
+      if (!this.isDown) return;
+      const x =
+        event.clientX || (event.touches && event.touches[0].clientX) || 0;
+      const deltaX = x - this.startX;
+      const itemDelta = Math.round(deltaX / (this.itemWidth + this.spacing));
+      this.active = Math.max(
+        0,
+        Math.min(this.active - itemDelta, this.components.length - 1)
+      );
+    },
+    handleMouseUp() {
+      this.isDown = false;
+    },
+  },
 };
 </script>
 
-<style>
-.flex-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+<style scoped>
+.carousel-wrapper {
   width: 100%;
+  height: 300px;
+  perspective: 800px;
+  overflow: hidden;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0) 0%,
+    #fff 100%
+  ); /* 하얀색 그라데이션 배경 */
 }
 
-/* .circular-slider {
+.carousel {
   position: relative;
-  top: 42vh;
-
-  width: calc(50rem / 2);
-  height: calc(50rem / 2);
-
-  color: #fff;
-  text-align: center;
-} */
-
-.wrapper {
+  width: 100%;
+  height: 100%;
   display: flex;
-  justify-content: center;
   align-items: center;
-  height: 400px;
+  justify-content: center;
+  transform-style: preserve-3d;
+  transition: transform 0.5s;
+  cursor: grab;
 }
 
-.slides {
-  list-style: none;
+.carousel-item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 180px;
+  height: 250px;
+  transition: transform 0.5s, opacity 0.5s, z-index 0.5s;
 }
 
-.slides img {
-  margin: 5px;
+.carousel-box {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  cursor: pointer;
+}
 
-  height: 100px;
-  width: 100px;
+.image-container {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 100%; /* 이미지의 가로 세로 비율에 따라 조정 */
+  overflow: hidden;
+}
+
+.carousel-box img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 이미지를 가로 세로 비율에 맞게 조정 */
+  border-radius: 10px;
+}
+.carousel-item.active {
+  z-index: 100;
 }
 </style>

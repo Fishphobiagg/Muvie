@@ -1,54 +1,38 @@
 <template>
-  <div class="flex-center">
-    <div class="circular-slider flex-center">
-      <ul class="wrapper">
-        <li class="slides" style="--img-no: 1">
-          <img
-            :src="`http://127.0.0.1:8000/${users[0].profile_picture}`"
-            alt="추천
-          유저"
-          />
-          <div>
-            <div>{{ users[0].nickname }}</div>
-          </div>
-        </li>
-        <li class="slides" style="--img-no: 2">
-          <img
-            :src="`http://127.0.0.1:8000/${users[1].profile_picture}`"
-            alt="추천 유저"
-          />
-          <div>
-            <div>{{ users[1].nickname }}</div>
-          </div>
-        </li>
-        <li class="slides" style="--img-no: 3">
-          <img
-            :src="`http://127.0.0.1:8000/${users[2].profile_picture}`"
-            alt="추천 유저"
-          />
-          <div>
-            <div>{{ users[2].nickname }}</div>
-          </div>
-        </li>
-        <li class="slides" style="--img-no: 4">
-          <img
-            :src="`http://127.0.0.1:8000/${users[3].profile_picture}`"
-            alt="추천 유저"
-          />
-          <div>
-            <div>{{ users[3].nickname }}</div>
-          </div>
-        </li>
-        <li class="slides" style="--img-no: 5">
-          <img
-            :src="`http://127.0.0.1:8000/${users[4].profile_picture}`"
-            alt="추천 유저"
-          />
-          <div>
-            <div>{{ users[4].nickname }}</div>
-          </div>
-        </li>
-      </ul>
+  <div class="slider">
+    <h6>님과 비슷한 유저 추천</h6>
+    <div class="slide-track">
+      <div
+        class="slide"
+        v-for="(user, index) in users"
+        :key="index"
+        :style="`--img-no: ${index + 1}`"
+      >
+        <img
+          class="user-slide-img"
+          :src="`http://127.0.0.1:8000/${user.profile_picture}`"
+          alt="추천 유저"
+        />
+        <div>
+          <div class="user-slide-nickname">{{ user.nickname }}</div>
+        </div>
+      </div>
+      <!-- 추가: 원래 슬라이드를 복제하여 오른쪽에 추가 -->
+      <div
+        class="slide"
+        v-for="(user, index) in users"
+        :key="index + 5"
+        :style="`--img-no: ${index + 1}`"
+      >
+        <img
+          class="user-slide-img"
+          :src="`http://127.0.0.1:8000/${user.profile_picture}`"
+          alt="추천 유저"
+        />
+        <div>
+          <div>{{ user.nickname }}</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -63,39 +47,47 @@ export default {
 </script>
 
 <style>
-.flex-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-}
-
-/* .circular-slider {
+.slider {
+  background: white;
+  box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.125);
+  height: 900px;
+  margin: auto;
+  overflow: hidden;
   position: relative;
-  top: 42vh;
+  width: 960px;
+}
 
-  width: calc(50rem / 2);
-  height: calc(50rem / 2);
-
-  color: #fff;
-  text-align: center;
-} */
-
-.wrapper {
+.slide-track {
+  animation: scroll 15s linear infinite;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 400px;
+  height: 600px;
+  width: calc(250px * 10); /* 변경: 슬라이드 개수에 맞게 수정 */
 }
 
-.slides {
-  list-style: none;
-}
-
-.slides img {
-  margin: 5px;
-
+.slide {
   height: 100px;
-  width: 100px;
+  width: 250px;
+  flex: 0 0 250px; /* 변경: 슬라이드 너비 설정 */
+}
+
+.user-slide-img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+}
+.user-slide-nickname {
+  margin-top: 10px;
+  font-size: 20px;
+  font-weight: 700;
+}
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(
+      calc(-250px * 5)
+    ); /* 변경: 원래 슬라이드 개수에 맞게 수정 */
+  }
 }
 </style>
