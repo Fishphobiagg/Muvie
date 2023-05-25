@@ -45,7 +45,6 @@ class ComponentSerializer(serializers.ModelSerializer):
     speechiness = serializers.FloatField()
     valence = serializers.FloatField()
     tempo = serializers.FloatField()
-    mode = serializers.FloatField()
     loudness = serializers.FloatField()
     danceability = serializers.FloatField()
 
@@ -57,14 +56,13 @@ class ComponentSerializer(serializers.ModelSerializer):
         data["speechiness"] = float(data.get("speechiness", 0)) / 100
         data["valence"] = float(data.get("valence", 0)) / 100
         data["tempo"] = int(data.get("tempo", 0)) * 3 + 50
-        data["mode"] = float(data.get("mode", 0)) / 100
         data["loudness"] = -int(data.get("loudness", 0)) * 3/5
         data["danceability"] = float(data.get("danceability", 0)) / 100
         return super().to_internal_value(data)
 
     class Meta:
         model = MusicComponent
-        fields = '__all__'
+        exclude = ('mode',)
 
 class LikedUserSerializer(serializers.ModelSerializer):
     follower_count = serializers.SerializerMethodField()

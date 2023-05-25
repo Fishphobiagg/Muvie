@@ -14,7 +14,9 @@ from .serializers import *
 from musics.models import Music
 from accounts.models import MusicUserLike, User
 
-
+import numpy as np
+from numpy import dot
+from numpy.linalg import norm
 
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -202,7 +204,6 @@ def recommend_components(request):
         'speechiness': component.speechiness,
         'valence': component.valence,
         'tempo': component.tempo,
-        'mode': component.mode,
         'loudness': component.loudness,
         'danceability': component.danceability,
     }
@@ -230,15 +231,16 @@ def recommend_components(request):
 def recommend_user(request):
     user = request.user
     random_users = random.sample(list(User.objects.exclude(pk=user.pk).exclude(following=user)), (User.objects.all().count() - User.objects.filter(following=user).count())//10) # 대규모로 갈 경우 속도가 느려지기 때문에 후에 수정
-    user_vector = calculate_vector(user)
+    user_vector = np.array(calculate_vector(user))
     random_user_list = []
     for random_user in random_users:
-        random_user_vector = calculate_vector(random_user)
-        similarity = cosine_similarity(user_vector, random_user_vector)[0][0]
+        random_user_vector = np.array(calculate_vector(random_user))
+        similarity = dot(user_vector, random_user_vector)/(norm(user_vector)*norm(random_user_vector))        
         random_user_list.append((similarity, random_user))
-        
+    
     random_user_list.sort(key=lambda x: x[0], reverse=True)
     topusers = [user[1] for user in random_user_list[:5]]
+
     user_serializer = SimpleUserSerializer(topusers, many=True)
     return Response({"recommend":user_serializer.data})
 
