@@ -12,7 +12,7 @@
         :style="{ opacity: showButtons ? '0.8' : '1' }"
       />
       <div class="music_info">
-        <span class="music_name" @click="addPlaylist(fwg)">{{
+        <span class="music_name" @click="playMusic(fwg)">{{
           fwg.title
         }}</span>
       </div>

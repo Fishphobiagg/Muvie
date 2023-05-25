@@ -75,7 +75,6 @@ class MusicComponentView(APIView):
     "speechiness": int(float(data.speechiness) * 100),
     "valence": int(float(data.valence) * 100),
     "tempo": int((data.tempo-50)/3),
-    "mode": int(float(data.mode) * 100),
     "loudness": int(-data.loudness*5/3),
     "danceability": int(float(data.danceability) * 100)
 }

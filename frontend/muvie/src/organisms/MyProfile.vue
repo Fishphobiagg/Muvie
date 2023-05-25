@@ -1,6 +1,8 @@
 <!-- eslint-disable no-restricted-syntax -->
 <template>
   <div>
+    <img src="../assets/logo.png" alt="로고" class="logo" @click="navigateToMain()">
+    <i class=""></i>
     <div class="my-profile">
       <div class="my-photo-detail">
         <img
@@ -121,6 +123,9 @@ export default {
     },
   },
   methods: {
+    navigateToMain(){
+      this.$router.push({name:"MainView"})
+    },
     ...mapMutations(["updatePhoto"]),
     isFollowing() {
       console.log(this.following);
@@ -183,7 +188,15 @@ export default {
 </script>
 
 <style>
-.follow_info {
+.logo {
+  width: 120px;
+  height: 40px;
+  margin-left: 30px;
+  cursor: pointer;
+  display: flex;
+  justify-content: start;
+}
+.follow_info{
   display: flex;
   flex-direction: row;
 }

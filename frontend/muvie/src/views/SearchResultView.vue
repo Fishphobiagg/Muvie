@@ -1,5 +1,6 @@
 <template>
   <div>
+    <img src="../assets/logo.png" alt="" class="logo" @click="navigateToMain()">
     <div class="tab">
       <div class="search-bar">
         <div class="search-input">
@@ -89,6 +90,10 @@ export default {
         this.inputData = "";
       }
     },
+    navigateToMain(){
+      this.$router.push({name:"MainView"})
+    }
+    ,
     clickButton(idx) {
       this.tab = idx;
       const lineElement = this.$refs.line;
@@ -113,6 +118,15 @@ export default {
 </script>
 
 <style>
+.logo{
+  width: 120px;
+  height: 40px;
+  display: flex;
+  cursor: pointer;
+  display: flex;
+  justify-content: start;
+
+}
 .tab {
   position: relative;
   width: 100%;

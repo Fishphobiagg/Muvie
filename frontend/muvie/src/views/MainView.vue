@@ -38,7 +38,7 @@
     </ModalAtom>
     <ModalAtom class="login-request" :isModalOpen="isModal2Open">
       <div></div>
-      <img class="modal-logo" src="../assets/logo.png" alt="" />
+      <img class="modal-logo" src="../assets/logo2.png" alt="" />
       <h2 class="explanation">
         당신의 영화를 듣고, <br />좋아하고, <br />즐겨보세요
       </h2>
@@ -350,7 +350,7 @@ export default {
 }
 
 .welcome-msg {
-  width: 500px;
+  width: 600px;
   height: 200px;
   font-size: 60px;
   margin-top: 50px;
