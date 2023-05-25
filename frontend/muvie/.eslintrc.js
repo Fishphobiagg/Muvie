@@ -18,5 +18,12 @@ module.exports = {
   plugins: ["vue", "eslint-plugin-prettier"],
   rules: {
     "prettier/prettier": "error",
+    "vue/multi-word-component-names": [
+      "error",
+      {
+        ignores: [],
+      },
+    ],
+    "prefer-destructuring": ["error", { object: true, array: false }],
   },
 };
