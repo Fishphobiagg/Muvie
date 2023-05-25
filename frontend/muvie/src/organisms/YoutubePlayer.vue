@@ -1,6 +1,12 @@
 <template>
   <div id="player">
-    <img class="albumCover" :src="albumCover" alt="앨범 커버" />
+    <img
+      v-if="albumCover"
+      class="albumCover"
+      :src="albumCover"
+      alt="앨범 커버"
+    />
+    <i v-else class="fa-sharp fa-solid fa-music" style="color: gray"></i>
     <iframe
       ref="youtubeIframe"
       width="100"
@@ -203,6 +209,12 @@ export default {
   filter: blur(10px); */
 }
 
+.fa-sharp {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 17px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
 #player {
   position: fixed;
   left: 0;
@@ -242,6 +254,7 @@ export default {
   align-items: flex-start; /* 수정된 부분 */
   justify-content: center;
   width: 60%;
+  margin-left: 30px;
 }
 
 .progress-bar {
