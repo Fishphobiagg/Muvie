@@ -1,5 +1,5 @@
 <template>
-  <div class="slider">
+  <div class="user-slider">
     <h2 class="slider-nickname">
       {{ nickname || "익명의 유저" }}님과 비슷한 유저 추천
     </h2>
@@ -64,18 +64,24 @@ export default {
 </script>
 
 <style>
-.slider {
+.user-slider {
   background-color: transparent;
   box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.125);
   height: 900px;
-  margin: auto;
+  margin: 0 auto;
   overflow: hidden;
   position: relative;
-  width: 960px;
+  width: 100vw;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .slider-nickname {
-  margin-bottom: 60px;
+  margin-bottom: 200px;
+  font-size: 70px;
+  opacity: 0.9;
 }
 .slide-track {
   animation: scroll 15s linear infinite;

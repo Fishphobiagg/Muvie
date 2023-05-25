@@ -52,8 +52,12 @@
               >{{ following_count }}
               <p class="follow_tag">팔로잉</p>
             </span>
-            <button @click="handleModal">취향 설정</button>
-            <button @click="editProfile">프로필 편집</button>
+            <button class="profile-button" @click="handleModal">
+              취향 설정
+            </button>
+            <button class="profile-button" @click="editProfile">
+              프로필 편집
+            </button>
           </div>
         </div>
         <!-- 상대 프로필 메뉴 -->
@@ -67,7 +71,9 @@
               >{{ following_count }}
               <p class="follow_tag">팔로잉</p>
             </span>
-            <button>{{ isFollowing() ? "팔로잉" : "팔로우" }}</button>
+            <button class="profile-button">
+              {{ isFollowing() ? "팔로잉" : "팔로우" }}
+            </button>
           </div>
         </div>
         <ModalAtom :isModalOpen="isModalOpen">
@@ -256,11 +262,13 @@ export default {
 .my-profile-detail button {
   /* margin: 20px; */
   margin: 10px;
+  height: 50px;
+
   padding: 10px 20px;
   background: white;
   /* 그림자 수정 필요 */
   box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
-  border-radius: 15px;
+  border-radius: 50px;
   text-decoration: none;
   border: none;
   cursor: pointer;

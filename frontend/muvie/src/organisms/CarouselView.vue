@@ -1,5 +1,8 @@
 <template>
   <div class="carousel-wrapper">
+    <div class="welcome-msg">
+      {{ nickname || "익명의 유저" }} 님을 위한 <br />오늘의 음악
+    </div>
     <div
       class="carousel"
       @wheel="handleWheel"
@@ -43,6 +46,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "CarouselView",
   props: {
@@ -88,6 +93,14 @@ export default {
     handleMouseUp() {
       this.isDown = false;
     },
+  },
+  computed: {
+    ...mapState({
+      nickname: (state) =>
+        localStorage.getItem("vuex") && state.loginStore.userInfo
+          ? state.loginStore.userInfo.nickname
+          : "익명의 유저",
+    }),
   },
 };
 </script>
