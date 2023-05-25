@@ -1,9 +1,16 @@
 import Vue from "vue";
 import axios from "axios";
 // import VueYoutube from "vue-youtube";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import Flicking from "@egjs/vue-flicking";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import "@egjs/vue-flicking/dist/flicking.css";
+
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
+
+Vue.use(Flicking);
 
 // request interceptor
 axios.interceptors.request.use(

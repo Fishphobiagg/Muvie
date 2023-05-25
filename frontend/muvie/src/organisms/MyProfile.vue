@@ -41,7 +41,7 @@
           ></i>
         </div>
         <!-- 내 프로필 메뉴 -->
-        <div class="my-profile" v-if="me">
+        <div class="my-profile" v-if="userId == paramId">
           <div class="follow_info">
             <span class="count"
               >{{ followers_count }}

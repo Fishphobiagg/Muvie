@@ -3,10 +3,6 @@
     <div class="mainview">
       <NavBar class="navbar" @open-modal="handleModal" />
       <div class="one-view">
-        <!-- <div class="welcome-msg">
-          {{ nickname || "익명의 유저" }} 님을 위한 <br />오늘의 음악
-        </div> -->
-        <!-- <CircleCarousel :components="components" /> -->
         <div class="full-height-container first">
           <transition name="slide">
             <div class="full-height-scroll">
@@ -90,10 +86,14 @@ export default {
       this.$router.push({ name: "Profile", params: { userId } });
     },
     navigateToLogin() {
-      this.$router.push({ name: "Login" });
+      if (this.$route.path !== "/login") {
+        this.$router.push("/login");
+      }
     },
     navigateToSignup() {
-      this.$router.push({ name: "Signup" });
+      if (this.$route.path !== "/signup") {
+        this.$router.push("/signup");
+      }
     },
     logout() {
       const vuexData = JSON.parse(localStorage.getItem("vuex"));
@@ -101,19 +101,28 @@ export default {
         delete vuexData.loginStore;
         localStorage.setItem("vuex", JSON.stringify(vuexData));
       }
+      this.localStorageValue = false;
       this.localStorageValueExists();
     },
     localStorageValueExists() {
       console.log("로컬스토리지 있니?");
       const vuexData = JSON.parse(localStorage.getItem("vuex"));
-      console.log(vuexData.loginStore.userInfo);
-      this.localStorageValue = vuexData.loginStore.userInfo;
+      console.log(vuexData.loginStore);
+      console.log(vuexData);
+      this.localStorageValue =
+        vuexData.loginStore.isLogin !== undefined
+          ? vuexData.loginStore.isLogin
+          : false;
+      console.log("지금 로컬스토리지는?");
+      console.log(this.localStorageValue);
     },
     handleLocalStorageChange(value) {
-      console.log("있으면 감시");
+      console.log(value, "있으면 감시");
       if (!value) {
+        console.log("모달열림");
         this.isModal2Open = true;
       } else {
+        console.log("모달 안열림");
         this.isModal2Open = false;
       }
       console.log(this.isModal2Open);
