@@ -77,10 +77,10 @@ export default {
 </script>
 
 <style>
+
 .delete_button{
   cursor: pointer;
 }
-
 .music-detail {
   width: 800px;
   height: 80px;

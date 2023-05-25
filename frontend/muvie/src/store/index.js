@@ -7,6 +7,7 @@ import mypageStore from "./modules/mypageStore";
 import mainStore from "./modules/mainStore";
 import searchStore from "./modules/searchStore";
 import preferenceStore from "./modules/preferenceStore";
+import playerStore from "./modules/playerStore";
 
 Vue.use(Vuex);
 
@@ -22,6 +23,7 @@ export default new Vuex.Store({
     mainStore,
     searchStore,
     preferenceStore,
+    playerStore,
   },
-  plugins: [createPersistedState({ paths: ["loginStore"] })],
+  plugins: [createPersistedState({ paths: ["loginStore", "playerStore"] })],
 });

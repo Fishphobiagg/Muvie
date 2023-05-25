@@ -65,8 +65,8 @@ export default {
     item: Object,
   },
   methods: {
-    addPlaylist(fwg) {
-      this.$store.dispatch("addPlaylist", fwg.id);
+    addPlaylist(item) {
+      this.$store.dispatch("addPlaylist", item.id);
     },
     truncateTitle(title) {
       const maxLength = 42;
@@ -76,10 +76,13 @@ export default {
       return title;
     },
     addPlaylistAndPlayMusic(item) {
+      this.$store.dispatch("saveAlbumCover", item.album_cover);
       this.$store.dispatch("playMusic", {
         title: item.title,
         artist: item.artist,
       });
+      this.$store.dispatch("addPlaylist", item.id);
+
     },
     like(item) {
       this.$store.dispatch("like", item.id);
@@ -88,12 +91,6 @@ export default {
       this.$store.dispatch("unlike", item.id);
     },
   },
-  // computed: {
-  //   ...mapState({
-  //     // videoId를 getters를 통해 가져옴
-  //     videoId: (state) => state.mypageStore.getters.getVideoId,
-  //   }),
-  // },
 };
 </script>
 
