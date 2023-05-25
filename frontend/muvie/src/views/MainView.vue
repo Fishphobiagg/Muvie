@@ -83,18 +83,18 @@ export default {
       this.$router.push({ name: "Signup" });
     },
     logout() {
-      localStorage.removeItem("vuex");
+      const vuexData = JSON.parse(localStorage.getItem("vuex"));
+      if (vuexData && vuexData.loginStore) {
+        delete vuexData.loginStore;
+        localStorage.setItem("vuex", JSON.stringify(vuexData));
+      }
       this.localStorageValueExists();
     },
     localStorageValueExists() {
       console.log("로컬스토리지 있니?");
-      console.log(localStorage.getItem("vuex"));
-      console.log(localStorage.getItem("vuex") != null);
-      this.localStorageValue =
-        // eslint-disable-next-line eqeqeq
-        localStorage.getItem("vuex") != null &&
-        // eslint-disable-next-line eqeqeq
-        localStorage.getItem("vuex") != undefined;
+      const vuexData = JSON.parse(localStorage.getItem("vuex"));
+      console.log(vuexData.loginStore);
+      this.localStorageValue = vuexData.loginStore;
     },
     handleLocalStorageChange(value) {
       console.log("있으면 감시");
@@ -115,9 +115,11 @@ export default {
   computed: {
     ...mapState({
       userId: (state) =>
-        localStorage.getItem("vuex") ? state.loginStore.userInfo.id : "-1",
+        localStorage.getItem("vuex") && state.loginStore.userInfo
+          ? state.loginStore.userInfo.id
+          : "-1",
       nickname: (state) =>
-        localStorage.getItem("vuex")
+        localStorage.getItem("vuex") && state.loginStore.userInfo
           ? state.loginStore.userInfo.nickname
           : "익명의 유저",
       components: (state) =>
