@@ -94,44 +94,43 @@ export default {
 
 <style scoped>
 .carousel-wrapper {
+  position: relative;
+  top: 20;
   width: 100%;
-  height: 300px;
+  height: 80vh;
+  padding: 0;
   perspective: 800px;
   overflow: hidden;
-  background: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0) 0%,
-    #fff 100%
-  ); /* 하얀색 그라데이션 배경 */
 }
 
 .carousel {
   position: relative;
   width: 100%;
-  height: 100%;
+  height: 40%;
   display: flex;
   align-items: center;
   justify-content: center;
   transform-style: preserve-3d;
   transition: transform 0.5s;
   cursor: grab;
+  z-index: 3;
 }
 
 .carousel-item {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  /* top: 50%;
+  left: 50%; */
   transform: translate(-50%, -50%);
-  width: 180px;
-  height: 250px;
+  width: 250px;
+  height: 350px;
   transition: transform 0.5s, opacity 0.5s, z-index 0.5s;
+  z-index: 500;
 }
 
 .carousel-box {
   position: relative;
   width: 100%;
   height: 100%;
-  background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   text-align: center;
@@ -141,8 +140,7 @@ export default {
 .image-container {
   position: relative;
   width: 100%;
-  height: 0;
-  padding-bottom: 100%; /* 이미지의 가로 세로 비율에 따라 조정 */
+  height: 100%;
   overflow: hidden;
 }
 
@@ -152,7 +150,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover; /* 이미지를 가로 세로 비율에 맞게 조정 */
+  object-fit: cover;
   border-radius: 10px;
 }
 .carousel-item.active {

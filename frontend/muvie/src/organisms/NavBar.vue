@@ -108,6 +108,7 @@ export default {
   font-size: 16px;
   color: #888;
   margin-right: 10px;
+  margin-left: 10px;
 }
 
 .search-button i {

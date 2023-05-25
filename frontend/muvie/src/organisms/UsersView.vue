@@ -1,6 +1,8 @@
 <template>
   <div class="slider">
-    <h6>님과 비슷한 유저 추천</h6>
+    <h2 class="slider-nickname">
+      {{ nickname || "익명의 유저" }}님과 비슷한 유저 추천
+    </h2>
     <div class="slide-track">
       <div
         class="slide"
@@ -38,17 +40,27 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "UsersView",
   props: {
     users: Array,
+  },
+  computed: {
+    ...mapState({
+      nickname: (state) =>
+        localStorage.getItem("vuex")
+          ? state.loginStore.userInfo.nickname
+          : "익명의 유저",
+    }),
   },
 };
 </script>
 
 <style>
 .slider {
-  background: white;
+  background-color: transparent;
   box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.125);
   height: 900px;
   margin: auto;
@@ -57,6 +69,9 @@ export default {
   width: 960px;
 }
 
+.slider-nickname {
+  margin-bottom: 60px;
+}
 .slide-track {
   animation: scroll 15s linear infinite;
   display: flex;
