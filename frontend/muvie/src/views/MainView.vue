@@ -106,8 +106,8 @@ export default {
     localStorageValueExists() {
       console.log("로컬스토리지 있니?");
       const vuexData = JSON.parse(localStorage.getItem("vuex"));
-      console.log(vuexData.loginStore);
-      this.localStorageValue = vuexData.loginStore;
+      console.log(vuexData.loginStore.userInfo);
+      this.localStorageValue = vuexData.loginStore.userInfo;
     },
     handleLocalStorageChange(value) {
       console.log("있으면 감시");
@@ -273,6 +273,10 @@ export default {
   },
   mounted() {
     this.localStorageValueExists();
+    if (!this.localStorageValue) {
+      this.isModal2Open = true;
+    }
+    // this.handleLocalStorageChange(state.loginStore.userInfo);
   },
 };
 </script>

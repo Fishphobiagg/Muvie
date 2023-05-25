@@ -30,7 +30,6 @@ export default {
         "speechiness",
         "valence",
         "tempo",
-        "mode",
         "loudness",
         "danceability",
       ],
@@ -45,17 +44,10 @@ export default {
       console.log("이벤트 타겟 값", event.target.value);
       // this.sliderInitialValue = event.target.value * 100;
       // console.log("슬라이드 바 값:", this.sliderInitialValue);
-      if (idx === 6 || idx === 8) {
-        this.setPreference({
-          ingredient: this.ingredientsTitle[idx],
-          value: event.target.value,
-        });
-      } else {
-        this.setPreference({
-          ingredient: this.ingredientsTitle[idx],
-          value: event.target.value / 100,
-        });
-      }
+      this.setPreference({
+        ingredient: this.ingredientsTitle[idx],
+        value: event.target.value,
+      });
       console.log("스토어 값 변경");
       console.log(this.myPreference);
     },

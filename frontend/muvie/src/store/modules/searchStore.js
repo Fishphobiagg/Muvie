@@ -21,15 +21,13 @@ const searchStore = {
           console.log(err);
         });
     },
-    getUserList({commit}, keyword){
-      axios
-      .get(`${BASE_URL}/accounts/search/${keyword}`)
-      .then((res) => {
+    getUserList({ commit }, keyword) {
+      axios.get(`${BASE_URL}/accounts/search/${keyword}`).then((res) => {
         console.log("유저 검색 결과 가져오기");
-        console.log(res.data.data)
-        commit("getUserList", res.data.data)
-      })
-    }
+        console.log(res.data.data);
+        commit("getUserList", res.data.data);
+      });
+    },
   },
   mutations: {
     getSearchedList(state, payload) {
@@ -39,7 +37,6 @@ const searchStore = {
     getUserList(state, payload) {
       state.userList = payload;
       console.log("유저 검색 결과 불러오기");
-      
     },
   },
 };

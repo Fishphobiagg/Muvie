@@ -36,7 +36,6 @@ export default {
         "대화",
         "긍정",
         "템포",
-        "장조",
         "데시벨",
         "춤",
       ],
@@ -48,7 +47,6 @@ export default {
         "speechiness",
         "valence",
         "tempo",
-        "mode",
         "loudness",
         "danceability",
       ],
@@ -67,29 +65,6 @@ export default {
     };
   },
   methods: {
-    // setValue(obj) {
-    //   Object.keys(obj).forEach((key) => {
-    //     if (key in this.preferences) {
-    //       this.preferences[key] = obj[key];
-    //     }
-    //   });
-    //   console.log("조회한 성분 데이터 할당");
-    //   console.log(this.preferences);
-    // },
-    // handleSliderChange(_, idx) {
-    //   // console.log(idx);
-    //   // tempo와 loudness만 값 조정
-    //   if (idx === 6 || idx === 8) {
-    //     // this.preferences[this.ingredientsTitle[idx]] = value * 1000;
-    //     console.log(
-    //       "슬라이드 바 값 저장:",
-    //       this.myPreference[this.ingredientsTitle[idx]] * 100
-    //     );
-    //   } else {
-    //     // this.preferences[this.ingredientsTitle[idx]] = value;
-    //     console.log("슬라이드 바 값 저장:", this.myPreference);
-    //   }
-    // },
     confirmModal(myPreference) {
       console.log("확인 버튼 클릭");
       // eslint-disable-next-line eqeqeq
@@ -112,7 +87,7 @@ export default {
 <style>
 .slider-container {
   display: flex;
-  width: 56%;
+  width: 66%;
   height: 400px;
   flex-direction: column;
   align-items: center;
