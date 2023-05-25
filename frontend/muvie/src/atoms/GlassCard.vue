@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="glasscard-container">
     <div class="container">
       <div class="card">
         <div class="content">
@@ -17,6 +17,11 @@ export default {
 </script>
 
 <style>
+.glasscard-container {
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
+}
 /* body {
   display: flex;
   justify-content: center;
@@ -27,13 +32,16 @@ export default {
 } */
 .container {
   /* 임시 위치 */
-  position: fixed;
+  /* position: fixed;
   bottom: 0%;
-  left: 0;
-  /* position: relative;
-  display: flex;
+  left: 0; */
+  /* display: flex;
   justify-content: center;
   align-items: center; */
+  /* position: relative;*/
+  display: flex;
+  justify-content: center;
+  align-items: center;
   max-width: 1200px;
   flex-wrap: wrap;
   z-index: 1;

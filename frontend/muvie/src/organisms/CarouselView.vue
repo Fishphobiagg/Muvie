@@ -37,7 +37,6 @@
           <div>
             <div>{{ component.title }}</div>
             <div>{{ component.artist }}</div>
-            <div>{{ component.album }}</div>
           </div>
         </div>
       </div>
