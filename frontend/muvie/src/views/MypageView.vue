@@ -116,7 +116,7 @@ export default {
   padding-left: 1000px;
   justify-content: space-around;
   align-items: center;
-  border-bottom: 2px solid rgba(229, 229, 229);
+  /* border-bottom: 2px solid rgba(229, 229, 229); */
 }
 
 .tab-box li {

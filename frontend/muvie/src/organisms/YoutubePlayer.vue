@@ -19,10 +19,8 @@
     ></iframe>
 
     <div class="detail-and-bar">
-      <div class="song-detail scrolling-text-container">
-        <span id="song-title" ref="songTitleRef" class="scrolling-text">{{
-          title
-        }}</span>
+      <div class="song-detail">
+        <span id="song-title" ref="songTitleRef">{{ title }}</span>
         <span id="song-artist">{{ artist }}</span>
       </div>
       <div class="progress-bar">
@@ -113,7 +111,7 @@ export default {
       );
     },
     reloadPage() {
-      // 페이지 새로고침 시 실행되는 동작을 여기에 작성합니다.
+      // 페이지 새로고침 시 실행되는 동작
       console.log("페이지 새로고침됨");
       this.$store.dispatch("stopPlayerState");
     },
@@ -122,7 +120,7 @@ export default {
       const containerWidth = songTitleElement.offsetWidth;
       const textWidth = songTitleElement.scrollWidth;
       if (textWidth > containerWidth) {
-        const animationDuration = textWidth / 50; // 원하는 속도로 조정하세요
+        const animationDuration = textWidth / 50; // 원하는 속도로 조정
         songTitleElement.style.animationDuration = `${animationDuration}s`;
         songTitleElement.classList.add("scrolling-text");
       }
@@ -185,7 +183,7 @@ export default {
   white-space: nowrap;
   position: absolute;
   animation: scrollText linear infinite;
-  animation-duration: 10s; /* 원하는 속도로 조정하세요 */
+  animation-duration: 10s;
 }
 
 @keyframes scrollText {
@@ -205,8 +203,6 @@ export default {
   overflow: hidden;
   object-fit: cover;
   margin-right: 50px;
-  /* transform: scale(0.9);
-  filter: blur(10px); */
 }
 
 .fa-sharp {
@@ -221,7 +217,7 @@ export default {
   bottom: 0;
   width: 100%;
   height: 12%;
-  background-color: #eef3f7;
+  background-color: #eef3f7c4;
   box-shadow: 0px 55px 15px 50px rgba(50, 88, 130, 0.22);
   text-align: center;
   display: flex;
@@ -285,16 +281,20 @@ export default {
 
 #song-title {
   margin-right: 300px;
-  margin-left: 10px;
-  font-size: 20px;
-  font-weight: 800;
+  margin-left: 20px;
+  font-weight: 700;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 #song-artist {
-  font-weight: 700;
-  opacity: 0.8;
-  position: relative;
-  /* left: 300px; */
-  /* padding-left: 2300px; */
+  margin-right: 40px;
+  margin-left: 20px;
+  font-size: 15px;
+  color: #858fa5;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 </style>

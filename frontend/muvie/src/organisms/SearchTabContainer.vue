@@ -31,8 +31,8 @@
 
 <script>
 import { mapState } from "vuex";
-import SearchList from '../atoms/SearchList.vue';
-import UserList from '../atoms/UserList.vue';
+import SearchList from "../atoms/SearchList.vue";
+import UserList from "../atoms/UserList.vue";
 
 export default {
   name: "SearchTab",
@@ -46,21 +46,21 @@ export default {
   computed: {
     ...mapState({
       userId: (state) => state.loginStore.userId,
-      searchedList:(state) => state.searchStore.searchedList,
-      userList:(state) => state.searchStore.userList,
+      searchedList: (state) => state.searchStore.searchedList,
+      userList: (state) => state.searchStore.userList,
     }),
     paramId() {
       return this.$route.params.keyword;
     },
   },
-  watch: {
-    paramId(keyword) {
-      if (keyword) {
-        console.log("워치 파라미터");
-        this.$store.dispatch("getProfile", keyword);
-      }
-    },
-  },
+  // watch: {
+  //   paramId(keyword) {
+  //     if (keyword) {
+  //       console.log("워치 파라미터");
+  //       this.$store.dispatch("getProfile", keyword);
+  //     }
+  //   },
+  // },
   mounted() {
     console.log("마이페이지뷰의 파라미터 전달");
     console.log(this.paramId);
