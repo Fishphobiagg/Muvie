@@ -4,6 +4,8 @@
       <SignupForm @open-modal="handleModal" />
     </GlassCard>
     <YellowCircle />
+    <YellowCircle />
+    <YellowCircle />
     <ModalAtom :isModalOpen="isModalOpen">
       <h2>음악 취향</h2>
       <PreferSelect @close-modal="closeModal" />
@@ -51,5 +53,6 @@ export default {
 .signupview {
   width: 100%;
   height: 100%;
+  background: #eed0b2;
 }
 </style>

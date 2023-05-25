@@ -1,10 +1,10 @@
 <template>
   <div class="user-slider">
     <div class="foruser">
-    <p class="slider-nickname" style="font-weight:bold">{{ nickname || "익명의 유저" }}</p>
-    <p class="slider-nickname me">
-      님과 비슷한 유저
-    </p>
+      <p class="slider-nickname" style="font-weight: bold">
+        {{ nickname || "익명의 유저" }}
+      </p>
+      <p class="slider-nickname me">님과 비슷한 유저</p>
     </div>
     <div class="slide-track">
       <div
@@ -69,11 +69,14 @@ export default {
 </script>
 
 <style>
-.foruser{
+.foruser {
   display: flex;
+  text-align: center;
   margin-left: 40px;
   margin-bottom: 40px;
+  justify-content: center; /* 화면 중앙에 정렬 */
 }
+
 .user-slider {
   background-color: transparent;
   box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.125);

@@ -11,8 +11,10 @@
       />
     </div>
     <div class="button-container">
-      <button @click="confirmModal(myPreference)">확인</button>
-      <button @click="closeModal">나중에 하기</button>
+      <button class="preference-button" @click="confirmModal(myPreference)">
+        확인
+      </button>
+      <button class="preference-button" @click="closeModal">나중에 하기</button>
     </div>
   </div>
 </template>
@@ -96,6 +98,7 @@ export default {
 }
 
 .button-container > button {
+  position: relative;
   margin: 20px;
   padding: 13px 30px;
   background: white;
@@ -103,7 +106,7 @@ export default {
   border-radius: 15px;
   text-decoration: none;
   border: none;
-  z-index: 500;
+  z-index: 900;
   transition: transform 0.3s;
 }
 
