@@ -37,15 +37,15 @@
       </ul>
     </ModalAtom>
     <ModalAtom class="login-request" :isModalOpen="isModal2Open">
-      <div>
-
-      </div>
-      <img class="modal-logo" src="../assets/logo.png" alt="">
-      <h2 class="explanation">당신의 영화를 듣고, <br>좋아하고, <br>즐겨보세요</h2>
+      <div></div>
+      <img class="modal-logo" src="../assets/logo.png" alt="" />
+      <h2 class="explanation">
+        당신의 영화를 듣고, <br />좋아하고, <br />즐겨보세요
+      </h2>
       <p>로그인하면 더 많은 음악을 만나실 수 있습니다!</p>
       <div class="option-container">
-      <div @click="navigateToLogin()" class="option">로그인</div>
-      <div @click="navigateToSignup()" class="option">회원가입</div>
+        <div @click="navigateToLogin()" class="option">로그인</div>
+        <div @click="navigateToSignup()" class="option">회원가입</div>
       </div>
     </ModalAtom>
     <YoutubePlayer />
@@ -278,27 +278,27 @@ export default {
 </script>
 
 <style>
-.explanation{
- margin-right: 50px; 
- margin-left: 50px;
+.explanation {
+  margin-right: 50px;
+  margin-left: 50px;
 }
 
-.option-container{
+.option-container {
   display: flex;
   justify-content: center;
   flex-direction: column;
 }
 
-.modal-logo{
+.modal-logo {
   margin-right: 2px;
   margin-bottom: 20px;
 }
 
-.option-container{
+.option-container {
   height: 250px;
 }
 
-.option{
+.option {
   margin-top: 20px;
   padding: 10px;
   color: white;
@@ -310,7 +310,7 @@ export default {
   cursor: pointer;
 }
 
-.option:hover{
+.option:hover {
   margin-top: 20px;
   padding: 10px;
   color: white;
@@ -352,10 +352,11 @@ export default {
 .welcome-msg {
   width: 500px;
   height: 200px;
-  font-size: 70px;
+  font-size: 60px;
   margin-top: 50px;
   margin-left: 80px;
   text-align: left;
+  opacity: 0.9;
   /* z-index: -2; */
   background-color: transparent;
 }
@@ -370,9 +371,9 @@ export default {
 
 .profile-modal .modal-content {
   position: fixed;
-  border: 1px solid gray;
   border-radius: 5px;
-  top: 150px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  top: 90px;
   right: 50px;
   width: 150px;
   min-height: 30px;
@@ -398,13 +399,12 @@ export default {
   justify-content: center;
   cursor: pointer;
 }
-.login-request{
+.login-request {
   display: flex;
 }
 .login-request .modal-content {
   width: 400px;
   min-height: 580px;
   justify-content: center;
-
 }
 </style>
