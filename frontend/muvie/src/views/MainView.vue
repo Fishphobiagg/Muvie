@@ -2,19 +2,32 @@
   <div>
     <div class="mainview">
       <NavBar class="navbar" @open-modal="handleModal" />
-      <div class="welcome-msg">
-        Hey {{ nickname || "익명의 유저" }} <br />
-        Welcome Back!
+      <div class="one-view">
+        <div class="welcome-msg">
+          {{ nickname || "익명의 유저" }} 님을 위한 <br />오늘의 음악
+        </div>
+        <!-- <CircleCarousel :components="components" /> -->
+        <div class="full-height-container first">
+          <transition name="slide">
+            <div class="full-height-scroll">
+              <CarouselView :components="components" />
+            </div>
+          </transition>
+        </div>
       </div>
-      <!-- <CircleCarousel :components="components" /> -->
-      <div v-if="components">
-        <CarouselView :components="components" />
+      <div class="full-height-container">
+        <transition name="slide">
+          <div class="full-height-scroll">
+            <UsersView :users="users" />
+          </div>
+        </transition>
       </div>
-      <div v-if="users">
-        <UsersView :users="users" />
-      </div>
-      <div v-if="likes">
-        <LikesView :likes="likes" />
+      <div class="full-height-container">
+        <transition name="slide">
+          <div class="full-height-scroll">
+            <LikesView :likes="likes" />
+          </div>
+        </transition>
       </div>
     </div>
     <ModalAtom class="profile-modal" :isModalOpen="isModal1Open">
@@ -311,15 +324,40 @@ export default {
 
 .mainview {
   background: #eef3f7;
+  /* height: 50vh; */
+  overflow-y: auto;
+}
+
+.first {
+  position: absolute;
+  top: 0.5;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  background-color: transparent;
+}
+
+.full-height-scroll {
+  flex: 1;
+  overflow-y: auto;
+  /* padding: 20px; */
+}
+
+.one-view {
+  width: 100vw;
+  height: 100vh;
 }
 
 .welcome-msg {
   width: 500px;
   height: 200px;
   font-size: 70px;
-  margin-top: 100px;
+  margin-top: 50px;
   margin-left: 80px;
   text-align: left;
+  /* z-index: -2; */
+  background-color: transparent;
 }
 
 .navbar {

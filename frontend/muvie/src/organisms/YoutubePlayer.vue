@@ -216,6 +216,7 @@ export default {
   align-items: center;
   justify-content: center;
   margin-top: 50px;
+  z-index: 3;
 }
 
 #player i {
