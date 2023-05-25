@@ -73,24 +73,17 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "LikesView",
-  data() {
-    return {
-      flickingOptions: {
-        horizontal: true,
-        // circular: true,
-        // adaptive: true,
-        // threshold: 30,
-        // duration: 500,
-        // ease: "ease",
-        // infinite: true,
-        // startIndex: 0,
-        // gap: 10,
-        // autoResize: true,
-        // preventClickOnDrag: true,
-      },
-    };
+  computed: {
+    ...mapState({
+      nickname: (state) =>
+        localStorage.getItem("vuex")
+          ? state.loginStore.userInfo.nickname
+          : "익명의 유저",
+    }),
   },
   props: {
     likes: Array,

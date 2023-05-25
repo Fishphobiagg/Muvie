@@ -18,10 +18,8 @@ export default {
 
 <style>
 .glasscard-container {
-  /* height: 100%; */
-  /* width: 100%; */
   margin: auto;
-  min-height: 100vh;
+  margin-bottom: 100px;
 }
 .container {
   display: flex;
