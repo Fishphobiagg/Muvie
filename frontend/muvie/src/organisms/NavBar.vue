@@ -148,6 +148,6 @@ export default {
   width: 62px;
   height: 62px;
   margin-left: 20px;
-  z-index: 400;
+  z-index: 300;
 }
 </style>

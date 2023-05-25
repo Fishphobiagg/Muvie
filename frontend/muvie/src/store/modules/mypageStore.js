@@ -19,18 +19,6 @@ const mypageStore = {
     duration: null,
   },
   actions: {
-    getLikedList({ commit }, id) {
-      const LIKEDLIST_API = `${BASE_URL}/music/like/${id}/users`;
-      console.log(LIKEDLIST_API);
-      axios
-        .get(LIKEDLIST_API)
-        .then((res) => {
-          console.log("좋아요 누른 사람 목록 요청");
-          console.log(res);
-          commit("getMusicLiked", res.data);
-        })
-        .catch((err) => console.log(err));
-    },
     getLikeList({ commit }) {
       const LIKELIST_API = `${BASE_URL}/accounts/like`;
       console.log(LIKELIST_API);
@@ -159,14 +147,14 @@ const mypageStore = {
     follow({ commit }, id) {
       axios.post(`${BASE_URL}/accounts/${id}/follow`).then((res) => {
         console.log(res);
-        commit("updateFollowState", res.data.following);
+        commit("updateFollowState", res.data);
         // eslint-disable-next-line no-restricted-globals
       });
     },
     unfollow({ commit }, id) {
       axios.delete(`${BASE_URL}/accounts/${id}/follow`).then((res) => {
         console.log(res);
-        commit("updateUnfollowState", res.data.following);
+        commit("updateFollowState", res.data);
         // eslint-disable-next-line no-restricted-globals
       });
     },
@@ -229,7 +217,8 @@ const mypageStore = {
       console.log("이미지 요청 성공");
     },
     updateFollowState(state, payload) {
-      state.following = payload;
+      state.following = payload.following;
+      state.followers = payload.followers;
       console.log("팔로잉 목록 업데이트 성공");
     },
     updateUnfollowState(state, payload) {
