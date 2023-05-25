@@ -22,7 +22,7 @@
         <div class="search-bar-line"></div>
       </div>
 
-      <ul class="tab-box">
+      <ul class="tab-box-search">
         <li
           class="tab-li"
           ref="tabAll"
@@ -143,15 +143,15 @@ export default {
   margin: 50px auto;
 }
 
-.tab-box {
+.tab-box-search {
   width: 400px;
-  margin: 20px 0 20px 0;
+  margin: 20px 0 20px 65%;
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-end;
   align-items: center;
 }
 
-.tab-box li {
+.tab-box-search li {
   width: 110px;
   list-style: none;
   font-size: 18px;
@@ -165,7 +165,7 @@ export default {
   border-radius: 40px;
 }
 
-.tab-box li.active {
+.tab-box-search li.active {
   color: #fff;
   background-color: #7a56e8;
 }
@@ -176,7 +176,7 @@ export default {
   /* left: 700; */
   width: 100px;
   height: 5px;
-  background-color: #7350ff;
+  background-color: #7a56e8;
   border-radius: 10px;
   transition: all 0.3s ease-in-out;
 }

@@ -3,9 +3,9 @@
     <div class="mainview">
       <NavBar class="navbar" @open-modal="handleModal" />
       <div class="one-view">
-        <div class="welcome-msg">
+        <!-- <div class="welcome-msg">
           {{ nickname || "익명의 유저" }} 님을 위한 <br />오늘의 음악
-        </div>
+        </div> -->
         <!-- <CircleCarousel :components="components" /> -->
         <div class="full-height-container first">
           <transition name="slide">

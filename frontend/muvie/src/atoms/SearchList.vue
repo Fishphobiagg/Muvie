@@ -18,7 +18,10 @@
       </div>
       <span class="artist_name">{{ item.artist }}</span>
     </div>
-    <span class="play_button" @click="addPlaylistAndPlayMusic(item)" v-if="showButtons"
+    <span
+      class="play_button"
+      @click="addPlaylistAndPlayMusic(item)"
+      v-if="showButtons"
       ><i class="fas fa-play"></i
     ></span>
     <span
@@ -30,7 +33,9 @@
       }"
       v-if="showButtons"
     >
-      <i class="fas" :class="item.isLiked ? 'fa fa-heart' : 'fa fa-heart-o'">{{item.like_count}}</i>
+      <i class="fas" :class="item.isLiked ? 'fa fa-heart' : 'fa fa-heart-o'">{{
+        item.like_count
+      }}</i>
     </span>
   </div>
 </template>
@@ -66,7 +71,6 @@ export default {
         artist: item.artist,
       });
       this.$store.dispatch("addPlaylist", item.id);
-
     },
     like(item) {
       this.$store.dispatch("like", item.id);

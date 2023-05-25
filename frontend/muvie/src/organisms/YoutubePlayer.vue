@@ -62,6 +62,7 @@ export default {
         youtubeIframe.src = this.videoId; // iframe의 src를 빈 문자열로 설정하여 멈추기
       }
       console.log("하단바로 시작 요청");
+      this.startTimer();
     },
     stopPlayer() {
       const { youtubeIframe } = this.$refs;
@@ -217,7 +218,7 @@ export default {
   bottom: 0;
   width: 100%;
   height: 12%;
-  background-color: #eef3f7c4;
+  background-color: #eef3f7;
   box-shadow: 0px 55px 15px 50px rgba(50, 88, 130, 0.22);
   text-align: center;
   display: flex;
@@ -265,7 +266,7 @@ export default {
 
 .progress {
   height: inherit;
-  background-color: #a3b3ce;
+  background-color: #7a56e8;
   border-radius: 10px;
   transition: width 0.3s linear;
 }
