@@ -14,9 +14,9 @@ from .serializers import *
 from musics.models import Music
 from accounts.models import MusicUserLike, User
 
-
-
-from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
+from numpy import dot
+from numpy.linalg import norm
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -26,9 +26,7 @@ import random
 class SignupAPIView(APIView):
     def post(self, request):
         serializer = UserSerializer(data=request.data)
-        print(serializer.is_valid())
         if serializer.is_valid():
-            print(serializer)
             user = serializer.save()
             
             # jwt 토큰 접근
@@ -61,7 +59,6 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
-        print(cls, user)
         # Add custom claims
         token['email'] = user.email
         return token
@@ -202,7 +199,6 @@ def recommend_components(request):
         'speechiness': component.speechiness,
         'valence': component.valence,
         'tempo': component.tempo,
-        'mode': component.mode,
         'loudness': component.loudness,
         'danceability': component.danceability,
     }
@@ -231,14 +227,16 @@ def recommend_user(request):
     user = request.user
     user_vector = calculate_vector(user)
     random_users = random.sample(list(User.objects.exclude(pk=user.pk).exclude(following=user)), (User.objects.all().count() - User.objects.filter(following=user).count())//10) # 대규모로 갈 경우 속도가 느려지기 때문에 후에 수정
+    user_vector = np.array(calculate_vector(user))
     random_user_list = []
     for random_user in random_users:
-        random_user_vector = calculate_vector(random_user)
-        similarity = cosine_similarity(user_vector, random_user_vector)[0][0]
+        random_user_vector = np.array(calculate_vector(random_user))
+        similarity = dot(user_vector, random_user_vector)/(norm(user_vector)*norm(random_user_vector))        
         random_user_list.append((similarity, random_user))
-        
+    
     random_user_list.sort(key=lambda x: x[0], reverse=True)
     topusers = [user[1] for user in random_user_list[:5]]
+
     user_serializer = SimpleUserSerializer(topusers, many=True)
     return Response({"recommend":user_serializer.data})
 
@@ -287,10 +285,6 @@ def recommend_like(request):
 def search_user(request, keyword):
     user = request.user
     liked_music_ids = MusicUserLike.objects.filter(user=user).values_list('music_id', flat=True)
-    print(liked_music_ids)
-    # if not liked_music_ids:
-        
-    #     liked_music_ids = Music.objects.
     searched_users = User.objects.filter(Q(nickname__icontains=keyword)).exclude(pk=user.pk)
     similarity_scores = {}
     for similar_user in searched_users:
