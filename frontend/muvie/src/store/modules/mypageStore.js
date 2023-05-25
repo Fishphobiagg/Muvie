@@ -14,24 +14,11 @@ const mypageStore = {
     profile_picture: null,
     userId: null,
     like_list: null,
-    liked_list: null,
     play_list: null,
     videoId: null,
     duration: null,
   },
   actions: {
-    getLikedList({ commit }, id) {
-      const LIKEDLIST_API = `${BASE_URL}/music/like/${id}/users`;
-      console.log(LIKEDLIST_API);
-      axios
-        .get(LIKEDLIST_API)
-        .then((res) => {
-          console.log("좋아요 누른 사람 목록 요청");
-          console.log(res);
-          commit("getMusicLiked", res.data);
-        })
-        .catch((err) => console.log(err));
-    },
     getLikeList({ commit }) {
       const LIKELIST_API = `${BASE_URL}/accounts/like`;
       console.log(LIKELIST_API);
@@ -72,13 +59,15 @@ const mypageStore = {
     like({ commit }, id) {
       axios.post(`${BASE_URL}/music/like/${id}`).then((res) => {
         console.log(res);
-        commit("updateLikeState", res.like_list);
+        console.log("추가 좋아요")
+        commit("updateLikeState", res.data.like_list);
       });
     },
     unlike({ commit }, id) {
       axios.delete(`${BASE_URL}/music/like/${id}`).then((res) => {
         console.log(res);
-        commit("updateLikeState", res.like_list);
+        console.log('좋아요 삭제')
+        commit("updateLikeState", res.data.like_list);
       });
     },
     // playMusic({ commit }, { title, artist }) {
@@ -146,28 +135,27 @@ const mypageStore = {
       axios.post(`${BASE_URL}/music/playlist/${id}`).then((res) => {
         console.log("플레이 리스트 추가");
         console.log(res);
-        commit("updatePlayListState");
+        commit("updatePlayListState", res.data.play_list);
       });
     },
-    deletePlaylist(_, id) {
+    deletePlaylist({ commit }, id) {
       axios.delete(`${BASE_URL}/music/playlist/${id}`).then((res) => {
         console.log(res);
+        commit("updatePlayListState", res.data.play_list)
       });
     },
     follow({ commit }, id) {
       axios.post(`${BASE_URL}/accounts/${id}/follow`).then((res) => {
         console.log(res);
-        commit("updateFollowState", res.following);
+        commit("updateFollowState", res.data);
         // eslint-disable-next-line no-restricted-globals
-        location.reload();
       });
     },
     unfollow({ commit }, id) {
       axios.delete(`${BASE_URL}/accounts/${id}/follow`).then((res) => {
         console.log(res);
-        commit("updateUnfollowState", res.following);
+        commit("updateFollowState", res.data);
         // eslint-disable-next-line no-restricted-globals
-        location.reload();
       });
     },
     editNickname({ commit }, payload) {
@@ -229,7 +217,8 @@ const mypageStore = {
       console.log("이미지 요청 성공");
     },
     updateFollowState(state, payload) {
-      state.following = payload;
+      state.following = payload.following;
+      state.followers = payload.followers;
       console.log("팔로잉 목록 업데이트 성공");
     },
     updateUnfollowState(state, payload) {

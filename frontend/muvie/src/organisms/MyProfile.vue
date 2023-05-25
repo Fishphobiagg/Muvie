@@ -2,12 +2,11 @@
 <template>
   <div>
     <img
-      src="../assets/logo.png"
+      src="../assets/logo3.png"
       alt="로고"
       class="logo"
       @click="navigateToMain()"
     />
-    <i class=""></i>
     <div class="my-profile">
       <div class="my-photo-detail">
         <img
@@ -206,6 +205,7 @@ export default {
   cursor: pointer;
   display: flex;
   justify-content: start;
+  top: 30;
 }
 .follow_info {
   display: flex;

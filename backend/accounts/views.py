@@ -101,7 +101,7 @@ class FollowAPIView(APIView):
             }, status=status.HTTP_400_BAD_REQUEST)
         else:
             user.following.add(opponent)
-            serializer = FollowSerializer(user)
+            serializer = ProfileSerializer(instance=User.objects.get(pk=user_pk), user_pk=user.pk)
             return Response(serializer.data)
         
     def delete(self, request, user_pk):
@@ -112,8 +112,8 @@ class FollowAPIView(APIView):
                 "message" : "Not followed"
             }, status=status.HTTP_400_BAD_REQUEST)
         else:
-            serializer = FollowSerializer(user)
             user.following.remove(opponent)
+            serializer = ProfileSerializer(instance=user, user_pk=user.pk)
             return Response(serializer.data)
 
 class ProfileView(APIView):
@@ -121,7 +121,6 @@ class ProfileView(APIView):
     def get(self, request, user_pk):
         me = request.user
         if user_pk == me.pk:
-            print(me)
             serializer = MyProfileSerializer(instance=me, user_pk=me.pk)
             user_serializer = SimpleUserSerializer(me)
             response = {
@@ -249,7 +248,7 @@ def collaborative_filtering(user, n=10):
     elif len(liked_music_ids) < 10:
         other_query = list(Music.objects.order_by('?').values_list('id', flat=True)[:10 - len(liked_music_ids)])
         liked_music_ids.extend(other_query)
-    similar_users = random.sample(list(User.objects.filter(musicuserlike__music_id__in=liked_music_ids).exclude(id=user.id)), 10)
+    similar_users = random.sample(list(User.objects.filter(musicuserlike__music_id__in=liked_music_ids)), 10)
     similarity_scores = {}
     for similar_user in similar_users:
         similar_user_liked_music_ids = MusicUserLike.objects.filter(user=similar_user).values_list('music_id')
@@ -301,6 +300,8 @@ def search_user(request, keyword):
             'nickname':searched_user.nickname,
             'email':searched_user.email,
             'profile_picture':searched_user.profile_picture.url,
+            'followers_count':searched_user.followers.all().count(),
+            'following_count':searched_user.following.all().count(),
             'is_followed': user.following.filter(pk=user_id).exists()
         }
         )

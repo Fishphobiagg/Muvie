@@ -1,8 +1,11 @@
 <template>
   <div class="user-slider">
-    <h2 class="slider-nickname">
-      {{ nickname || "익명의 유저" }}님과 비슷한 유저 추천
-    </h2>
+    <div class="foruser">
+    <p class="slider-nickname" style="font-weight:bold">{{ nickname || "익명의 유저" }}</p>
+    <p class="slider-nickname me">
+      님과 비슷한 유저
+    </p>
+    </div>
     <div class="slide-track">
       <div
         class="slide"
@@ -12,8 +15,9 @@
       >
         <img
           class="user-slide-img"
-          :src="`http://127.0.0.1:8000/${user.profile_picture}`"
+          :src="`http://127.0.0.1:8000${user.profile_picture}`"
           alt="추천 유저"
+          @click="navigateToProfile(user.id)"
         />
         <div>
           <div class="user-slide-nickname">{{ user.nickname }}</div>
@@ -28,11 +32,12 @@
       >
         <img
           class="user-slide-img"
-          :src="`http://127.0.0.1:8000/${user.profile_picture}`"
+          :src="`http://127.0.0.1:8000${user.profile_picture}`"
           alt="추천 유저"
+          @click="navigateToProfile(user.id)"
         />
         <div>
-          <div>{{ user.nickname }}</div>
+          <div class="user-slide-nickname">{{ user.nickname }}</div>
         </div>
       </div>
     </div>
@@ -64,6 +69,11 @@ export default {
 </script>
 
 <style>
+.foruser{
+  display: flex;
+  margin-left: 40px;
+  margin-bottom: 40px;
+}
 .user-slider {
   background-color: transparent;
   box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.125);
@@ -79,8 +89,9 @@ export default {
 }
 
 .slider-nickname {
-  margin-bottom: 200px;
-  font-size: 70px;
+  display: flex;
+  justify-content: start;
+  font-size: 40px;
   opacity: 0.9;
 }
 .slide-track {
@@ -100,6 +111,7 @@ export default {
   width: 150px;
   height: 150px;
   border-radius: 50%;
+  cursor: pointer;
 }
 .user-slide-nickname {
   margin-top: 10px;

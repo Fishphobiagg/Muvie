@@ -25,11 +25,16 @@ class FollowSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('following',)
+        fields = ('following','followers')
     
     def get_following(self, instance):
         followers = instance.following.all()
         return [{"id":following.pk, 'nickname':following.nickname, 'email':following.email, 'profile_picture':following.profile_picture.url } for following in followers]
+    
+    def get_followers(self, instance):
+        followers = instance.followers.all()
+        return [{"id":follower.pk, 'nickname':follower.nickname, 'email':follower.email, 'profile_picture':follower.profile_picture.url} for follower in followers]
+    
 class SimpleUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
