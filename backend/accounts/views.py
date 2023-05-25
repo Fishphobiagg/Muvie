@@ -211,13 +211,13 @@ def recommend_components(request):
         poster = recommend['album']['images'][0]['url']
         if Music.objects.filter(title=title, artist=artist):
            music = Music.objects.filter(title=title, artist=artist)[0]
-           response['data'].append({"title":title, "artist":artist, 'album':album, 'poster':poster, 'like count':music.users_like_musics.count()})
+           response['data'].append({"id":music.pk, "title":title, "artist":artist, 'album':album, 'poster':poster, 'like count':music.users_like_musics.count()})
         else:
             new = Music.objects.create(
                 title=title, artist=artist, album_cover = poster
             )
             new.save()
-            response['data'].append({"title":title, "artist":artist, 'album':album, 'poster':poster, 'like count' : 0})
+            response['data'].append({"id":new.pk, "title":title, "artist":artist, 'album':album, 'poster':poster, 'like count' : 0})
     return Response(response)
 
 
