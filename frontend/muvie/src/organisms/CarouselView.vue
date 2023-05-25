@@ -28,7 +28,7 @@
           zIndex: components.length - Math.abs(active - index),
           opacity: 1 - Math.abs(active - index) / components.length,
         }"
-        @click="clickAnimation(index)"
+        @click="clickAnimation(index, component)"
       >
         <div class="carousel-box">
           <div class="image-container">
@@ -62,8 +62,35 @@ export default {
     };
   },
   methods: {
-    clickAnimation(index) {
-      this.active = index;
+    clickAnimation(index, component) {
+      console.log("캐러셀 클릭");
+      console.log(this.active);
+      console.log(index);
+      console.log(component);
+      // eslint-disable-next-line eqeqeq
+      if (this.active != index) {
+        this.active = index;
+        // eslint-disable-next-line eqeqeq
+      } else if (this.active == index) {
+        console.log(component);
+        console.log("이미 활성화 ! ! ! ! !");
+        const item = {
+          album_cover: component.poster,
+          title: component.title,
+          artist: component.artist,
+          id: component.id,
+        };
+        console.log(item);
+        this.addPlaylistAndPlayMusic(item);
+      }
+    },
+    addPlaylistAndPlayMusic(item) {
+      this.$store.dispatch("saveAlbumCover", item.album_cover);
+      this.$store.dispatch("playMusic", {
+        title: item.title,
+        artist: item.artist,
+      });
+      this.$store.dispatch("addPlaylist", item.id);
     },
     handleWheel(event) {
       event.preventDefault();

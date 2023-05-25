@@ -67,7 +67,7 @@ export default {
       console.log(this.formData);
       this.$store.dispatch("signup", this.formData);
       // 모달 오픈 이벤트 상위 SignupView로 전달
-      // this.$emit("open-modal");
+      this.$emit("open-modal");
     },
   },
 };

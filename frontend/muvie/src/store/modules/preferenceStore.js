@@ -36,16 +36,7 @@ const preferenceStore = {
         .then((res) => {
           console.log("음악성분 조회");
           console.log(res.data);
-          const modifiedData = { ...res.data };
-          modifiedData.energy *= 100;
-          modifiedData.instrumentalness *= 100;
-          modifiedData.liveness *= 100;
-          modifiedData.acousticness *= 100;
-          modifiedData.speechiness *= 100;
-          modifiedData.valence *= 100;
-          modifiedData.mode *= 100;
-          modifiedData.danceability *= 100;
-          commit("getIngredients", modifiedData);
+          commit("getIngredients", res.data);
         })
         .catch((err) => {
           console.log(err);

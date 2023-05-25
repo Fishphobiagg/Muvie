@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="signupview">
     <GlassCard>
       <SignupForm @open-modal="handleModal" />
     </GlassCard>
@@ -47,4 +47,9 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.signupview {
+  width: 100%;
+  height: 100%;
+}
+</style>

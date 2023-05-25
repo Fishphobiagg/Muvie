@@ -18,31 +18,15 @@ export default {
 
 <style>
 .glasscard-container {
-  /* display: flex;
-  justify-content: center;
-  align-items: center; */
-}
-/* body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  bottom: 0;
+  /* height: 100%; */
+  /* width: 100%; */
+  margin: auto;
   min-height: 100vh;
-} */
+}
 .container {
-  /* 임시 위치 */
-  /* position: fixed;
-  bottom: 0%;
-  left: 0; */
-  /* display: flex;
-  justify-content: center;
-  align-items: center; */
-  /* position: relative;*/
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 1200px;
   flex-wrap: wrap;
   z-index: 1;
 }
