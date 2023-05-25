@@ -14,7 +14,6 @@ const mypageStore = {
     profile_picture: null,
     userId: null,
     like_list: null,
-    liked_list: null,
     play_list: null,
     videoId: null,
     duration: null,
@@ -72,13 +71,15 @@ const mypageStore = {
     like({ commit }, id) {
       axios.post(`${BASE_URL}/music/like/${id}`).then((res) => {
         console.log(res);
-        commit("updateLikeState", res.like_list);
+        console.log("추가 좋아요")
+        commit("updateLikeState", res.data.like_list);
       });
     },
     unlike({ commit }, id) {
       axios.delete(`${BASE_URL}/music/like/${id}`).then((res) => {
         console.log(res);
-        commit("updateLikeState", res.like_list);
+        console.log('좋아요 삭제')
+        commit("updateLikeState", res.data.like_list);
       });
     },
     // playMusic({ commit }, { title, artist }) {
@@ -146,28 +147,27 @@ const mypageStore = {
       axios.post(`${BASE_URL}/music/playlist/${id}`).then((res) => {
         console.log("플레이 리스트 추가");
         console.log(res);
-        commit("updatePlayListState");
+        commit("updatePlayListState", res.data.play_list);
       });
     },
-    deletePlaylist(_, id) {
+    deletePlaylist({ commit }, id) {
       axios.delete(`${BASE_URL}/music/playlist/${id}`).then((res) => {
         console.log(res);
+        commit("updatePlayListState", res.data.play_list)
       });
     },
     follow({ commit }, id) {
       axios.post(`${BASE_URL}/accounts/${id}/follow`).then((res) => {
         console.log(res);
-        commit("updateFollowState", res.following);
+        commit("updateFollowState", res.data.following);
         // eslint-disable-next-line no-restricted-globals
-        location.reload();
       });
     },
     unfollow({ commit }, id) {
       axios.delete(`${BASE_URL}/accounts/${id}/follow`).then((res) => {
         console.log(res);
-        commit("updateUnfollowState", res.following);
+        commit("updateUnfollowState", res.data.following);
         // eslint-disable-next-line no-restricted-globals
-        location.reload();
       });
     },
     editNickname({ commit }, payload) {
