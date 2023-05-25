@@ -22,7 +22,7 @@ body {
   height: 100vh;
   width: 100vw;
   /* background: #349fb3; */
-  background: #eed0b2;
+  background: #F5F5F5;
   width: 300px;
   height: 300px;
 }

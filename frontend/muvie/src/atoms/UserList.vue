@@ -9,14 +9,10 @@
       <span class="user-name" @click="navigateToProfile(item.id)">{{
         item.nickname
       }}</span>
+      <span>{{item.email}}</span>
     </div>
-    <button
-      class="follow-button"
-      @click="followAction(item)"
-      :class="{ following: item.is_followed }"
-    >
-      {{ item.is_followed ? "팔로잉" : "팔로우" }}
-    </button>
+  <p>팔로워 : {{item.followers_count}}</p>
+  <p>팔로잉 : {{item.following_count}}</p>
   </div>
 </template>
 

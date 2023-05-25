@@ -50,9 +50,14 @@ export default {
     addPlaylist(fwg) {
       this.$store.dispatch("addPlaylist", fwg.id);
     },
-    playMusic(musicId) {
+    playMusic(item) {
       console.log("음악 재생 요청");
-      console.log(musicId);
+      console.log(item.id);
+      this.$store.dispatch("saveAlbumCover", item.album_cover);
+      this.$store.dispatch("playMusic", {
+        title: item.title,
+        artist: item.artist,
+      });
     },
     deletePlaylist(musicId) {
       console.log("플레이리스트 삭제 요청");

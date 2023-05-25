@@ -53,13 +53,19 @@ class MusicPlaylistView(APIView):
         user = request.user
         music = Music.objects.get(pk=music_pk)
         user.playlist.add(music)
-        return Response({"message":"Added to playlist successfully"})
+        serializer = MusicListSerializer(user.playlist.all(), many=True, user_pk=user.pk)
+        return Response({"message":"Added to playlist successfully",
+                         "play_list":serializer.data
+                         })
 
     def delete(self, request, music_pk):
         user = request.user
         music = Music.objects.get(pk=music_pk)
         user.playlist.remove(music)
-        return Response({"message":"Deleted to playlist successfully"})
+        serializer = MusicListSerializer(user.playlist.all(), many=True, user_pk=user.pk)
+        return Response({"message":"Deleted to playlist successfully",
+                         "play_list":serializer.data
+                         })
 
 class MusicComponentView(APIView):
     permission_classes = [IsAuthenticated]
