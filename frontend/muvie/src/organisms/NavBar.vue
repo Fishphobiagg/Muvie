@@ -1,6 +1,6 @@
 <template>
   <div class="navbar">
-    <img src="../assets/logo.png" alt="로고" class="logo">
+    <img src="../assets/logo.png" alt="로고" class="logo" />
     <div class="search-bar">
       <div class="search-input">
         <button class="search-button" @click="handleSearch">
@@ -10,6 +10,7 @@
           class="input-atoms"
           v-model="inputData"
           @keydown.enter="handleSearch"
+          placeholder="음악과 사용자를 검색해보세요"
         />
       </div>
       <div class="search-bar-line"></div>
@@ -28,7 +29,6 @@
 
 <script>
 import { mapState } from "vuex";
-import MuvieLogo from "../atoms/MuvieLogo.vue";
 
 export default {
   name: "NavBar",
@@ -36,9 +36,6 @@ export default {
     return {
       inputData: "",
     };
-  },
-  components: {
-    MuvieLogo,
   },
   computed: {
     ...mapState({
@@ -77,8 +74,10 @@ export default {
 </script>
 
 <style>
-.logo{
-  filter: ;
+.logo {
+  width: 120px;
+  height: 40px;
+  margin-left: 30px;
 }
 
 .navbar {
@@ -102,6 +101,10 @@ export default {
   background-color: transparent;
   border: none;
   outline: none;
+}
+
+.input-atoms::placeholder {
+  color: gray;
 }
 
 .search-button {
@@ -130,12 +133,15 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 10px;
 }
 
 .my-account img {
   width: 62px;
   height: 62px;
   margin-left: 20px;
+  margin-top: 15px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 .my-profile-photo {

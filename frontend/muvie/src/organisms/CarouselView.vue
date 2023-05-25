@@ -125,6 +125,7 @@ export default {
   height: 350px;
   transition: transform 0.5s, opacity 0.5s, z-index 0.5s;
   z-index: 500;
+}
 
 .carousel-box {
   position: relative;
@@ -134,6 +135,12 @@ export default {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   text-align: center;
   cursor: pointer;
+  filter: brightness(0.5);
+  transition: filter 0.5s;
+}
+
+.carousel-item.active .carousel-box {
+  filter: brightness(1);
 }
 
 .image-container {
@@ -151,7 +158,13 @@ export default {
   height: 100%;
   object-fit: cover;
   border-radius: 10px;
+  filter: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.5),
+    rgba(0, 0, 0, 1)
+  ) !important; /* 그라데이션을 통해 어둡게 만듦 */
 }
+
 .carousel-item.active {
   z-index: 100;
 }
