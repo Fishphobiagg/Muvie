@@ -285,7 +285,6 @@ def recommend_like(request):
 def search_user(request, keyword):
     user = request.user
     liked_music_ids = MusicUserLike.objects.filter(user=user).values_list('music_id', flat=True)
-
     searched_users = User.objects.filter(Q(nickname__icontains=keyword)).exclude(pk=user.pk)
     similarity_scores = {}
     for similar_user in searched_users:
