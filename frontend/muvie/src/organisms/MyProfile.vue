@@ -36,12 +36,28 @@
         </div>
         <!-- 내 프로필 메뉴 -->
         <div class="my-profile" v-if="me">
+        <div class="follow_info">
+          <span class="count">{{followers_count}}
+            <p class="follow_tag">팔로워</p>
+            </span>
+          <span class="count">{{following_count}}
+            <p class="follow_tag">팔로잉</p>
+            </span> 
           <button @click="handleModal">취향 설정</button>
           <button @click="editProfile">프로필 편집</button>
         </div>
+          </div>
         <!-- 상대 프로필 메뉴 -->
         <div class="other-profile" v-else>
+        <div class="follow_info">
+          <span class="count">{{followers_count}}
+            <p class="follow_tag">팔로워</p>
+            </span>
+          <span class="count">{{following_count}}
+            <p class="follow_tag">팔로잉</p>
+            </span> 
           <button>{{ isFollowing() ? "팔로잉" : "팔로우" }}</button>
+        </div>
         </div>
         <ModalAtom :isModalOpen="isModalOpen">
           <h2>음악 취향</h2>
@@ -62,7 +78,7 @@ export default {
   name: "MyProfile",
   data() {
     return {
-      me: null,
+      me: true,
       editing: false,
       newNickname: "",
       formData: null,
@@ -86,12 +102,17 @@ export default {
       console.log(`이 유저는 내가 ${this.me}`);
     },
   },
+  mounted: {
+    
+  },
   computed: {
     ...mapState({
       userId: (state) => state.loginStore.userId,
       nickname: (state) => state.mypageStore.nickname,
       following: (state) => state.mypageStore.following,
       profile_picture: (state) => state.mypageStore.profile_picture,
+      followers_count: (state) => state.mypageStore.followers_count,
+      following_count: (state) => state.mypageStore.following_count,
     }),
     paramId() {
       return this.$route.params.userId;
@@ -160,6 +181,24 @@ export default {
 </script>
 
 <style>
+.follow_info{
+  display: flex;
+  flex-direction: row;
+  margin-left: 50px;
+}
+  
+  .follow_tag{
+    font-size: 15px;
+    margin-top: 3px;
+    font-weight: normal;
+  }
+
+.count{
+  font-size: 20px;
+  margin: 10px;
+  font-weight: 600;
+}
+
 .my-profile {
   display: flex;
   align-items: center;

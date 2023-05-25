@@ -3,43 +3,43 @@
     <div class="circular-slider flex-center">
       <ul class="wrapper">
         <li class="slides" style="--img-no: 1">
-          <img :src="components[0].poster" alt="성분 추천 음악" />
-          <div>
-            <div>{{ components[0].title }}</div>
-            <div>{{ components[0].artist }}</div>
-            <div>{{ components[0].album }}</div>
+          <div class="recommend_list">
+          <div class="album">{{ components[0].album }}</div>
+          <img class="album_cover" :src="components[0].poster" alt="성분 추천 음악" @click="addPlaylistAndPlayMusic(components[0])"/>
+            <div class="title">{{ components[0].title }}</div>
+            <div class="artist">{{ components[0].artist }}</div>
           </div>
         </li>
         <li class="slides" style="--img-no: 2">
-          <img :src="components[1].poster" alt="성분 추천 음악" />
-          <div>
-            <div>{{ components[1].title }}</div>
-            <div>{{ components[1].artist }}</div>
-            <div>{{ components[1].album }}</div>
+          <div class="recommend_list">
+            <div class="album">{{ components[1].album }}</div>
+          <img class="album_cover" :src="components[1].poster" alt="성분 추천 음악" @click="addPlaylistAndPlayMusic(components[1])"/>
+            <div class="title">{{ components[1].title }}</div>
+            <div class="artist">{{ components[1].artist }}</div>
           </div>
         </li>
         <li class="slides" style="--img-no: 3">
-          <img :src="components[2].poster" alt="성분 추천 음악" />
-          <div>
-            <div>{{ components[2].title }}</div>
-            <div>{{ components[2].artist }}</div>
-            <div>{{ components[2].album }}</div>
+          <div class="recommend_list">
+           <div class="album">{{ components[2].album }}</div>
+          <img class="album_cover" :src="components[2].poster" alt="성분 추천 음악" @click="addPlaylistAndPlayMusic(components[2])" />
+            <div class="title">{{ components[2].title }}</div>
+            <div class="artist">{{ components[2].artist }}</div>
           </div>
         </li>
         <li class="slides" style="--img-no: 4">
-          <img :src="components[3].poster" alt="성분 추천 음악" />
-          <div>
-            <div>{{ components[3].title }}</div>
-            <div>{{ components[3].artist }}</div>
-            <div>{{ components[3].album }}</div>
+          <div class="recommend_list">
+            <div class="album">{{ components[3].album }}</div>            
+          <img class="album_cover" :src="components[3].poster" alt="성분 추천 음악" @click="addPlaylistAndPlayMusic(components[3])"/>
+            <div class="title">{{ components[3].title }}</div>
+            <div class="artist">{{ components[3].artist }}</div>
           </div>
         </li>
         <li class="slides" style="--img-no: 5">
-          <img :src="components[4].poster" alt="성분 추천 음악" />
-          <div>
-            <div>{{ components[4].title }}</div>
-            <div>{{ components[4].artist }}</div>
-            <div>{{ components[4].album }}</div>
+          <div class="recommend_list">
+            <div class="album">{{ components[4].album }}</div>
+          <img class="album_cover" :src="components[4].poster" alt="성분 추천 음악" @click="addPlaylistAndPlayMusic(components[4])"/>
+            <div class="title">{{ components[4].title }}</div>
+            <div class="artist">{{ components[4].artist }}</div>
           </div>
         </li>
       </ul>
@@ -53,10 +53,42 @@ export default {
   props: {
     components: Array,
   },
+  methods:{
+    addPlaylistAndPlayMusic(item) {
+      this.$store.dispatch("playMusic", {
+        title: item.title,
+        artist: item.artist,
+      });
+    }
+  }
 };
+
 </script>
 
 <style>
+
+.title{
+  font-size: 20px;
+  font-weight: bold;
+  height: 20px;
+
+}
+
+.artist{
+  margin-top: 30px;
+}
+
+.album{
+  font-size: 13px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+}
+
+.album_cover{
+  cursor: pointer;
+}
+
 .flex-center {
   display: flex;
   justify-content: center;
@@ -83,6 +115,7 @@ export default {
 }
 
 .slides {
+  width: 250px;
   list-style: none;
 }
 
