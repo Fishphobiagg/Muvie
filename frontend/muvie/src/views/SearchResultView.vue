@@ -1,5 +1,6 @@
 <template>
   <div>
+    <img src="../assets/logo.png" alt="" class="logo" @click="navigateToMain()">
     <div class="tab">
       <ul class="tab-box">
         <li
@@ -54,6 +55,10 @@ export default {
     userList: (state) => state.searchStore.userList,
   }),
   methods: {
+    navigateToMain(){
+      this.$router.push({name:"MainView"})
+    }
+    ,
     clickButton(idx) {
       this.tab = idx;
       const lineElement = this.$refs.line;
@@ -78,6 +83,15 @@ export default {
 </script>
 
 <style>
+.logo{
+  width: 120px;
+  height: 40px;
+  display: flex;
+  cursor: pointer;
+  display: flex;
+  justify-content: start;
+
+}
 .tab {
   /* position: fixed; */
   position: relative;
