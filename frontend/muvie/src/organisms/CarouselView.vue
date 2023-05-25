@@ -92,7 +92,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .carousel-wrapper {
   position: relative;
   top: 20;
@@ -125,7 +125,6 @@ export default {
   height: 350px;
   transition: transform 0.5s, opacity 0.5s, z-index 0.5s;
   z-index: 500;
-}
 
 .carousel-box {
   position: relative;

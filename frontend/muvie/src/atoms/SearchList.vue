@@ -44,7 +44,7 @@
           :class="item.isLiked ? 'fa fa-heart' : 'fa fa-heart-o'"
         ></i>
       </span>
-      <p class="like_count" @click="console.log(1)" v-if="showButtons">
+      <p class="like_count" v-if="showButtons">
         {{ item.like_count }}
       </p>
     </div>
@@ -82,6 +82,7 @@ export default {
         artist: item.artist,
       });
       this.$store.dispatch("addPlaylist", item.id);
+
     },
     like(item) {
       this.$store.dispatch("like", item.id);

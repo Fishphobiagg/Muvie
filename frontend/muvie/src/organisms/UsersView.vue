@@ -55,6 +55,11 @@ export default {
           : "익명의 유저",
     }),
   },
+  methods: {
+    navigateToProfile(userId){
+      this.$router.push({name: "Profile", params: {userId}});
+    },
+  }
 };
 </script>
 

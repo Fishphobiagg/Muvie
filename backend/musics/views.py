@@ -67,7 +67,7 @@ class MusicComponentView(APIView):
         user = request.user
         data = user.music_components
         response_data = {
-    "id": 5,
+    "id": user.id,
     "energy": int(float(data.energy) * 100),
     "instrumentalness": int(float(data.instrumentalness) * 100),
     "liveness": int(float(data.liveness) * 100),
@@ -81,19 +81,6 @@ class MusicComponentView(APIView):
 }
 
         return Response(response_data)
-    
-    # def post(self, request):
-    #         serializer = ComponentSerializer(data=request.data)
-    #         user = request.user
-    #         if serializer.is_valid():
-    #             component = user.music_components
-    #             for field, value in serializer.validated_data.items():
-    #                 setattr(component, field, value)
-    #             component.save()
-    #             return Response({"component":user.music_components}, status=status.HTTP_201_CREATED)
-    #         else:
-    #             return Response(serializer.errors, status=status.HTTP_406_NOT_ACCEPTABLE)
-
 
     def post(self, request):
         user = request.user

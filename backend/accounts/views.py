@@ -229,8 +229,8 @@ def recommend_components(request):
 @permission_classes([IsAuthenticated])
 def recommend_user(request):
     user = request.user
-    random_users = random.sample(list(User.objects.exclude(pk=user.pk).exclude(following=user)), (User.objects.all().count() - User.objects.filter(following=user).count())//10) # 대규모로 갈 경우 속도가 느려지기 때문에 후에 수정
     user_vector = calculate_vector(user)
+    random_users = random.sample(list(User.objects.exclude(pk=user.pk).exclude(following=user)), (User.objects.all().count() - User.objects.filter(following=user).count())//10) # 대규모로 갈 경우 속도가 느려지기 때문에 후에 수정
     random_user_list = []
     for random_user in random_users:
         random_user_vector = calculate_vector(random_user)
@@ -244,10 +244,14 @@ def recommend_user(request):
 
 
 def collaborative_filtering(user, n=10):
-    liked_music_ids = MusicUserLike.objects.filter(user=user).values_list('music_id', flat=True)
+    liked_music_ids = list(MusicUserLike.objects.filter(user=user).order_by('-created_at').values_list('music_id', flat=True)[:10])
 
+    if not liked_music_ids:
+        liked_music_ids = list(Music.objects.order_by('?').values_list('id', flat=True)[:10])
+    elif len(liked_music_ids) < 10:
+        other_query = list(Music.objects.order_by('?').values_list('id', flat=True)[:10 - len(liked_music_ids)])
+        liked_music_ids.extend(other_query)
     similar_users = random.sample(list(User.objects.filter(musicuserlike__music_id__in=liked_music_ids).exclude(id=user.id)), 10)
-
     similarity_scores = {}
     for similar_user in similar_users:
         similar_user_liked_music_ids = MusicUserLike.objects.filter(user=similar_user).values_list('music_id')
@@ -283,11 +287,16 @@ def recommend_like(request):
 def search_user(request, keyword):
     user = request.user
     liked_music_ids = MusicUserLike.objects.filter(user=user).values_list('music_id', flat=True)
+    print(liked_music_ids)
+    # if not liked_music_ids:
+        
+    #     liked_music_ids = Music.objects.
     searched_users = User.objects.filter(Q(nickname__icontains=keyword)).exclude(pk=user.pk)
     similarity_scores = {}
     for similar_user in searched_users:
         similar_user_liked_music_ids = MusicUserLike.objects.filter(user=similar_user).values_list('music_id')
         similarity_scores[similar_user.id] = len(set(liked_music_ids) & set(similar_user_liked_music_ids))
+
     sorted_similar_users = sorted(similarity_scores.items(), key=lambda x: x[1], reverse=True)
     responses = []
     for user_id, like in sorted_similar_users:
@@ -298,7 +307,7 @@ def search_user(request, keyword):
             'nickname':searched_user.nickname,
             'email':searched_user.email,
             'profile_picture':searched_user.profile_picture.url,
-            'is_followed': searched_user.following.filter(pk=user.pk).exists()
+            'is_followed': user.following.filter(pk=user_id).exists()
         }
         )
     return Response({"data":responses}, status=status.HTTP_200_OK)

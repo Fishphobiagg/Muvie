@@ -46,17 +46,13 @@
 
 <script>
 import { mapState } from 'vuex';
-import LikedUserList from './LikedUserList.vue';
 
 export default {
   name: "LikeList",
-  components: {
-    LikedUserList,
-  },
+
   data() {
     return {
       showButtons: false,
-      showLikedUsers: false,
     };
   },
   computed: {

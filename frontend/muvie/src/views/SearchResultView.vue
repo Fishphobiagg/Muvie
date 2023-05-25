@@ -124,18 +124,11 @@ export default {
   position: absolute;
   top: 0;
   /* left: 700; */
-  width: 130px;
+  width: 100px;
   height: 5px;
   background-color: #7350ff;
   border-radius: 10px;
   transition: all 0.3s ease-in-out;
 }
 
-.tab-container {
-  position: relative;
-  width: 100%;
-  height: 700px;
-  background-color: white;
-  padding-top: 10px;
-}
 </style>
