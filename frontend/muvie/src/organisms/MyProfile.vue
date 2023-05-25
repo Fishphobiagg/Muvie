@@ -1,7 +1,12 @@
 <!-- eslint-disable no-restricted-syntax -->
 <template>
   <div>
-    <img src="../assets/logo.png" alt="로고" class="logo" @click="navigateToMain()">
+    <img
+      src="../assets/logo.png"
+      alt="로고"
+      class="logo"
+      @click="navigateToMain()"
+    />
     <i class=""></i>
     <div class="my-profile">
       <div class="my-photo-detail">
@@ -38,28 +43,32 @@
         </div>
         <!-- 내 프로필 메뉴 -->
         <div class="my-profile" v-if="me">
-        <div class="follow_info">
-          <span class="count">{{followers_count}}
-            <p class="follow_tag">팔로워</p>
+          <div class="follow_info">
+            <span class="count"
+              >{{ followers_count }}
+              <p class="follow_tag">팔로워</p>
             </span>
-          <span class="count">{{following_count}}
-            <p class="follow_tag">팔로잉</p>
-            </span> 
-          <button @click="handleModal">취향 설정</button>
-          <button @click="editProfile">프로필 편집</button>
-        </div>
+            <span class="count"
+              >{{ following_count }}
+              <p class="follow_tag">팔로잉</p>
+            </span>
+            <button @click="handleModal">취향 설정</button>
+            <button @click="editProfile">프로필 편집</button>
           </div>
+        </div>
         <!-- 상대 프로필 메뉴 -->
         <div class="other-profile" v-else>
-        <div class="follow_info">
-          <span class="count">{{followers_count}}
-            <p class="follow_tag">팔로워</p>
+          <div class="follow_info">
+            <span class="count"
+              >{{ followers_count }}
+              <p class="follow_tag">팔로워</p>
             </span>
-          <span class="count">{{following_count}}
-            <p class="follow_tag">팔로잉</p>
-            </span> 
-          <button>{{ isFollowing() ? "팔로잉" : "팔로우" }}</button>
-        </div>
+            <span class="count"
+              >{{ following_count }}
+              <p class="follow_tag">팔로잉</p>
+            </span>
+            <button>{{ isFollowing() ? "팔로잉" : "팔로우" }}</button>
+          </div>
         </div>
         <ModalAtom :isModalOpen="isModalOpen">
           <h2>음악 취향</h2>
@@ -104,9 +113,7 @@ export default {
       console.log(`이 유저는 내가 ${this.me}`);
     },
   },
-  mounted: {
-    
-  },
+  mounted: {},
   computed: {
     ...mapState({
       userId: (state) => state.loginStore.userId,
@@ -121,8 +128,8 @@ export default {
     },
   },
   methods: {
-    navigateToMain(){
-      this.$router.push({name:"MainView"})
+    navigateToMain() {
+      this.$router.push({ name: "MainView" });
     },
     ...mapMutations(["updatePhoto"]),
     isFollowing() {
@@ -194,19 +201,18 @@ export default {
   display: flex;
   justify-content: start;
 }
-.follow_info{
+.follow_info {
   display: flex;
   flex-direction: row;
-  margin-left: 50px;
 }
-  
-  .follow_tag{
-    font-size: 15px;
-    margin-top: 3px;
-    font-weight: normal;
-  }
 
-.count{
+.follow_tag {
+  font-size: 15px;
+  margin-top: 3px;
+  font-weight: normal;
+}
+
+.count {
   font-size: 20px;
   margin: 10px;
   font-weight: 600;

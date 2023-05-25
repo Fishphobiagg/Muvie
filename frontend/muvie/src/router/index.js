@@ -1,6 +1,5 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import HomeView from "../views/HomeView.vue";
 import LoginView from "../views/LoginView.vue";
 import SignupView from "../views/SignupView.vue";
 import MypageView from "../views/MypageView.vue";
@@ -12,8 +11,8 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
-    name: "home",
-    component: HomeView,
+    name: "MainView",
+    component: MainView,
   },
   {
     path: "/login",
@@ -30,11 +29,11 @@ const routes = [
     name: "Profile",
     component: MypageView,
   },
-  {
-    path: "/main",
-    name: "MainView",
-    component: MainView,
-  },
+  // {
+  //   path: "/main",
+  //   name: "MainView",
+  //   component: MainView,
+  // },
   {
     path: "/search/:keyword",
     name: "SearchResultView",

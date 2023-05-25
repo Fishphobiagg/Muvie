@@ -1,7 +1,27 @@
 <template>
   <div>
-    <img src="../assets/logo.png" alt="" class="logo" @click="navigateToMain()">
+    <img
+      src="../assets/logo.png"
+      alt=""
+      class="logo"
+      @click="navigateToMain()"
+    />
     <div class="tab">
+      <div class="search-bar">
+        <div class="search-input">
+          <button class="search-button" @click="handleSearch">
+            <i class="fas fa-search"></i>
+          </button>
+          <input
+            class="input-atoms"
+            v-model="inputData"
+            @keydown.enter="handleSearch"
+            placeholder="음악과 사용자를 검색해보세요"
+          />
+        </div>
+        <div class="search-bar-line"></div>
+      </div>
+
       <ul class="tab-box">
         <li
           class="tab-li"
@@ -25,8 +45,8 @@
           :class="{ active: tab === 2 }"
           @click="clickButton(2)"
         >
-          유저</li>
-        <div ref="line" class="line"></div>
+          유저
+        </li>
       </ul>
       <div class="tab-container">
         <SearchTab :tab="tab" />
@@ -44,6 +64,7 @@ export default {
   data() {
     return {
       tab: 0,
+      inputData: "",
     };
   },
   components: {
@@ -53,12 +74,30 @@ export default {
     userId: (state) => state.loginStore.userId,
     searchedList: (state) => state.searchStore.searchedList,
     userList: (state) => state.searchStore.userList,
+    keyword() {
+      return this.$route.params.keyword;
+    },
   }),
-  methods: {
-    navigateToMain(){
-      this.$router.push({name:"MainView"})
+  created() {
+    if (this.keyword) {
+      console.log("키워드 있어");
+      console.log(this.keyword);
+      this.inputData = this.keyword; // inputData에 파라미터 값을 할당
     }
-    ,
+  },
+  methods: {
+    handleSearch() {
+      if (this.inputData.trim() !== "") {
+        this.$router.push({
+          name: "SearchResultView",
+          params: { keyword: this.inputData },
+        });
+        this.inputData = "";
+      }
+    },
+    navigateToMain() {
+      this.$router.push({ name: "MainView" });
+    },
     clickButton(idx) {
       this.tab = idx;
       const lineElement = this.$refs.line;
@@ -83,38 +122,33 @@ export default {
 </script>
 
 <style>
-.logo{
+.logo {
   width: 120px;
   height: 40px;
   display: flex;
   cursor: pointer;
   display: flex;
   justify-content: start;
-
 }
 .tab {
-  /* position: fixed; */
   position: relative;
   width: 100%;
-  /* top: 300px; */
-  /* bottom: 700px; */
-  /* right: 200px; */
   overflow: hidden;
-  /* background: #fff; */
   line-height: 1.5;
   font-weight: 300;
-  color: #888;
-  /* display: flex; */
-  /* justify-content: flex-end; */
+}
+
+.search-bar {
+  width: 50%;
+  margin: 50px auto;
 }
 
 .tab-box {
   width: 400px;
-  margin: 0px;
+  margin: 20px 0 20px 0;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  border-bottom: 2px solid rgba(229, 229, 229);
 }
 
 .tab-box li {
@@ -123,15 +157,17 @@ export default {
   font-size: 18px;
   font-weight: 600;
   color: #919191;
-  background: none;
-  background-color: white;
+  background-color: #fff;
   border: none;
-  padding: 15px;
+  padding: 13px;
+  margin: 5px;
   cursor: pointer;
+  border-radius: 40px;
 }
 
 .tab-box li.active {
-  color: #7360ff;
+  color: #fff;
+  background-color: #7a56e8;
 }
 
 .line {
@@ -144,5 +180,4 @@ export default {
   border-radius: 10px;
   transition: all 0.3s ease-in-out;
 }
-
 </style>

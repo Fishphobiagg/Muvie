@@ -56,10 +56,10 @@ export default {
     }),
   },
   methods: {
-    navigateToProfile(userId){
-      this.$router.push({name: "Profile", params: {userId}});
+    navigateToProfile(userId) {
+      this.$router.push({ name: "Profile", params: { userId } });
     },
-  }
+  },
 };
 </script>
 

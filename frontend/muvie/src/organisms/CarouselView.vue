@@ -101,6 +101,7 @@ export default {
   padding: 0;
   perspective: 800px;
   overflow: hidden;
+  z-index: 1;
 }
 
 .carousel {
@@ -113,18 +114,16 @@ export default {
   transform-style: preserve-3d;
   transition: transform 0.5s;
   cursor: grab;
-  z-index: 3;
+  z-index: 2; /* 이미지 캐러셀을 앞으로 가져옴 */
 }
 
 .carousel-item {
   position: absolute;
-  /* top: 50%;
-  left: 50%; */
   transform: translate(-50%, -50%);
   width: 250px;
   height: 350px;
   transition: transform 0.5s, opacity 0.5s, z-index 0.5s;
-  z-index: 500;
+  z-index: 3; /* 이미지 캐러셀 요소가 다른 요소들보다 앞에 위치하도록 설정 */
 }
 
 .carousel-box {
@@ -135,8 +134,9 @@ export default {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   text-align: center;
   cursor: pointer;
-  filter: brightness(0.5);
+  filter: brightness(0.7);
   transition: filter 0.5s;
+  z-index: 2; /* 이미지 캐러셀 요소가 welcome-msg 요소 앞으로 나오도록 설정 */
 }
 
 .carousel-item.active .carousel-box {
