@@ -8,6 +8,8 @@
 ## Tech Stack
 
 ### Back-end & Front-end
+![Python](https://img.shields.io/badge/Python-yellow.svg?&style=for-the-badge&logo=Python&logoColor=#3776AB)
+![Javascript](https://img.shields.io/badge/Javascript-white.svg?&style=for-the-badge&logo=Javascript&logoColor=#F7DF1E)
 ![Django](https://img.shields.io/badge/Django-092E20.svg?&style=for-the-badge&logo=Django&logoColor=#092E20)
 ![Vue.js](https://img.shields.io/badge/Vue.js-4FC08D.svg?&style=for-the-badge&logo=Vue.js&logoColor=092E20)
 
@@ -15,8 +17,6 @@
 ![Notion](https://img.shields.io/badge/Notion-000000.svg?&style=for-the-badge&logo=Notion&logoColor=로고색상)
 ![Github](https://img.shields.io/badge/Github-181717.svg?&style=for-the-badge&logo=Github&logoColor=로고색상)
 ![Discord](https://img.shields.io/badge/Discord-5865F2.svg?&style=for-the-badge&logo=Discord&logoColor=092E20)
-![Gitbook](https://img.shields.io/badge/Gitbook-3884FF.svg?&style=for-the-badge&logo=Gitbook&logoColor=092E20)
-
 <br>
 
 ## ✔ 목차
@@ -137,19 +137,14 @@
 | style | 코드 스타일 변경 (코드 포매팅, 세미콜론 누락 등)기능 수정이 없는 경우 |
 | refactor | 코드 리팩토링 |
 | chore | 빌드 업무 수정, 패키지 매니저 수정 (gitignore 수정 등) |
-
+<br>
 ### git flow
 
 | 브랜치명 | 구분 | 설명 | 비고 |
 | --- | --- | --- | --- |
 | master | 유지 브랜치 | - 기본 브랜치 - 언제든지 배포 가능한 형태 유지 |  |
-| dev | 보조 브랜치 | - feature가 모이는 통합 테스트 브랜치
-- 테스트 완료 후 master로 머지
-- 소스 프리징을 해결하기 위한 브랜치 | feature에서 여기로 풀리퀘스트 요청
-여기서 모두 통합 후 마지막에 master로 풀리퀘스트 요청 |
-| feature | 보조 브랜치 | - 기능 단위 개발 브랜치
-- feature에서 개발 완료 후 dev에서 머지
-- Issue list로 브랜치 생성 및 관리 | ex) feat: signup  |
+| dev | 보조 브랜치 | - feature가 모이는 통합 |
+| feature | 보조 브랜치 | - 기능 단위 개발 브랜치| ex) feat: signup  |
 | hotfix | 보조 브랜치 | - 운영중 긴급한 오류를 해결하기 위한 브랜치 |  |
 
 ### Team Rule & Culture
