@@ -2,7 +2,7 @@
 <template>
   <div>
     <img
-      src="../assets/logo3.png"
+      src="../assets/logo4.png"
       alt="로고"
       class="logo"
       @click="navigateToMain()"

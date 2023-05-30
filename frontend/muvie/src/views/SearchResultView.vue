@@ -1,7 +1,7 @@
 <template>
   <div>
     <img
-      src="../assets/logo3.png"
+      src="../assets/logo4.png"
       alt=""
       class="logo"
       @click="navigateToMain()"
