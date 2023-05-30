@@ -1,8 +1,8 @@
-<h1 align="center">🎵 Muvie 🎬
- </h1>
+<h1 align="center">🎵 Muvie 🎬</h1>
 <br>
 <p align="center">DRF(Django REST Framework) & Vue를 이용한 Restful 웹 프로젝트</p>
 <p align="center"><a>Muvie</a>는 영화 OST를 스트리밍할 수 있고, 다른 사용자와의 상호작용을 통해 자신의 취향에 알맞는 음악을 추천받을 수 있는 서비스입니다.</p>
+
 <br>
 
 ## Tech Stack
@@ -54,7 +54,7 @@
 
 | 정예륜(팀원) | 이명우(PM) |
 | --- | --- |
-| <p align="left" style="color:pink">Front-end<p/> | <p align="left" style="color:skyblue">Back-end<p/> |
+| <p align="left" style="color:pink">Front-end</p> | <p align="left" style="color:skyblue">Back-end</p> |
 | [@YeryunJung](https://github.com/YeryunJung) | [@Fishphobiagg](https://github.com/Fishphobiagg) |
 <br>
 
@@ -63,6 +63,18 @@
 <br>
 
 ## 프로젝트
+> 내가 좋아하는 영화, 내가 좋아하는 음악 Muvie
+> * 내가 듣던 영화 OST를 찾고 싶다면? ***Muvie***
+> * 내가 들었던 영화 OST와 비슷한 음악을 찾고 싶다면? ***Muvie***
+1. 내 취향에 맞는 영화 OST 추천
+2. 나와 비슷한 음악을 찾는 사람도 만나볼 수 있고,
+3. 음악 스트리밍, 재생목록, 좋아요로 내 개성을 표현
+3. 새로운 음악을 추천해주는 기능까지
+
+<br>
+
+<p align="center"> <img src="./img/main2.gif" width="65%"/></p>
+
 
 <br>
 <h1 align="center">🚀 서비스
@@ -77,6 +89,7 @@
 #### 팔로우/언팔로우/프로필 조회
 
 > 유저 간 팔로우 및 언팔로우가 가능합니다. 또 유저 프로필 조회를 통해 상대방의 팔로워, 팔로잉, 좋아요 목록, 플레이리스트까지 확인할 수 있습니다.
+<p align="center"> <img src="./img/profile.gif" width="65%"/></p>
 
 <br>
 
@@ -84,6 +97,7 @@
 #### 좋아요/스트리밍/플레이리스트
 
 > 자신이 좋아하는 음악에 대한 좋아요 기능을 이용할 수 있습니다. 또한 음악을 스트리밍 할 수 있으며 플레이리스트에 추가해둘 수도 있습니다.
+<p align="center"> <img src="./img/music.gif" width="65%"/></p>
 
 <br>
 
