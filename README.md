@@ -117,7 +117,7 @@
 
 #### [ERD](https://github.com/Fishphobiagg/Muvie/wiki/ERD)
 #### [요구사항 정의서](https://perfect-bluebell-dba.notion.site/1e54ff56a7a34de8b57aca5876a0b84b)
-#### [디자인](https://youtu.be/p1cE9T0CFCQ)
+#### [디자인](https://www.figma.com/file/oWZhVQ82Wh3Met5o5I9w2b/230501_MUVIE?type=design&node-id=0%3A1&t=mxH7VMSR9IYFajhf-1)
 
 ### 🛠 개발
 
