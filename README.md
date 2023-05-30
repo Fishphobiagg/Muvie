@@ -138,6 +138,7 @@
 | refactor | 코드 리팩토링 |
 | chore | 빌드 업무 수정, 패키지 매니저 수정 (gitignore 수정 등) |
 <br>
+
 ### git flow
 
 | 브랜치명 | 구분 | 설명 | 비고 |
