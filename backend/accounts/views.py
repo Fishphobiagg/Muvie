@@ -119,15 +119,6 @@ class FollowAPIView(APIView):
 @permission_classes([IsAuthenticated])
 def profile_view(request, user_pk):
     me = request.user
-    if user_pk == me.pk:
-        serializer = MyProfileSerializer(instance=me, user_pk=me.pk)
-        user_serializer = SimpleUserSerializer(me)
-        response = {
-            "user_profile" : user_serializer.data,
-            "detail" : serializer.data
-        }
-        return Response(response)
-    
     user = User.objects.get(pk=user_pk)
     serializer = ProfileSerializer(instance=user, user_pk=me.pk)
     user_serializer = SimpleUserSerializer(user)
@@ -157,7 +148,7 @@ def change_accounts(self, request, user_pk):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def get_like_list(self, request):
+def get_like_list(request):
     user = request.user
     like_list = user.like_music.all()
     serializer = MusicListSerializer(like_list, many=True, user_pk=user.pk)
@@ -165,7 +156,7 @@ def get_like_list(self, request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def get_play_list(self, request):
+def get_play_list(request):
     user = request.user
     playlist = user.playlist.all()
     serializer = MusicListSerializer(playlist, many=True, user_pk=user.pk)
@@ -198,12 +189,12 @@ def recommend_components(request):
         if Music.objects.filter(title=title, artist=artist):
            music = Music.objects.filter(title=title, artist=artist)[0]
            response['data'].append({"id":music.pk, "title":title, "artist":artist, 'album':album, 'poster':poster, 'like count':music.users_like_musics.count()})
-
-        new = Music.objects.create(
-            title=title, artist=artist, album_cover = poster
-        )
-        new.save()
-        response['data'].append({"id":new.pk, "title":title, "artist":artist, 'album':album, 'poster':poster, 'like count' : 0})
+        else:
+            new = Music.objects.create(
+                title=title, artist=artist, album_cover = poster
+            )
+            new.save()
+            response['data'].append({"id":new.pk, "title":title, "artist":artist, 'album':album, 'poster':poster, 'like count' : 0})
     return Response(response)
 
 
