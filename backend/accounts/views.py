@@ -1,5 +1,4 @@
 from django.db.models import Q
-from django.db.models import Count
 
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
@@ -9,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 
 from musics.serializers import MusicListSerializer
-from .algorithms.algorithm import recommend_ost, calculate_vector
+from .algorithms.algorithm import recommend_ost, calculate_vector, collaborative_filtering
 from .serializers import *
 from musics.models import Music
 from accounts.models import MusicUserLike, User
@@ -23,38 +22,40 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 import random
 
-class SignupAPIView(APIView):
-    def post(self, request):
-        serializer = UserSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            
-            # jwt 토큰 접근
-            token = TokenObtainPairSerializer.get_token(user)
-            refresh_token = str(token)
-            access_token = str(token.access_token)
-            res = Response(
-                {
-                    "user": serializer.data,
-                    "message": "register successs",
-                    "token": {
-                        "access": access_token,
-                        "refresh": refresh_token,
-                    },
-                },
-                status=status.HTTP_200_OK,
-            )
-            
-            # jwt 토큰 => 쿠키에 저장
-            res.set_cookie("access", access_token, httponly=True)
-            res.set_cookie("refresh", refresh_token, httponly=True)
-            return res
+@api_view(['POST'])
+def signup(request):
+    serializer = UserSerializer(data=request.data)
+    if not serializer.is_valid():
         if 'email' in serializer.errors:
-            return Response({"message":"Email is already registered"}, status=status.HTTP_409_CONFLICT)
+            return Response({"message":"Email is already registered"}, status=status.HTTP_400_BAD_REQUEST)
         elif 'nickname' in serializer.errors:
-            return Response({"message":"Nickname is already registered"}, status=status.HTTP_409_CONFLICT)
+            return Response({"message":"Nickname is already registered"}, status=status.HTTP_400_BAD_REQUEST)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    user = serializer.save()
     
+    # jwt 토큰 접근
+    token = TokenObtainPairSerializer.get_token(user)
+    refresh_token = str(token)
+    access_token = str(token.access_token)
+    res = Response(
+        {
+            "user": serializer.data,
+            "message": "register successs",
+            "token": {
+                "access": access_token,
+                "refresh": refresh_token,
+            },
+        },
+        status=status.HTTP_200_OK,
+    )
+    
+    # jwt 토큰 => 쿠키에 저장
+    res.set_cookie("access", access_token, httponly=True)
+    res.set_cookie("refresh", refresh_token, httponly=True)
+    return res
+
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
@@ -99,10 +100,9 @@ class FollowAPIView(APIView):
             return Response({
                 "message" : "already followed"
             }, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            user.following.add(opponent)
-            serializer = ProfileSerializer(instance=User.objects.get(pk=user_pk), user_pk=user.pk)
-            return Response(serializer.data)
+        user.following.add(opponent)
+        serializer = ProfileSerializer(instance=User.objects.get(pk=user_pk), user_pk=user.pk)
+        return Response(serializer.data)
         
     def delete(self, request, user_pk):
         user = request.user
@@ -110,80 +110,57 @@ class FollowAPIView(APIView):
         if opponent not in user.following.all():
             return Response({
                 "message" : "Not followed"
-            }, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            user.following.remove(opponent)
-            serializer = ProfileSerializer(instance=user, user_pk=user.pk)
-            return Response(serializer.data)
+            }, status=status.HTTP_400_BAD_REQUEST)   
+        user.following.remove(opponent)
+        serializer = ProfileSerializer(instance=user, user_pk=user.pk)
+        return Response(serializer.data)
 
-class ProfileView(APIView):
-    permission_classes = [IsAuthenticated]
-    def get(self, request, user_pk):
-        me = request.user
-        if user_pk == me.pk:
-            serializer = MyProfileSerializer(instance=me, user_pk=me.pk)
-            user_serializer = SimpleUserSerializer(me)
-            response = {
-                "user_profile" : user_serializer.data,
-                "detail" : serializer.data
-            }
-            return Response(response)
-        else:
-            user = User.objects.get(pk=user_pk)
-            serializer = ProfileSerializer(instance=user, user_pk=me.pk)
-            user_serializer = SimpleUserSerializer(user)
-            response = {
-                "user_profile" : user_serializer.data,
-                "detail" : serializer.data
-            }
-        return Response(response)
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def profile_view(request, user_pk):
+    me = request.user
+    user = User.objects.get(pk=user_pk)
+    serializer = ProfileSerializer(instance=user, user_pk=me.pk)
+    user_serializer = SimpleUserSerializer(user)
+    response = {
+        "user_profile" : user_serializer.data,
+        "detail" : serializer.data
+    }
+    return Response(response)
         
-class PasswordChangeView(APIView):
-    permission_classes = [IsAuthenticated]
-    def patch(self, request, user_pk):
-        user = User.objects.get(pk=user_pk)
-        new_password = request.data.get('new_password')
-        new_password_confirm = request.data.get('new_password_confirm')
-        if new_password == new_password_confirm:
-            user.password = new_password
-            return Response(SimpleUserSerializer(user).data, status=status.HTTP_200_OK)
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def change_accounts(self, request, user_pk):
+    user = User.objects.get(pk=user_pk)
+    serializer = UserChangeSerializer(user, data=request.data, partial=True)
+    
+    if 'email' in serializer.errors:
+        return Response({"message":"Email is already registered"}, status=status.HTTP_400_BAD_REQUEST)
+    
+    elif 'nickname' in serializer.errors:
+        return Response({"message":"Nickname is already registered"}, status=status.HTTP_400_BAD_REQUEST)
+    
+    elif not serializer.is_valid():
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    serializer.save()
+    return Response({"changed_data" : UserChangeSerializer(User.objects.get(pk=user_pk)).data})
 
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_like_list(request):
+    user = request.user
+    like_list = user.like_music.all()
+    serializer = MusicListSerializer(like_list, many=True, user_pk=user.pk)
+    return Response({"like_list":serializer.data})
 
-class AccountsChangeView(APIView):
-    permission_classes = [IsAuthenticated]
-    def patch(self, request, user_pk):
-        user = User.objects.get(pk=user_pk)
-        if request.user != user:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
-        serializer = UserChangeSerializer(user, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"message":"Change Success",
-                             "changed_data" : UserChangeSerializer(User.objects.get(pk=user_pk)).data
-                             })
-        if 'email' in serializer.errors:
-            return Response({"message":"Email is already registered"}, status=status.HTTP_409_CONFLICT)
-        elif 'nickname' in serializer.errors:
-            return Response({"message":"Nickname is already registered"}, status=status.HTTP_409_CONFLICT)
-
-        return Response(serializer.error, status=status.HTTP_400_BAD_REQUEST)
-
-class LikeListView(APIView):
-    permission_classes = [IsAuthenticated]
-    def get(self, request):
-        user = request.user
-        like_list = user.like_music.all()
-        serializer = MusicListSerializer(like_list, many=True, user_pk=user.pk)
-        return Response({"like_list":serializer.data})
-
-class PlaylistView(APIView):
-    permission_classes = [IsAuthenticated]
-    def get(self, request):
-        user = request.user
-        playlist = user.playlist.all()
-        serializer = MusicListSerializer(playlist, many=True, user_pk=user.pk)
-        return Response({"play_list":serializer.data})
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_play_list(request):
+    user = request.user
+    playlist = user.playlist.all()
+    serializer = MusicListSerializer(playlist, many=True, user_pk=user.pk)
+    return Response({"play_list":serializer.data})
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -208,6 +185,7 @@ def recommend_components(request):
         artist = recommend['artists'][0]['name']
         album = recommend['album']['name']
         poster = recommend['album']['images'][0]['url']
+
         if Music.objects.filter(title=title, artist=artist):
            music = Music.objects.filter(title=title, artist=artist)[0]
            response['data'].append({"id":music.pk, "title":title, "artist":artist, 'album':album, 'poster':poster, 'like count':music.users_like_musics.count()})
@@ -238,28 +216,6 @@ def recommend_user(request):
 
     user_serializer = SimpleUserSerializer(topusers, many=True)
     return Response({"recommend":user_serializer.data})
-
-
-def collaborative_filtering(user, n=10):
-    liked_music_ids = list(MusicUserLike.objects.filter(user=user).order_by('-created_at').values_list('music_id', flat=True)[:10])
-
-    if not liked_music_ids:
-        liked_music_ids = list(Music.objects.order_by('?').values_list('id', flat=True)[:10])
-    elif len(liked_music_ids) < 10:
-        other_query = list(Music.objects.order_by('?').values_list('id', flat=True)[:10 - len(liked_music_ids)])
-        liked_music_ids.extend(other_query)
-    similar_users = random.sample(list(User.objects.filter(musicuserlike__music_id__in=liked_music_ids)), 10)
-    similarity_scores = {}
-    for similar_user in similar_users:
-        similar_user_liked_music_ids = MusicUserLike.objects.filter(user=similar_user).values_list('music_id')
-        similarity_scores[similar_user.id] = len(set(liked_music_ids) & set(similar_user_liked_music_ids))
-    sorted_similar_users = sorted(similarity_scores.items(), key=lambda x: x[1], reverse=True)
-
-    top_similar_users = [item[0] for item in sorted_similar_users[:n]]
-    recommend_music = Music.objects.filter(musicuserlike__user__id__in=top_similar_users).annotate(like_count=Count('musicuserlike')).order_by('-like_count')
-
-    return recommend_music, top_similar_users
-
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])

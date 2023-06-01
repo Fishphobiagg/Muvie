@@ -1,17 +1,6 @@
 from .models import Music, MusicComponent
 from rest_framework import serializers
-from accounts.models import User
 
-class ComponentSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(
-        queryset=User.objects.all(),
-        default=serializers.CurrentUserDefault()
-    )
-
-    class Meta:
-        model = MusicComponent
-        fields = '__all__'
-    
 class MusicListSerializer(serializers.ModelSerializer):
     like_count = serializers.SerializerMethodField()
     movie = serializers.SerializerMethodField()
@@ -63,21 +52,3 @@ class ComponentSerializer(serializers.ModelSerializer):
     class Meta:
         model = MusicComponent
         exclude = ('mode',)
-
-class LikedUserSerializer(serializers.ModelSerializer):
-    follower_count = serializers.SerializerMethodField()
-    is_followed = serializers.SerializerMethodField()
-    class Meta:
-        model = User
-        field = ('id', 'nickname', 'profile_picture', 'follower_count', 'is_followed')
-    
-    def __init__(self, *args, **kwargs):
-        user_pk = kwargs.pop('user_pk', None)
-        super().__init__(*args, **kwargs)
-        self.user_pk = user_pk
-
-    def get_follower(self, instance):
-        return instance.followers.all().count()
-    
-    def get_is_followed(self, instance):
-        return instance.followers.filter(pk=self.user_pk).exists()
