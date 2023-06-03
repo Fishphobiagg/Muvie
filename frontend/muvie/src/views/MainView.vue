@@ -26,12 +26,20 @@
         </transition>
       </div>
     </div>
-    <ModalAtom class="profile-modal" :isModalOpen="isModal1Open">
+    <!-- <ModalAtom class="profile-modal" :isModal1Open="isModal1Open">
       <ul>
         <li @click="navigateToProfile(userId)">마이페이지</li>
         <li @click="logout">로그아웃</li>
       </ul>
-    </ModalAtom>
+    </ModalAtom> -->
+    <div class="profile-modal-div" v-if="isModal1Open">
+      <div class="modal-content-div">
+        <ul>
+          <li @click="navigateToProfile(userId)">마이페이지</li>
+          <li @click="logout">로그아웃</li>
+        </ul>
+      </div>
+    </div>
     <ModalAtom class="login-request" :isModalOpen="isModal2Open">
       <div></div>
       <img class="modal-logo" src="../assets/logo2.png" alt="" />
@@ -378,8 +386,46 @@ export default {
   position: relative;
 }
 
+.profile-modal-div {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content-div {
+  position: fixed;
+  border-radius: 5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  top: 90px;
+  right: 50px;
+  width: 150px;
+  min-height: 30px;
+  padding: 5px;
+  padding: 5px;
+  z-index: 9999;
+  /* display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: white;
+  border-radius: 15px;
+  padding: 20px;
+  width: 60%;
+  min-height: 60%;
+  overflow: hidden; */
+}
+
 .profile-modal {
   background-color: transparent;
+  position: fixed;
+  top: 90px;
+  right: 50px;
+  z-index: 9999;
 }
 
 .profile-modal .modal-content {
@@ -394,7 +440,7 @@ export default {
   padding: 5px;
 }
 
-.profile-modal .modal-content > ul {
+.profile-modal-div .modal-content-div > ul {
   list-style: none;
   padding: 0;
   margin: 0;
@@ -403,7 +449,7 @@ export default {
   align-items: center;
 }
 
-.profile-modal .modal-content > ul > li {
+.profile-modal-div .modal-content-div > ul > li {
   text-align: center;
   margin: 10px;
   flex: 1;
@@ -415,7 +461,7 @@ export default {
 .login-request {
   display: flex;
 }
-.login-request .modal-content {
+.login-request .modal-content-div {
   width: 400px;
   min-height: 580px;
   justify-content: center;
