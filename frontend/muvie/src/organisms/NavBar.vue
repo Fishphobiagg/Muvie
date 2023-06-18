@@ -10,6 +10,7 @@
           class="input-atoms"
           v-model="inputData"
           @keydown.enter="handleSearch"
+          @input="changeInput"
           placeholder="음악과 사용자를 검색해보세요"
         />
       </div>
@@ -52,6 +53,10 @@ export default {
     }),
   },
   methods: {
+    changeInput(e) {
+      this.inputData = e.target.value;
+      console.log(this.inputData);
+    },
     handleSearch() {
       if (this.inputData.trim() !== "") {
         this.$router.push({

@@ -1,7 +1,7 @@
 <template>
   <div>
     <img
-      src="../assets/logo3.png"
+      src="../assets/logo4.png"
       alt=""
       class="logo"
       @click="navigateToMain()"
@@ -16,6 +16,7 @@
             class="input-atoms"
             v-model="inputData"
             @keydown.enter="handleSearch"
+            @input="changeInput"
             placeholder="음악과 사용자를 검색해보세요"
           />
         </div>
@@ -49,7 +50,7 @@
         </li>
       </ul>
       <div class="tab-container">
-        <SearchTab :tab="tab" />
+        <SearchTab :tab="tab" :key="componentKey" />
       </div>
     </div>
   </div>
@@ -65,6 +66,7 @@ export default {
     return {
       tab: 0,
       inputData: "",
+      componentKey: 0,
     };
   },
   components: {
@@ -86,6 +88,10 @@ export default {
     }
   },
   methods: {
+    changeInput(e) {
+      this.inputData = e.target.value;
+      console.log(this.inputData);
+    },
     handleSearch() {
       if (this.inputData.trim() !== "") {
         this.$router.push({
@@ -93,6 +99,7 @@ export default {
           params: { keyword: this.inputData },
         });
         this.inputData = "";
+        this.componentKey += 1;
       }
     },
     navigateToMain() {

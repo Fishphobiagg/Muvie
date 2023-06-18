@@ -1,13 +1,15 @@
-<h1 align="center">🎵 Muvie 🎬
- </h1>
+<h1 align="center">🎵 Muvie 🎬</h1>
 <br>
 <p align="center">DRF(Django REST Framework) & Vue를 이용한 Restful 웹 프로젝트</p>
 <p align="center"><a>Muvie</a>는 영화 OST를 스트리밍할 수 있고, 다른 사용자와의 상호작용을 통해 자신의 취향에 알맞는 음악을 추천받을 수 있는 서비스입니다.</p>
+
 <br>
 
 ## Tech Stack
 
 ### Back-end & Front-end
+![Python](https://img.shields.io/badge/Python-yellow.svg?&style=for-the-badge&logo=Python&logoColor=#3776AB)
+![Javascript](https://img.shields.io/badge/Javascript-white.svg?&style=for-the-badge&logo=Javascript&logoColor=#F7DF1E)
 ![Django](https://img.shields.io/badge/Django-092E20.svg?&style=for-the-badge&logo=Django&logoColor=#092E20)
 ![Vue.js](https://img.shields.io/badge/Vue.js-4FC08D.svg?&style=for-the-badge&logo=Vue.js&logoColor=092E20)
 
@@ -15,8 +17,6 @@
 ![Notion](https://img.shields.io/badge/Notion-000000.svg?&style=for-the-badge&logo=Notion&logoColor=로고색상)
 ![Github](https://img.shields.io/badge/Github-181717.svg?&style=for-the-badge&logo=Github&logoColor=로고색상)
 ![Discord](https://img.shields.io/badge/Discord-5865F2.svg?&style=for-the-badge&logo=Discord&logoColor=092E20)
-![Gitbook](https://img.shields.io/badge/Gitbook-3884FF.svg?&style=for-the-badge&logo=Gitbook&logoColor=092E20)
-
 <br>
 
 ## ✔ 목차
@@ -54,7 +54,7 @@
 
 | 정예륜(팀원) | 이명우(PM) |
 | --- | --- |
-| <p align="left" style="color:pink">Front-end<p/> | <p align="left" style="color:skyblue">Back-end<p/> |
+| <p align="left" style="color:pink">Front-end</p> | <p align="left" style="color:skyblue">Back-end</p> |
 | [@YeryunJung](https://github.com/YeryunJung) | [@Fishphobiagg](https://github.com/Fishphobiagg) |
 <br>
 
@@ -63,6 +63,18 @@
 <br>
 
 ## 프로젝트
+> 내가 좋아하는 영화, 내가 좋아하는 음악 Muvie
+> * 내가 듣던 영화 OST를 찾고 싶다면? ***Muvie***
+> * 내가 들었던 영화 OST와 비슷한 음악을 찾고 싶다면? ***Muvie***
+1. 내 취향에 맞는 영화 OST 추천
+2. 나와 비슷한 음악을 찾는 사람도 만나볼 수 있고,
+3. 음악 스트리밍, 재생목록, 좋아요로 내 개성을 표현
+3. 새로운 음악을 추천해주는 기능까지
+
+<br>
+
+<p align="center"> <img src="./img/main2.gif" width="65%"/></p>
+
 
 <br>
 <h1 align="center">🚀 서비스
@@ -77,6 +89,7 @@
 #### 팔로우/언팔로우/프로필 조회
 
 > 유저 간 팔로우 및 언팔로우가 가능합니다. 또 유저 프로필 조회를 통해 상대방의 팔로워, 팔로잉, 좋아요 목록, 플레이리스트까지 확인할 수 있습니다.
+<p align="center"> <img src="./img/profile.gif" width="65%"/></p>
 
 <br>
 
@@ -84,6 +97,7 @@
 #### 좋아요/스트리밍/플레이리스트
 
 > 자신이 좋아하는 음악에 대한 좋아요 기능을 이용할 수 있습니다. 또한 음악을 스트리밍 할 수 있으며 플레이리스트에 추가해둘 수도 있습니다.
+<p align="center"> <img src="./img/music.gif" width="65%"/></p>
 
 <br>
 
@@ -103,7 +117,7 @@
 
 #### [ERD](https://github.com/Fishphobiagg/Muvie/wiki/ERD)
 #### [요구사항 정의서](https://perfect-bluebell-dba.notion.site/1e54ff56a7a34de8b57aca5876a0b84b)
-#### [디자인](https://youtu.be/p1cE9T0CFCQ)
+#### [디자인](https://www.figma.com/file/oWZhVQ82Wh3Met5o5I9w2b/230501_MUVIE?type=design&node-id=0%3A1&t=mxH7VMSR9IYFajhf-1)
 
 ### 🛠 개발
 
@@ -123,19 +137,15 @@
 | style | 코드 스타일 변경 (코드 포매팅, 세미콜론 누락 등)기능 수정이 없는 경우 |
 | refactor | 코드 리팩토링 |
 | chore | 빌드 업무 수정, 패키지 매니저 수정 (gitignore 수정 등) |
+<br>
 
 ### git flow
 
 | 브랜치명 | 구분 | 설명 | 비고 |
 | --- | --- | --- | --- |
 | master | 유지 브랜치 | - 기본 브랜치 - 언제든지 배포 가능한 형태 유지 |  |
-| dev | 보조 브랜치 | - feature가 모이는 통합 테스트 브랜치
-- 테스트 완료 후 master로 머지
-- 소스 프리징을 해결하기 위한 브랜치 | feature에서 여기로 풀리퀘스트 요청
-여기서 모두 통합 후 마지막에 master로 풀리퀘스트 요청 |
-| feature | 보조 브랜치 | - 기능 단위 개발 브랜치
-- feature에서 개발 완료 후 dev에서 머지
-- Issue list로 브랜치 생성 및 관리 | ex) feat: signup  |
+| dev | 보조 브랜치 | - feature가 모이는 통합 |
+| feature | 보조 브랜치 | - 기능 단위 개발 브랜치| ex) feat: signup  |
 | hotfix | 보조 브랜치 | - 운영중 긴급한 오류를 해결하기 위한 브랜치 |  |
 
 ### Team Rule & Culture

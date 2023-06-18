@@ -1,6 +1,5 @@
 from rest_framework.decorators import api_view, permission_classes
 from django.db.models import Q
-from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from . models import Music
@@ -8,11 +7,6 @@ from . serializers import *
 from rest_framework.views import APIView
 from rest_framework import status
 
-class MusicPagenatior(PageNumberPagination):
-    page_size = 10
-    page_query_param = 'page'
-    page_size_query_param = 'per_page'
-    max_page_size = 100
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -26,10 +20,8 @@ class MusicLikeView(APIView):
     def get(self, request, **kwargs):
         user = request.user
         like_list = user.like_music.all()
-        paginator = MusicPagenatior()
-        result_page = paginator.paginate_queryset(like_list, request)
-        serializer = MusicListSerializer(result_page, many=True, user_pk=user.pk)
-        return paginator.get_paginated_response(serializer.data)
+        serializer = MusicListSerializer(like_list, many=True, user_pk=user.pk)
+        return Response(serializer.data)
 
     def post(self, request, music_pk):
         user = request.user
@@ -96,15 +88,3 @@ class MusicComponentView(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def liked_users(request, music_pk):
-    music = Music.objects.get(pk=music_pk)
-    user = request.user
-    liked_users = music.users_like_musics.all()
-    serializer = LikedUserSerializer(instance=liked_users, many=True, user_pk=user.pk)
-    if serializer.is_valid():
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    return Response(serializer.error, status=status.HTTP_406_NOT_ACCEPTABLE)
