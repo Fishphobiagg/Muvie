@@ -1,6 +1,6 @@
 <h1 align="center">🎵 Muvie 🎬</h1>
 <br>
-<p align="center">DRF(Django REST Framework) & Vue를 이용한 Restful 웹 프로젝트</p>
+<p align="center">DRF(Django REST Framework) & Vue.js로 구현한 Restful 웹 프로젝트</p>
 <p align="center"><a>Muvie</a>는 영화 OST를 스트리밍할 수 있고, 다른 사용자와의 상호작용을 통해 자신의 취향에 알맞는 음악을 추천받을 수 있는 서비스입니다.</p>
 
 <br>
