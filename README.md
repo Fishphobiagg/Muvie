@@ -106,7 +106,7 @@
 
 > 메인 페이지에서 이용자의 취향 및 행동에 따른 노래를 추천받을 수 있습니다. 추천 알고리즘은 총 세 가지입니다.
 
-👉 [추천 알고리즘 상세 설명](https://www.notion.so/Recommendation-algorithms-aca53ba69dac448292604dc6aff46721?pvs=4) 👈
+👉 [추천 알고리즘 상세 설명](https://perfect-bluebell-dba.notion.site/Recommendation-algorithms-aca53ba69dac448292604dc6aff46721?pvs=4) 👈
 
 <br>
 
