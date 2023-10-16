@@ -54,7 +54,7 @@
 
 | 정예륜(팀원) | 이명우(PM) |
 | --- | --- |
-| <p align="left" style="color:pink">Front-end</p> | <p align="left" style="color:skyblue">Back-end</p> |
+| <p align="left" style="color:pink">Frontend</p> | <p align="left" style="color:skyblue">Backend</p> |
 | [@YeryunJung](https://github.com/YeryunJung) | [@Fishphobiagg](https://github.com/Fishphobiagg) |
 <br>
 
